@@ -59,7 +59,7 @@ functions:
     handler: handler.hello
     events:
       - http:
-          path: users/create
+          path: /
           method: get
 
 #    The following are a few example events you can configure
