@@ -19,8 +19,7 @@ module.exports.world = (event, context, callback) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Hello world',
-      input: $input.json('$.mykey') ,
+      message: 'Hello world' ,
       context: context,
       event: event
     }),
