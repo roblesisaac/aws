@@ -20,7 +20,6 @@ module.exports.world = (event, context, callback) => {
     statusCode: 200,
     body: JSON.stringify({
       message: 'Hello world',
-      params: $input.params,
       context: context,
       event: event
     }),
