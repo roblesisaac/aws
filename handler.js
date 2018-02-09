@@ -15,7 +15,7 @@ module.exports.hello = (event, context, callback) => {
   // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
 };
 
-module.exports.hello = (event, context, callback) => {
+module.exports.world = (event, context, callback) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
