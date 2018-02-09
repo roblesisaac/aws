@@ -19,7 +19,7 @@ module.exports.world = (event, context, callback) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Welcome',
+      message: 'Welcome to ' + event.pathParameters.sitename + '.com !!',
       context: context,
       event: event
     }),
