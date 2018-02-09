@@ -65,7 +65,7 @@ functions:
     handler: handler.world
     events:
       - http:
-          path: /sitename/api
+          path: /{sitename}/api
           method: get     
 
 #    The following are a few example events you can configure
