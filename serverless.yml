@@ -62,7 +62,7 @@ functions:
           path: /
           method: get
   world:
-    handler: handler.hello
+    handler: handler.world
     events:
       - http:
           path: /:sitename/api
