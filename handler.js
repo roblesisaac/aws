@@ -20,7 +20,7 @@ module.exports.world = (event, context, callback) => {
     statusCode: 200,
     body: JSON.stringify({
       message: 'Hello world',
-      input: $input.body,
+      input: $input.json('$.mykey') ,
       context: context,
       event: event
     }),
