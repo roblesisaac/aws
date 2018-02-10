@@ -8,6 +8,12 @@ provider:
     AUTH0_CLIENT_SECRET: ${file(./secrets.json):AUTH0_CLIENT_SECRET}
   
 functions:
+  landingPage:
+    handler: handler.landingPage
+    events:
+      - http:
+          method: get
+          path: landing-page
   hello:
     handler: handler.hello
     events:
