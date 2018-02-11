@@ -24,7 +24,7 @@ functions:
     handler: handler.landingApi
     events:
       - http:
-          method; get
+          method: get
           path: /{sitename}/api 
   auth:
     handler: handler.auth
