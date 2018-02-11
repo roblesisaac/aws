@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const connectToDatabase = require('./db');
 const Note = require('./models/Note');
 // Set in `enviroment` of serverless.yml
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID
