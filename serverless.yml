@@ -19,7 +19,7 @@ functions:
     events:
       - http:
           method; get
-          path: /{sitename}
+          path: {sitename}
   siteApi:
     handler: handler.landingApi
     events:
