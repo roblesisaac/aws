@@ -91,39 +91,24 @@ module.exports.privateEndpoint = (event, context, callback) => {
   })
 }
 
-module.exports.hello = (event, context, callback) => {
+module.exports.landingApi = (event, context, callback) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
-
-  callback(null, response);
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
-};
-
-module.exports.world = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Welcome to ' + event.pathParameters.sitename + '.com !!',
+      message: 'Welcome to the api of ' + event.pathParameters.sitename + '.com !!',
       context: context,
       event: event
     }),
   };
 
   callback(null, response);
-};
+}
 
 module.exports.landingPage = (event, context, callback) => {
   let dynamicHtml = '<p>Hey Unknown!</p>';
   // check for GET params and use if available
-  if (event.queryStringParameters && event.queryStringParameters.name) {
-    dynamicHtml = `<p>Hey ${event.queryStringParameters.name}!</p>`;
+  if (event.pathParameters && event.pathParameters.sitename) {
+    dynamicHtml = `<p>Hey ${event.pathParameters.sitename}!</p>`;
   }
 
   const html = `
