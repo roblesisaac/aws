@@ -65,7 +65,11 @@ module.exports.getAll = (event, context, callback) => {
 
   connectToDatabase()
     .then(() => {
-      Note.find()
+      let query = {};
+      if(event.queryStringParameters) {
+        query = event.queryStringParameters;
+      }
+      Note.find(query)
         .then(notes => callback(null, {
           statusCode: 200,
           body: JSON.stringify(notes)
