@@ -10,6 +10,41 @@ provider:
     AUTH0_CLIENT_SECRET: ${file(./secrets.json):AUTH0_CLIENT_SECRET}
   
 functions:
+  create:
+    handler: handler.create # point to exported create function in handler.js
+    events:
+      - http:
+          path: notes # path will be domain.name.com/dev/notes
+          method: post
+          cors: true
+  getOne:
+    handler: handler.getOne
+    events:
+      - http:
+          path: notes/{id} # path will be domain.name.com/dev/notes/1
+          method: get
+          cors: true
+  getAll:
+    handler: handler.getAll # path will be domain.name.com/dev/notes
+    events:
+     - http:
+         path: notes
+         method: get
+         cors: true
+  update:
+    handler: handler.update # path will be domain.name.com/dev/notes/1
+    events:
+     - http:
+         path: notes/{id}
+         method: put
+         cors: true
+  delete:
+    handler: handler.delete
+    events:
+     - http:
+         path: notes/{id} # path will be domain.name.com/dev/notes/1
+         method: delete
+         cors: true
   landing:
     handler: handler.landingPage
     events:
