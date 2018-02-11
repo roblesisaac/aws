@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './variables.env' });
 const jwt = require('jsonwebtoken')
 const connectToDatabase = require('./db');
 // Set in `enviroment` of serverless.yml
