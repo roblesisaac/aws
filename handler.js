@@ -105,10 +105,10 @@ module.exports.landingApi = (event, context, callback) => {
 }
 
 module.exports.landingPage = (event, context, callback) => {
-  let dynamicHtml = '<p>Hey Unknown!</p>';
+  let siteName = 'plysheet';
   // check for GET params and use if available
   if (event.pathParameters && event.pathParameters.sitename) {
-    dynamicHtml = `<p>Hey ${event.pathParameters.sitename}!</p>`;
+    siteName = event.pathParameters.sitename;
   }
 
   const html = `
@@ -117,9 +117,11 @@ module.exports.landingPage = (event, context, callback) => {
       h1 { color: #73757d; }
     </style>
     <body>
-      <h1>Landing Page</h1>
-      ${dynamicHtml}
+      <h1>Welcome to ${siteName}</h1>
     </body>
+    <script type="text/javascript">
+      var url = '${siteName}';
+    </script>
   </html>`;
 
   const response = {
