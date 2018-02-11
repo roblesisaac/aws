@@ -209,12 +209,12 @@ module.exports.landingPage = (event, context, callback) => {
       h1 { color: #73757d; }
     </style>
     <body>
-      <div class="app">
+      <div id="app">
         <h1>Welcome to ${siteName}</h1>
         <button @click="post" class="post">Post</button>
       </div>
     </body>
-    <script src="http://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
     <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
