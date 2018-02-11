@@ -214,7 +214,7 @@ module.exports.landingPage = (event, context, callback) => {
         <button @click="post" class="post">Post</button>
       </div>
     </body>
-    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
     <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
@@ -232,7 +232,7 @@ module.exports.landingPage = (event, context, callback) => {
         el: '#app',
         methods: {
           post: function() {
-            console.log('post')
+            axios.post('https://oxo043kf92.execute-api.us-east-1.amazonaws.com/dev/notes', {title:"blog", description: "here is the description."})
           }
         }
       });
