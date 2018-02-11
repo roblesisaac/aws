@@ -1,4 +1,6 @@
-const jwt = require('jsonwebtoken');
+require('dotenv').config({ path: './variables.env' });
+const jwt = require('jsonwebtoken')
+const connectToDatabase = require('./db');
 const Note = require('./models/Notes');
 // Set in `enviroment` of serverless.yml
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID
@@ -21,6 +23,156 @@ const generatePolicy = (principalId, effect, resource) => {
   }
   return authResponse
 }
+
+module.exports.create = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+  // context.callbackWaitsForEmptyEventLoop = false;
+
+  // connectToDatabase()
+  //   .then(() => {
+  //     Note.create(JSON.parse(event.body))
+  //       .then(note => callback(null, {
+  //         statusCode: 200,
+  //         body: JSON.stringify(note)
+  //       }))
+  //       .catch(err => callback(null, {
+  //         statusCode: err.statusCode || 500,
+  //         headers: { 'Content-Type': 'text/plain' },
+  //         body: 'Could not create the note.'
+  //       }));
+  //   });
+};
+
+module.exports.getOne = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+  // context.callbackWaitsForEmptyEventLoop = false;
+
+  // connectToDatabase()
+  //   .then(() => {
+  //     Note.findById(event.pathParameters.id)
+  //       .then(note => callback(null, {
+  //         statusCode: 200,
+  //         body: JSON.stringify(note)
+  //       }))
+  //       .catch(err => callback(null, {
+  //         statusCode: err.statusCode || 500,
+  //         headers: { 'Content-Type': 'text/plain' },
+  //         body: 'Could not fetch the note.'
+  //       }));
+  //   });
+};
+
+module.exports.getAll = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+  // context.callbackWaitsForEmptyEventLoop = false;
+
+  // connectToDatabase()
+  //   .then(() => {
+  //     Note.find()
+  //       .then(notes => callback(null, {
+  //         statusCode: 200,
+  //         body: JSON.stringify(notes)
+  //       }))
+  //       .catch(err => callback(null, {
+  //         statusCode: err.statusCode || 500,
+  //         headers: { 'Content-Type': 'text/plain' },
+  //         body: 'Could not fetch the notes.'
+  //       }))
+  //   });
+};
+
+module.exports.update = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+  // context.callbackWaitsForEmptyEventLoop = false;
+
+  // connectToDatabase()
+  //   .then(() => {
+  //     Note.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
+  //       .then(note => callback(null, {
+  //         statusCode: 200,
+  //         body: JSON.stringify(note)
+  //       }))
+  //       .catch(err => callback(null, {
+  //         statusCode: err.statusCode || 500,
+  //         headers: { 'Content-Type': 'text/plain' },
+  //         body: 'Could not fetch the notes.'
+  //       }));
+  //   });
+};
+
+module.exports.delete = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+  // context.callbackWaitsForEmptyEventLoop = false;
+
+  // connectToDatabase()
+  //   .then(() => {
+  //     Note.findByIdAndRemove(event.pathParameters.id)
+  //       .then(note => callback(null, {
+  //         statusCode: 200,
+  //         body: JSON.stringify({ message: 'Removed note with id: ' + note._id, note: note })
+  //       }))
+  //       .catch(err => callback(null, {
+  //         statusCode: err.statusCode || 500,
+  //         headers: { 'Content-Type': 'text/plain' },
+  //         body: 'Could not fetch the notes.'
+  //       }));
+  //   });
+};
 
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
 module.exports.auth = (event, context, callback) => {
