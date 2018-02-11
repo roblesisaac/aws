@@ -18,8 +18,8 @@ functions:
     handler: handler.landingPage
     events:
       - http:
-          method; get
-          path: {sitename}
+          method: get
+          path: /{sitename}
   siteApi:
     handler: handler.landingApi
     events:
