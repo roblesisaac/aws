@@ -234,8 +234,7 @@ module.exports.landingPage = (event, context, callback) => {
           post: function() {
             console.log('post')
           }
-        },
-        template: '<div><h1>{{ ply.name }}</h1><transition name="slide-fade"><ply-sheet :name="ply.link"></ply-sheet></transition></div>'
+        }
       });
     </script>
   </html>`;
