@@ -25,33 +25,21 @@ const generatePolicy = (principalId, effect, resource) => {
 }
 
 module.exports.create = (event, context, callback) => {
-  return callback(null, {
-    statusCode: 200,
-    headers: {
-      /* Required for CORS support to work */
-      "Access-Control-Allow-Origin": "*",
-      /* Required for cookies, authorization headers with HTTPS */
-      "Access-Control-Allow-Credentials": true
-    },
-    body: JSON.stringify({
-      message: 'Hi ⊂◉‿◉つ from Public API',
-    }),
-  })
-  // context.callbackWaitsForEmptyEventLoop = false;
+  context.callbackWaitsForEmptyEventLoop = false;
 
-  // connectToDatabase()
-  //   .then(() => {
-  //     Note.create(JSON.parse(event.body))
-  //       .then(note => callback(null, {
-  //         statusCode: 200,
-  //         body: JSON.stringify(note)
-  //       }))
-  //       .catch(err => callback(null, {
-  //         statusCode: err.statusCode || 500,
-  //         headers: { 'Content-Type': 'text/plain' },
-  //         body: 'Could not create the note.'
-  //       }));
-  //   });
+  connectToDatabase()
+    .then(() => {
+      Note.create(JSON.parse(event.body))
+        .then(note => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(note)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not create the note.'
+        }));
+    });
 };
 
 module.exports.getOne = (event, context, callback) => {
