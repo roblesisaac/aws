@@ -1,4 +1,3 @@
-require('dotenv').config({ path: './variables.env' });
 const jwt = require('jsonwebtoken')
 const connectToDatabase = require('./db');
 const Note = require('./models/Note');
