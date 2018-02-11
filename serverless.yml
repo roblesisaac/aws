@@ -8,24 +8,24 @@ provider:
     AUTH0_CLIENT_SECRET: ${file(./secrets.json):AUTH0_CLIENT_SECRET}
   
 functions:
-  landingPage:
+  landing:
     handler: handler.landingPage
     events:
       - http:
           method: get
-          path: landing-page
-  hello:
-    handler: handler.hello
-    events:
-      - http:
           path: /
-          method: get
-  world:
-    handler: handler.world
+  siteLanding:
+    handler: handler.landingPage
     events:
       - http:
-          path: /{sitename}/api
-          method: get     
+          method; get
+          path: /{sitename}
+  siteApi:
+    handler: handler.landingApi
+    events:
+      - http:
+          method; get
+          path: /{sitename}/api 
   auth:
     handler: handler.auth
     cors: true
