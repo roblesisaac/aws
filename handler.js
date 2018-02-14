@@ -172,13 +172,20 @@ module.exports.landingPage = (event, context, callback) => {
 
   const html = `
   <html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <script src="//cdn.auth0.com/js/lock/10.1.0/lock.min.js"></script>
+    </head>
     <style>
       h1 { color: #73757d; }
     </style>
     <body>
       <div id="app">
         <h1>Welcome to ${siteName}</h1>
-        <button @click="post" class="post">Post</button>
+        <button @click="login">Login</button>
+        <button @click="post('public')">Public</button>
+        <button @click="post('private')">Private</button>
       </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -188,18 +195,52 @@ module.exports.landingPage = (event, context, callback) => {
     <script type="text/javascript">
       var url = '${siteName}';
       var site = new Vue({
+        created: function() {
+          this.lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+            auth: {
+              params: {
+                scope: 'openid email'
+              }
+            }
+          });
+
+          this.lock.on("authenticated", function(authResult) {
+            console.log(authResult)
+            lock.getProfile(authResult.idToken, function(error, profile) {
+              if (error) {
+                // Handle error
+                console.log(JSON.stringify(error))
+                return false
+              }
+              // authResult.accessToken && authResult.idToken
+              // Save the JWT token.
+              localStorage.setItem('access_token', authResult.accessToken)
+              localStorage.setItem('id_token', authResult.idToken)
+          
+              // Save the profile
+              localStorage.setItem('profile', JSON.stringify(profile))
+            });
+          });
+        },
         computed: {
           height: function() {
             return this.$el.clientHeight;
           }
         },
         data: {
-          ply: "ply"
+          ply: "ply",
+          lock: null,
+          AUTH0_CLIENT_ID: "OVQTtDOjwc1QMCs9gBJMrAsyA5Z0KY6d",
+          AUTH0_DOMAIN: "plysheet.auth0.com",
+          
         },
         el: '#app',
         methods: {
-          post: function() {
-            axios.post('https://www.blockometry.com/api/private').then(function(res){
+          login: function() {
+            this.lock.show();
+          },
+          post: function(type) {
+            axios.post('https://www.blockometry.com/api/'+type).then(function(res){
               console.log(res);
             })
           }
