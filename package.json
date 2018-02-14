@@ -4,6 +4,7 @@
   "description": "Demonstration of protecting API gateway endpoints with auth0",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^5.0.0",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^5.0.4"
