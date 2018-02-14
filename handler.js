@@ -1,7 +1,6 @@
 require('dotenv').config({ path: './variables.env' });
 const jwt = require('jsonwebtoken')
 const connectToDatabase = require('./db');
-const restful = require('node-restful');
 const Note = require('./models/Notes');
 const sheet = require('./models/sheets');
 // Set in `enviroment` of serverless.yml
