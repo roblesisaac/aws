@@ -13,6 +13,7 @@ const script = {
 const sheetSchema = new mongoose.Schema({
     "name" : String,
     "link" : String,
+    "sort" : Number,
     "load" : String,
     "public" : String,
     "scripts": [script],
