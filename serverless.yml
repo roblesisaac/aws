@@ -20,11 +20,32 @@ custom:
     createRoute53Record: true
 
 functions:
-  sheet:
-    handler: handler.sheet # point to exported create function in handler.js
+  post:
+    handler: api.post
     events:
       - http:
-          path: sheets # path will be domain.name.com/dev/notes
+          path: /{sitename}/api/{sheet}
+          method: get
+          cors: true
+  get:
+    handler: api.get
+    events:
+      - http:
+          path: /{sitename}/api/{sheet}
+          method: get
+          cors: true
+  put:
+    handler: api.put
+    events:
+      - http:
+          path: /{sitename}/api/{sheet}
+          method: get
+          cors: true
+  delete:
+    handler: api.delete
+    events:
+      - http:
+          path: /{sitename}/api/{sheet}
           method: get
           cors: true
   create:
