@@ -81,7 +81,7 @@ functions:
           method: get
           path: /{sitename}/api 
   auth:
-    handler: handler.auth
+    handler: auth.auth
     cors: true
   publicEndpoint:
     handler: handler.publicEndpoint
