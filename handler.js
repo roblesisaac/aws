@@ -199,7 +199,9 @@ module.exports.landingPage = (event, context, callback) => {
         el: '#app',
         methods: {
           post: function() {
-            axios.post('https://www.blockometry.com/api/public')
+            axios.post('https://www.blockometry.com/api/public').then(function(res){
+              console.log(res);
+            })
           }
         }
       });
