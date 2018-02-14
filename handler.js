@@ -1,7 +1,9 @@
 require('dotenv').config({ path: './variables.env' });
 const jwt = require('jsonwebtoken')
 const connectToDatabase = require('./db');
+const restful = require('node-restful');
 const Note = require('./models/Notes');
+const sheet = require('./models/sheets');
 // Set in `enviroment` of serverless.yml
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID
 const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET
@@ -23,6 +25,18 @@ const generatePolicy = (principalId, effect, resource) => {
   }
   return authResponse
 }
+
+module.exports.sheet = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  connectToDatabase()
+    .then(() => {
+      sheet.methods(['get', 'put', 'post', 'delete']).after('get', (req, res, next) => {
+        res.send('Connected to sheets!');
+        next();
+      })
+    });
+};
 
 module.exports.create = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
