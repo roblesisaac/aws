@@ -1,17 +1,16 @@
-var restful = require('node-restful');
-var mongoose = restful.mongoose;
+const mongoose = restful.mongoose;
 
-var user = {
+const user = {
   username: String,
   apps: [String]
 };
 
-var script = {
+const script = {
   name: String,
   txt: String
 }
 
-var sheetSchema = new mongoose.Schema({
+const sheetSchema = new mongoose.Schema({
     "name" : String,
     "link" : String,
     "load" : String,
@@ -28,4 +27,4 @@ var sheetSchema = new mongoose.Schema({
 //     next();
 // });
 
-module.exports = restful.model('sheets', sheetSchema);
+module.exports = mongoose.model('sheets', sheetSchema);
