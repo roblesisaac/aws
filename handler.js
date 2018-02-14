@@ -31,9 +31,19 @@ module.exports.sheet = (event, context, callback) => {
 
   connectToDatabase()
     .then(() => {
-      sheet.methods(['get', 'put', 'post', 'delete']).after('get', (req, res, next) => {
-        res.send('Connected to sheets!');
-        next();
+      sheet.methods(['get', 'put', 'post', 'delete']).after('get', () => {
+        return callback(null, {
+          statusCode: 200,
+          headers: {
+            /* Required for CORS support to work */
+            "Access-Control-Allow-Origin": "*",
+            /* Required for cookies, authorization headers with HTTPS */
+            "Access-Control-Allow-Credentials": true
+          },
+          body: JSON.stringify({
+            message: 'Hi ⊂◉‿◉つ from Public API',
+          }),
+        })
       })
     });
 };
