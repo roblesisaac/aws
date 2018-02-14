@@ -1,4 +1,4 @@
-const mongoose = restful.mongoose;
+const mongoose = require('mongoose');
 
 const user = {
   username: String,
