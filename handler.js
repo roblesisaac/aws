@@ -196,7 +196,7 @@ module.exports.landingPage = (event, context, callback) => {
       var url = '${siteName}';
       var site = new Vue({
         created: function() {
-          this.lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+          this.lock = new Auth0Lock(this.AUTH0_CLIENT_ID, this.AUTH0_DOMAIN, {
             auth: {
               params: {
                 scope: 'openid email'
