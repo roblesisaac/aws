@@ -185,25 +185,7 @@ module.exports.landingPage = (event, context, callback) => {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
     <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
-    <script type="text/javascript">
-      var url = '${siteName}';
-      var site = new Vue({
-        computed: {
-          height: function() {
-            return this.$el.clientHeight;
-          }
-        },
-        data: {
-          ply: "ply"
-        },
-        el: '#app',
-        methods: {
-          post: function() {
-            axios.post('https://www.blockometry.com/public', {title:"blog", description: "here is the description."})
-          }
-        }
-      });
-    </script>
+    <script src="http://plysheet.com/plysheet/scripts/aws"></script>
   </html>`;
 
   const response = {
