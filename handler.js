@@ -236,7 +236,7 @@ module.exports.landingPage = (event, context, callback) => {
         el: '#app',
         methods: {
           post: function() {
-            axios.post('https://oxo043kf92.execute-api.us-east-1.amazonaws.com/dev/notes', {title:"blog", description: "here is the description."})
+            axios.post('https://www.blockometry.com/notes', {title:"blog", description: "here is the description."})
           }
         }
       });
