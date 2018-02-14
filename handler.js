@@ -175,7 +175,6 @@ module.exports.landingPage = (event, context, callback) => {
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-      <script src="//cdn.auth0.com/js/lock/10.1.0/lock.min.js"></script>
     </head>
     <style>
       h1 { color: #73757d; }
@@ -183,9 +182,15 @@ module.exports.landingPage = (event, context, callback) => {
     <body>
       <div id="app">
         <h1>Welcome to ${siteName}</h1>
+        Username: <input type="text v-model="user.username">
+        <br>
+        Password: <input type="text" v-model="user.password">
+        <br>
+        Name: <input type="text" v-model="user.name">
+        <br>
+        <button @click="newUser">Create</button>
+        <br>
         <button @click="login">Login</button>
-        <button @click="post('public')">Public</button>
-        <button @click="post('private')">Private</button>
       </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -195,33 +200,6 @@ module.exports.landingPage = (event, context, callback) => {
     <script type="text/javascript">
       var url = '${siteName}';
       var site = new Vue({
-        created: function() {
-          this.lock = new Auth0Lock(this.AUTH0_CLIENT_ID, this.AUTH0_DOMAIN, {
-            auth: {
-              params: {
-                scope: 'openid email'
-              }
-            }
-          });
-
-          this.lock.on("authenticated", function(authResult) {
-            console.log(authResult)
-            lock.getProfile(authResult.idToken, function(error, profile) {
-              if (error) {
-                // Handle error
-                console.log(JSON.stringify(error))
-                return false
-              }
-              // authResult.accessToken && authResult.idToken
-              // Save the JWT token.
-              localStorage.setItem('access_token', authResult.accessToken)
-              localStorage.setItem('id_token', authResult.idToken)
-          
-              // Save the profile
-              localStorage.setItem('profile', JSON.stringify(profile))
-            });
-          });
-        },
         computed: {
           height: function() {
             return this.$el.clientHeight;
@@ -229,20 +207,23 @@ module.exports.landingPage = (event, context, callback) => {
         },
         data: {
           ply: "ply",
-          lock: null,
-          AUTH0_CLIENT_ID: "OVQTtDOjwc1QMCs9gBJMrAsyA5Z0KY6d",
-          AUTH0_DOMAIN: "plysheet.auth0.com",
-          
+          user: {
+            username: "Eiken",
+            name: "isaac robles,
+            password: "pass"
+          }
         },
-        el: '#app',
+        el: "#app",
         methods: {
-          login: function() {
-            this.lock.show();
+          create: function() {
+            axios.post("http://www.blockometry.com/plysheet/users", this.user).then(function(res){
+              console.log(res.data)
+            });
           },
-          post: function(type) {
-            axios.post('https://www.blockometry.com/api/'+type).then(function(res){
-              console.log(res);
-            })
+          login: function() {
+            axios.post("http://www.blockometry.com/plysheet/auth", this.user).then(function(res){
+              console.log(res.data)
+            });
           }
         }
       });
