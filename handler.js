@@ -188,7 +188,7 @@ module.exports.landingPage = (event, context, callback) => {
         <br>
         Name: <input type="text" v-model="user.name">
         <br>
-        <button @click="newUser">Create</button>
+        <button @click="create">Create</button>
         <br>
         <button @click="login">Login</button>
       </div>
