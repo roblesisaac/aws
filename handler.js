@@ -209,7 +209,7 @@ module.exports.landingPage = (event, context, callback) => {
           ply: "ply",
           user: {
             username: "Eiken",
-            name: "isaac robles,
+            name: "isaac robles",
             password: "pass"
           }
         },
