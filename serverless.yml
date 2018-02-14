@@ -15,7 +15,7 @@ plugins:
 custom:
   customDomain:
     domainName: www.blockometry.com
-    basePath: ''
+    basePath: '/plaza'
     stage: ${self:provider.stage}
     createRoute53Record: true
 
