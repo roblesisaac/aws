@@ -28,23 +28,22 @@ const generatePolicy = (principalId, effect, resource) => {
 
 module.exports.sheet = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-
   connectToDatabase()
     .then(() => {
-      sheet.methods(['get', 'put', 'post', 'delete']).after('get', () => {
-        return callback(null, {
+      let query = {};
+      if(event.queryStringParameters) {
+        query = event.queryStringParameters;
+      }
+      sheet.find(query)
+        .then(sheets => callback(null, {
           statusCode: 200,
-          headers: {
-            /* Required for CORS support to work */
-            "Access-Control-Allow-Origin": "*",
-            /* Required for cookies, authorization headers with HTTPS */
-            "Access-Control-Allow-Credentials": true
-          },
-          body: JSON.stringify({
-            message: 'Hi ⊂◉‿◉つ from Public API',
-          }),
-        })
-      })
+          body: JSON.stringify(sheets)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the sheets.'
+        }))
     });
 };
 
