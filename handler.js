@@ -182,7 +182,7 @@ module.exports.landingPage = (event, context, callback) => {
     <body>
       <div id="app">
         <h1>Welcome to ${siteName}</h1>
-        Username: <input type="text v-model="user.username">
+        Username: <input type="text" v-model="user.username">
         <br>
         Password: <input type="text" v-model="user.password">
         <br>
