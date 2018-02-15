@@ -3,24 +3,33 @@ const user = require('./models/users');
 const site = require('./models/sites');
 const sheet = require('./models/sheets');
 const prtcl = {
-  user: 'user protocol',
-  site: 'site  protocol',
-  sheet: 'sheet  protocol'
+  users: 'user protocol',
+  sites: 'site  protocol',
+  sheets: 'sheet  protocol'
 };
 
 module.exports.rest = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const siteName = event.pathParameters.sitename;
   const sheetName = event.pathParameters.sheet;
-  const method = prtcl[sheetName];
+  const schema = prtcl[sheetName];
+  const method = event.httpMethod;
   connectToDatabase()
     .then(() => {
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify({
-          method: method,
-          event: event
-        })
-      });
+      if(method) {
+        callback(null, {
+          statusCode: 200,
+          body: JSON.stringify({
+            message: schema
+          })
+        });
+      } else {
+        callback(null, {
+          statusCode: 200,
+          body: JSON.stringify({
+            event: event
+          })
+        });
+      }
     });
-}
+};
