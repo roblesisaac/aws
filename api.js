@@ -14,9 +14,9 @@ module.exports.rest = (event, context, callback) => {
     .then(() => {
       callback(null, {
         statusCode: 200,
-        body: {
+        body: JSON.stringify({
           event: event
-        }
+        })
       });
     });
 };
