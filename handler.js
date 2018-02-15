@@ -169,6 +169,14 @@ module.exports.landingPage = (event, context, callback) => {
         <button @click="create">Create</button>
         <br>
         <button @click="login">Login</button>
+        <br>
+        site name: <input type="text" v-model="site.name">
+        <br>
+        site url: <input type="text" v-model="site.url">
+        <br>
+        site userId: <input type="text" v-model="site.userId">
+        <br>
+        <button @click="createSite">Create</button>
       </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -194,12 +202,17 @@ module.exports.landingPage = (event, context, callback) => {
         el: "#app",
         methods: {
           create: function() {
-            axios.post("https://www.blockometry.com/plysheet/api/users", this.user).then(function(res){
+            axios.post("http://www.blockometry.com/plysheet/users", this.user).then(function(res){
               console.log(res.data)
             });
           },
+          createSite: function() {
+            axios.post("http://www.blockometry.com/plysheet/users", this.site).then(function(res) {
+              console.log(res.data)
+            };
+          },
           login: function() {
-            axios.post("https://www.blockometry.com/plysheet/api/auth", this.user).then(function(res){
+            axios.post("http://www.blockometry.com/plysheet/auth", this.user).then(function(res){
               console.log(res.data)
             });
           }
