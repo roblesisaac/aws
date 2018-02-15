@@ -200,7 +200,7 @@ module.exports.landingPage = (event, context, callback) => {
           },
           site: {
             name: "plaza",
-            url: "plaza,
+            url: "plaza",
             userId: ""
           }
         },
