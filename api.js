@@ -1,3 +1,11 @@
+const connectToDatabase = require('./db');
+const sheet = require('./models/sheets');
+const prtcl = {
+  user: 'user protocol',
+  site: 'site  protocol',
+  sheet: 'sheet  protocol'
+};
+
 module.exports.rest = (event, context, callback) => {
   const response = {
     statusCode: 200,
