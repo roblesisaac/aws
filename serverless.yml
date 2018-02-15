@@ -21,28 +21,28 @@ custom:
 
 functions:
   post:
-    handler: api.post
+    handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
   get:
-    handler: api.get
+    handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
   put:
-    handler: api.put
+    handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
   delete:
-    handler: api.delete
+    handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
