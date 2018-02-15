@@ -17,10 +17,10 @@ module.exports.rest = (event, context, callback) => {
       if(event.queryStringParameters) {
         query = event.queryStringParameters;
       }
-      Note.find(query)
-        .then(notes => callback(null, {
+      user.find(query)
+        .then(users => callback(null, {
           statusCode: 200,
-          body: JSON.stringify(notes)
+          body: JSON.stringify(users)
         }))
         .catch(err => callback(null, {
           statusCode: err.statusCode || 500,
