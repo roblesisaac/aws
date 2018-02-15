@@ -1,139 +1,222 @@
-service: plysheet
+require('dotenv').config({ path: './variables.env' });
+const connectToDatabase = require('./db');
+const Note = require('./models/Notes');
+const sheet = require('./models/sheets');
 
-provider:
-  name: aws
-  runtime: nodejs6.10
-  memorySize: 128 # set the maximum memory of the Lambdas in Megabytes
-  timeout: 10 # the timeout is 10 seconds (default is 6 seconds)
-  environment:
-    AUTH0_CLIENT_ID: ${file(./secrets.json):AUTH0_CLIENT_ID}
-    AUTH0_CLIENT_SECRET: ${file(./secrets.json):AUTH0_CLIENT_SECRET}
-  
-plugins:
-  - serverless-domain-manager
+module.exports.create = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
 
-custom:
-  customDomain:
-    domainName: www.blockometry.com
-    basePath: ''
-    stage: ${self:provider.stage}
-    createRoute53Record: true
+  connectToDatabase()
+    .then(() => {
+      Note.create(JSON.parse(event.body))
+        .then(note => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(note)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not create the note.'
+        }));
+    });
+};
 
-functions:
-  post:
-    handler: api.rest
-    events:
-      - http:
-          path: /{sitename}/api/{sheet}
-          method: get
-          cors: true
-  get:
-    handler: api.rest
-    events:
-      - http:
-          path: /{sitename}/api/{sheet}
-          method: get
-          cors: true
-  put:
-    handler: api.rest
-    events:
-      - http:
-          path: /{sitename}/api/{sheet}
-          method: get
-          cors: true
-  delete:
-    handler: api.rest
-    events:
-      - http:
-          path: /{sitename}/api/{sheet}
-          method: get
-          cors: true
-  create:
-    handler: handler.create # point to exported create function in handler.js
-    events:
-      - http:
-          path: notes # path will be domain.name.com/dev/notes
-          method: post
-          cors: true
-  getOne:
-    handler: handler.getOne
-    events:
-      - http:
-          path: notes/{id} # path will be domain.name.com/dev/notes/1
-          method: get
-          cors: true
-  getAll:
-    handler: handler.getAll # path will be domain.name.com/dev/notes
-    events:
-     - http:
-         path: notes
-         method: get
-         cors: true
-  update:
-    handler: handler.update # path will be domain.name.com/dev/notes/1
-    events:
-     - http:
-         path: notes/{id}
-         method: put
-         cors: true
-  landing:
-    handler: handler.landingPage
-    events:
-      - http:
-          method: get
-          path: /
-  siteLanding:
-    handler: handler.landingPage
-    events:
-      - http:
-          method: get
-          path: /{sitename}
-  siteApi:
-    handler: handler.landingApi
-    events:
-      - http:
-          method: get
-          path: /{sitename}/api 
-  auth:
-    handler: auth.auth
-    cors: true
-  publicEndpoint:
-    handler: handler.publicEndpoint
-    events:
-      - http:
-          path: api/public
-          method: post
-          cors: true
-  privateEndpoint:
-    handler: handler.privateEndpoint
-    events:
-      - http:
-          path: api/private
-          method: post
-          # See custom authorizer docs here: http://bit.ly/2gXw9pO
-          authorizer: auth
-          cors: true
+module.exports.getOne = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
 
-resources:
-  Resources:
-    # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
-    GatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: EXPIRED_TOKEN
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
-    AuthFailureGatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: UNAUTHORIZED
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
+  connectToDatabase()
+    .then(() => {
+      Note.findById(event.pathParameters.id)
+        .then(note => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(note)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the note.'
+        }));
+    });
+};
+
+module.exports.getAll = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  connectToDatabase()
+    .then(() => {
+      let query = {};
+      if(event.queryStringParameters) {
+        query = event.queryStringParameters;
+      }
+      Note.find(query)
+        .then(notes => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(notes)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the notes.'
+        }))
+    });
+};
+
+module.exports.update = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  connectToDatabase()
+    .then(() => {
+      Note.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
+        .then(note => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(note)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the notes.'
+        }));
+    });
+};
+
+module.exports.delete = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  connectToDatabase()
+    .then(() => {
+      Note.findByIdAndRemove(event.pathParameters.id)
+        .then(note => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify({ message: 'Removed note with id: ' + note._id, note: note })
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the notes.'
+        }));
+    });
+};
+
+// Public API
+module.exports.publicEndpoint = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+}
+
+// Private API
+module.exports.privateEndpoint = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Private API. Only logged in users can see this',
+    }),
+  })
+}
+
+module.exports.landingApi = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Welcome to the api of ' + event.pathParameters.sitename + '.com !!',
+      context: context,
+      event: event
+    }),
+  };
+
+  callback(null, response);
+}
+
+module.exports.landingPage = (event, context, callback) => {
+  let siteName = 'plysheet';
+  // check for GET params and use if available
+  if (event.pathParameters && event.pathParameters.sitename) {
+    siteName = event.pathParameters.sitename;
+  }
+
+  const html = `
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    </head>
+    <style>
+      h1 { color: #73757d; }
+    </style>
+    <body>
+      <div id="app">
+        <h1>Welcome to ${siteName}</h1>
+        Username: <input type="text" v-model="user.username">
+        <br>
+        Password: <input type="text" v-model="user.password">
+        <br>
+        Name: <input type="text" v-model="user.name">
+        <br>
+        <button @click="create">Create</button>
+        <br>
+        <button @click="login">Login</button>
+      </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
+    <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script type="text/javascript">
+      var url = '${siteName}';
+      var site = new Vue({
+        computed: {
+          height: function() {
+            return this.$el.clientHeight;
+          }
+        },
+        data: {
+          ply: "ply",
+          user: {
+            username: "Eiken",
+            name: "isaac robles",
+            password: "pass"
+          }
+        },
+        el: "#app",
+        methods: {
+          create: function() {
+            axios.post("http://www.blockometry.com/plysheet/users", this.user).then(function(res){
+              console.log(res.data)
+            });
+          },
+          login: function() {
+            axios.post("http://www.blockometry.com/plysheet/auth", this.user).then(function(res){
+              console.log(res.data)
+            });
+          }
+        }
+      });
+    </script>
+  </html>`;
+
+  const response = {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html',
+    },
+    body: html,
+  };
+
+  // callback is sending HTML back
+  callback(null, response);
+};
