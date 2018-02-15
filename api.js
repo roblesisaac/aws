@@ -2,6 +2,7 @@ const connectToDatabase = require('./db');
 const user = require('./models/users');
 const site = require('./models/sites');
 const sheet = require('./models/sheets');
+const Note = require('./models/Notes');
 const prtcl = {
   user: 'user protocol',
   site: 'site  protocol',
@@ -9,14 +10,23 @@ const prtcl = {
 };
 
 module.exports.rest = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Welcome to the api of .com !!',
-      context: context,
-      event: event
-    }),
-  };
+  context.callbackWaitsForEmptyEventLoop = false;
 
-  callback(null, response);
+  connectToDatabase()
+    .then(() => {
+      let query = {};
+      if(event.queryStringParameters) {
+        query = event.queryStringParameters;
+      }
+      Note.find(query)
+        .then(notes => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(notes)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the notes.'
+        }))
+    });
 }
