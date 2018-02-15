@@ -28,4 +28,4 @@ const sheetSchema = new mongoose.Schema({
 //     next();
 // });
 
-module.exports = mongoose.model('sheets', sheetSchema);
+module.exports = mongoose.model('sheet', sheetSchema);
