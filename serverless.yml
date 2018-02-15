@@ -25,7 +25,7 @@ functions:
     events:
       - http:
           path: /{sitename}/api/{sheet}
-          method: get
+          method: post
           cors: true
   get:
     handler: api.rest
@@ -39,14 +39,14 @@ functions:
     events:
       - http:
           path: /{sitename}/api/{sheet}
-          method: get
+          method: put
           cors: true
   delete:
     handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
-          method: get
+          method: delete
           cors: true
   create:
     handler: handler.create # point to exported create function in handler.js
