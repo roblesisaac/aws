@@ -76,13 +76,6 @@ functions:
          path: notes/{id}
          method: put
          cors: true
-  delete:
-    handler: handler.delete
-    events:
-     - http:
-         path: notes/{id} # path will be domain.name.com/dev/notes/1
-         method: delete
-         cors: true
   landing:
     handler: handler.landingPage
     events:
