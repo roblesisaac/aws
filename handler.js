@@ -197,6 +197,11 @@ module.exports.landingPage = (event, context, callback) => {
             username: "Eiken",
             name: "isaac robles",
             password: "pass"
+          },
+          site: {
+            name: "plaza",
+            url: "plaza,
+            userId: ""
           }
         },
         el: "#app",
