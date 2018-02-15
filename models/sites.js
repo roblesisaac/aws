@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var mongoose = new mongoose.Schema({
+var siteSchema = new mongoose.Schema({
     name: String,
     userId: String,
     url: { type: String, unique: true }
