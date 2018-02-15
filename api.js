@@ -14,8 +14,7 @@ module.exports.rest = (event, context, callback) => {
     .then(() => {
       callback(null, {
         statusCode: 200,
-        event: event,
-        context: context
+        event: event
       });
     });
 };
