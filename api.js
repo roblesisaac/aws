@@ -5,15 +5,16 @@ const models = {
   sheets: require('./models/sheets')
 };
 
-const post = function(model, event, callback) {
-  const methods = {
-    "POST": "create",
-    "GET": "find",
-    "PUT": "findByIdAndUpdate",
-    "DELETE": "findByIdAndRemove"
-  };
-  const method = methods[event.httpMethod];
-  model[method](JSON.parse(event.body))
+const res = function(model, event, callback) {
+  const methods = { POST: "create", GET: "find", PUT: "findByIdAndUpdate", DELETE: "findByIdAndRemove" };
+  const http = event.httpMethod;
+  let req = {};
+  if(http === "POST") {
+    req = JSON.parse(event.body);
+  } else if (http === 'GET') {
+    req = event.queryStringParameters;
+  }
+  model[methods[http]](req)
     .then(data => callback(null, {
       statusCode: 200,
       body: JSON.stringify(data)
@@ -33,7 +34,7 @@ module.exports.rest = (event, context, callback) => {
   connectToDatabase()
     .then(() => {
       if(model) {
-        post(model, event, callback);
+        res(model, event, callback);
       } else {
         callback(null, {
           statusCode: 200,
