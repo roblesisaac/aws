@@ -212,7 +212,7 @@ module.exports.landingPage = (event, context, callback) => {
             });
           },
           createSite: function() {
-            axios.post("https://www.blockometry.com/plysheet/api/users", this.site).then(function(){
+            axios.post("https://www.blockometry.com/plysheet/api/sites", this.site).then(function(res){
               console.log(res.data)
             });
           },
