@@ -133,7 +133,7 @@ module.exports.landingApi = (event, context, callback) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Welcome to the api of ' + event.pathParameters.siteUrl + '.com !!',
+      message: 'Welcome to the api of ' + event.pathParameters.sitename + '.com !!',
       context: context,
       event: event
     }),
@@ -145,8 +145,8 @@ module.exports.landingApi = (event, context, callback) => {
 module.exports.landingPage = (event, context, callback) => {
   let siteName = 'plysheet';
   // check for GET params and use if available
-  if (event.pathParameters && event.pathParameters.siteUrl) {
-    siteName = event.pathParameters.siteUrl;
+  if (event.pathParameters && event.pathParameters.sitename) {
+    siteName = event.pathParameters.sitename;
   }
 
   const html = `
