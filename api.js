@@ -13,15 +13,15 @@ module.exports.rest = (event, context, callback) => {
 
   connectToDatabase()
     .then(() => {
-        const response = {
+      sheet.find()
+        .then(sheets => callback(null, {
           statusCode: 200,
-          body: JSON.stringify({
-            message: 'Welcome to the api of .com !!',
-            context: context,
-            event: event
-          }),
-        };
-      
-        callback(null, response);
+          body: JSON.stringify(sheets)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the sheets.'
+        }))
     });
 }
