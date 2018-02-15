@@ -59,13 +59,13 @@ functions:
     events:
       - http:
           method: get
-          path: /{sitename}
+          path: /{siteUrl}
   siteApi:
     handler: handler.landingApi
     events:
       - http:
           method: get
-          path: /{sitename}/api 
+          path: /{siteUrl}/api 
   auth:
     handler: auth.auth
     cors: true
