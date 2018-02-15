@@ -22,14 +22,14 @@ custom:
 
 functions:
   post:
-    handler: api.post
+    handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: post
           cors: true
   get:
-    handler: api.get
+    handler: api.rest
     events:
       - http:
           path: /{sitename}/api/{sheet}
