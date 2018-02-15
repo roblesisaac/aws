@@ -1,4 +1,5 @@
 const connectToDatabase = require('./db');
+const site = require('./models/sites');
 const sheet = require('./models/sheets');
 const prtcl = {
   user: 'user protocol',
