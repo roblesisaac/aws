@@ -3,20 +3,24 @@ const user = require('./models/users');
 const site = require('./models/sites');
 const sheet = require('./models/sheets');
 const prtcl = {
-  user: 'user protocol',
-  site: 'site  protocol',
-  sheet: 'sheet  protocol'
+  users: 'user protocol',
+  sites: 'site  protocol',
+  sheets: 'sheet  protocol'
 };
 
 module.exports.rest = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Welcome to the api of .com !!',
-      context: context,
-      event: event
-    }),
-  };
-
-  callback(null, response);
+  context.callbackWaitsForEmptyEventLoop = false;
+  const siteUrl = event.pathParameters.siteUrl;
+  const sheetName = event.pathParamenter.sheet;
+  const method = prtcl[sheetName];
+  connectToDatabase()
+    .then(() => {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify({
+          method: method,
+          event: event
+        })
+      })
+    });
 }
