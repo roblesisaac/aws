@@ -6,7 +6,14 @@ const models = {
 };
 
 const post = function(model, event, callback) {
-  model.create(JSON.parse(event.body))
+  const methods = {
+    "POST": "create",
+    "GET": "getAll",
+    "PUT": "findByIdAndUpdate",
+    "DELETE": "findByIdAndRemove"
+  };
+  const method = methods[event.httpMethod];
+  model[method](JSON.parse(event.body))
     .then(data => callback(null, {
       statusCode: 200,
       body: JSON.stringify(data)
@@ -23,7 +30,6 @@ module.exports.rest = (event, context, callback) => {
   const siteName = event.pathParameters.sitename;
   const sheetName = event.pathParameters.sheet;
   const model = models[sheetName];
-  const method = event.httpMethod;
   connectToDatabase()
     .then(() => {
       if(model) {
