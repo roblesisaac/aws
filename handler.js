@@ -207,17 +207,17 @@ module.exports.landingPage = (event, context, callback) => {
         el: "#app",
         methods: {
           create: function() {
-            axios.post("http://www.blockometry.com/plysheet/users", this.user).then(function(res){
+            axios.post("https://www.blockometry.com/plysheet/users", this.user).then(function(res){
               console.log(res.data)
             });
           },
           createSite: function() {
-            axios.post("http://www.blockometry.com/plysheet/users", this.site).then(function(){
+            axios.post("https://www.blockometry.com/plysheet/users", this.site).then(function(){
               console.log(res.data)
             });
           },
           login: function() {
-            axios.post("http://www.blockometry.com/plysheet/auth", this.user).then(function(res){
+            axios.post("https://www.blockometry.com/plysheet/auth", this.user).then(function(res){
               console.log(res.data)
             });
           }
