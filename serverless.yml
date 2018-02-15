@@ -22,47 +22,19 @@ custom:
 
 functions:
   post:
-    handler: api.rest
+    handler: api.post
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: post
           cors: true
   get:
-    handler: api.rest
+    handler: api.get
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
-  put:
-    handler: api.rest
-    events:
-      - http:
-          path: /{sitename}/api/{sheet}
-          method: put
-          cors: true
-  delete:
-    handler: api.rest
-    events:
-      - http:
-          path: /{sitename}/api/{sheet}
-          method: delete
-          cors: true
-  getAll:
-    handler: handler.getAll # path will be domain.name.com/dev/notes
-    events:
-     - http:
-         path: notes
-         method: get
-         cors: true
-  update:
-    handler: handler.update # path will be domain.name.com/dev/notes/1
-    events:
-     - http:
-         path: notes/{id}
-         method: put
-         cors: true
   landing:
     handler: handler.landingPage
     events:
