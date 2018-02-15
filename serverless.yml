@@ -48,6 +48,20 @@ functions:
           path: /{sitename}/api/{sheet}
           method: delete
           cors: true
+  getAll:
+    handler: handler.getAll # path will be domain.name.com/dev/notes
+    events:
+     - http:
+         path: notes
+         method: get
+         cors: true
+  update:
+    handler: handler.update # path will be domain.name.com/dev/notes/1
+    events:
+     - http:
+         path: notes/{id}
+         method: put
+         cors: true
   landing:
     handler: handler.landingPage
     events:
