@@ -1,11 +1,8 @@
 const connectToDatabase = require('./db');
-const user = require('./models/users');
-const site = require('./models/sites');
-const sheet = require('./models/sheets');
-const prtcl = {
-  users: 'user protocol',
-  sites: 'site  protocol',
-  sheets: 'sheet  protocol'
+const models = {
+  users: require('./models/users'),
+  sites: require('./models/sites'),
+  sheets: require('./models/sheets')
 };
 
 const post = function(model, event, callback) {
@@ -25,7 +22,7 @@ module.exports.rest = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const siteName = event.pathParameters.sitename;
   const sheetName = event.pathParameters.sheet;
-  const model = prtcl[sheetName];
+  const model = models[sheetName];
   const method = event.httpMethod;
   connectToDatabase()
     .then(() => {
