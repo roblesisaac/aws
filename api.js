@@ -10,7 +10,7 @@ const prtcl = {
 
 module.exports.rest = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const siteUrl = event.pathParameters.siteUrl;
+  const siteUrl = event.pathParameters.siteurl;
   const sheetName = event.pathParamenter.sheet;
   const method = prtcl[sheetName];
   connectToDatabase()
