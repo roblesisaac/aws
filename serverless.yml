@@ -24,28 +24,28 @@ functions:
     handler: api.rest
     events:
       - http:
-          path: /{sitename}/api/{sheet}
+          path: /{siteurl}/api/{sheet}
           method: post
           cors: true
   get:
     handler: api.rest
     events:
       - http:
-          path: /{sitename}/api/{sheet}
+          path: /{siteurl}/api/{sheet}
           method: get
           cors: true
   put:
     handler: api.rest
     events:
       - http:
-          path: /{sitename}/api/{sheet}
+          path: /{siteurl}/api/{sheet}
           method: put
           cors: true
   delete:
     handler: api.rest
     events:
       - http:
-          path: /{sitename}/api/{sheet}
+          path: /{siteurl}/api/{sheet}
           method: delete
           cors: true
   landing:
