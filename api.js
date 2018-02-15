@@ -9,14 +9,14 @@ const prtcl = {
 };
 
 module.exports.rest = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  connectToDatabase()
-    .then(() => {
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify({
-          event: event
-        })
-      });
-    });
-};
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Welcome to the api of ' + event.pathParameters.sitename + '.com !!',
+      context: context,
+      event: event
+    }),
+  };
+
+  callback(null, response);
+}
