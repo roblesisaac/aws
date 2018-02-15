@@ -8,7 +8,7 @@ const models = {
 const post = function(model, event, callback) {
   const methods = {
     "POST": "create",
-    "GET": "getAll",
+    "GET": "find",
     "PUT": "findByIdAndUpdate",
     "DELETE": "findByIdAndRemove"
   };
