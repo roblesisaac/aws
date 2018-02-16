@@ -1,6 +1,6 @@
 const connectToDb = require('./db');
 const models = {
-  note: require('./models/Notes'),
+  sheet: require('./models/sheets'),
   site: require('./models/sites')
 };
 
@@ -55,14 +55,26 @@ module.exports.landingPage = (event, context, callback) => {
     .then(() => {
       models.site.findOne({url: siteName})
         .then(function(site) {
-          const html = rhtml(site);
+          if(site) {
+            models.sheet.find({siteId: site._id})
+              .then(sheets => {
+                callback(null, {
+                  statusCode: 200,
+                  headers: {
+                    'Content-Type': 'text/html',
+                  },
+                  body: rhtml(site)
+                });                 
+              });
+          } else {
             callback(null, {
               statusCode: 200,
               headers: {
                 'Content-Type': 'text/html',
               },
-              body: html,
-            });      
+              body: `<h1>No ${siteName} exists</h1>`
+            });             
+          }
         });      
     });
 };
