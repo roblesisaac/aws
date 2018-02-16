@@ -229,11 +229,11 @@ module.exports.landingPage = (event, context, callback) => {
                   name: "isaac robles",
                   password: "pass"
                 },
+                sheet: '${sheet}',
                 site: {
                   name: "plaza",
                   url: "plaza",
                   userId: "",
-                  sheet: '${sheet}',
                 }
               },
               el: "#app",
