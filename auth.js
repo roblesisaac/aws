@@ -21,6 +21,38 @@ const generatePolicy = (principalId, effect, resource) => {
   return authResponse
 }
 
+// Public API
+module.exports.publicEndpoint = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Public API',
+    }),
+  })
+}
+
+// Private API
+module.exports.privateEndpoint = (event, context, callback) => {
+  return callback(null, {
+    statusCode: 200,
+    headers: {
+      /* Required for CORS support to work */
+      "Access-Control-Allow-Origin": "*",
+      /* Required for cookies, authorization headers with HTTPS */
+      "Access-Control-Allow-Credentials": true
+    },
+    body: JSON.stringify({
+      message: 'Hi ⊂◉‿◉つ from Private API. Only logged in users can see this',
+    }),
+  })
+}
+
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
 module.exports.auth = (event, context, callback) => {
   console.log('event', event)
