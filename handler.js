@@ -5,6 +5,7 @@ const models = {
 };
 
 const rhtml = function(site) {
+  site = site || {name: 'plysheet', url: 'plysheet'};
   return `
     <html>
       <head>
@@ -55,7 +56,7 @@ module.exports.landingPage = (event, context, callback) => {
       models.site.findOne({url: siteName})
         .then(function(site) {
           site = site || {};
-          const html = shtml(site);
+          const html = rhtml(site);
             callback(null, {
               statusCode: 200,
               headers: {
