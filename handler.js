@@ -19,26 +19,27 @@ module.exports.sheet = (event, context, callback) => {
   };
   models.site.findOne({url: siteName})
     .then(function(site) {
-        if (!site) {
-          response.body = JSON.stringify({message: 'No Site ' + siteName});
-          return callback(null, response);
-        }
-        models.sheet.findOne({siteId: site._id, name: sheetName})
-          .then(function(sheet){
-              if(!sheet) {
-                response.body = JSON.stringify({message: 'No Sheet ' + sheetName});
-                return callback(null, response);
-              }
-              response.headers['Content-Type'] = "application/javascript";
-              let arr = sheet[prop];
-              let res = null;
-              for(var i=0; i<arr.length; i++) {
-                if(arr[i].name === name) res = arr[i].txt;
-                i=arr.length;
-              }
-              response.body = res;
-              callback(null, response);
-            });
+      callback(null, response);
+        // if (!site) {
+        //   response.body = JSON.stringify({message: 'No Site ' + siteName});
+        //   return callback(null, response);
+        // }
+        // models.sheet.findOne({siteId: site._id, name: sheetName})
+        //   .then(function(sheet){
+        //       if(!sheet) {
+        //         response.body = JSON.stringify({message: 'No Sheet ' + sheetName});
+        //         return callback(null, response);
+        //       }
+        //       response.headers['Content-Type'] = "application/javascript";
+        //       let arr = sheet[prop];
+        //       let res = null;
+        //       for(var i=0; i<arr.length; i++) {
+        //         if(arr[i].name === name) res = arr[i].txt;
+        //         i=arr.length;
+        //       }
+        //       response.body = res;
+        //       callback(null, response);
+        //     });
       });
 };
 
