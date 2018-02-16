@@ -21,6 +21,13 @@ custom:
     createRoute53Record: true
 
 functions:
+  sheet:
+    handler: handler.sheet
+    events:
+      - http:
+        path: /{sitename}/sheet/{sheet}/{prop}/{name}
+        method: get
+        cors: true
   post:
     handler: api.rest
     events:
@@ -35,13 +42,6 @@ functions:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
-  sheet:
-    handler: handler.sheet
-    events:
-      -http:
-        path: /{sitename}/sheet/{sheet}/{prop}/{name}
-        method: get
-        cors: true
   landing:
     handler: handler.landingPage
     events:
