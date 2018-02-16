@@ -48,10 +48,10 @@ module.exports.sheet = (event, context, callback) => {
 const rhtml = function(site, sheets) {
   site = site || {name: 'plysheet', url: 'plysheet'};
   site.sheets = {};
-  for (var i in sheets) {
-    sheets[i]._id = JSON.stringify(sheets[i]._id);
-    site.sheet[sheets[i].name] = sheets[i];
-  }
+  // for (var i in sheets) {
+  //   sheets[i]._id = JSON.stringify(sheets[i]._id);
+  //   site.sheet[sheets[i].name] = sheets[i];
+  // }
   return `
     <html>
       <head>
