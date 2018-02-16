@@ -4,24 +4,6 @@ const models = {
   site: require('./models/sites')
 };
 
-module.exports.create = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-
-  connectToDb()
-    .then(() => {
-      models.note.create(JSON.parse(event.body))
-        .then(note => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(note)
-        }))
-        .catch(err => callback(null, {
-          statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not create the note.'
-        }));
-    });
-};
-
 module.exports.getOne = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
@@ -37,28 +19,6 @@ module.exports.getOne = (event, context, callback) => {
           headers: { 'Content-Type': 'text/plain' },
           body: 'Could not fetch the note.'
         }));
-    });
-};
-
-module.exports.getAll = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-
-  connectToDb()
-    .then(() => {
-      let query = {};
-      if(event.queryStringParameters) {
-        query = event.queryStringParameters;
-      }
-      models.note.find(query)
-        .then(notes => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(notes)
-        }))
-        .catch(err => callback(null, {
-          statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the notes.'
-        }))
     });
 };
 
@@ -97,38 +57,6 @@ module.exports.delete = (event, context, callback) => {
         }));
     });
 };
-
-// Public API
-module.exports.publicEndpoint = (event, context, callback) => {
-  return callback(null, {
-    statusCode: 200,
-    headers: {
-      /* Required for CORS support to work */
-      "Access-Control-Allow-Origin": "*",
-      /* Required for cookies, authorization headers with HTTPS */
-      "Access-Control-Allow-Credentials": true
-    },
-    body: JSON.stringify({
-      message: 'Hi ⊂◉‿◉つ from Public API',
-    }),
-  })
-}
-
-// Private API
-module.exports.privateEndpoint = (event, context, callback) => {
-  return callback(null, {
-    statusCode: 200,
-    headers: {
-      /* Required for CORS support to work */
-      "Access-Control-Allow-Origin": "*",
-      /* Required for cookies, authorization headers with HTTPS */
-      "Access-Control-Allow-Credentials": true
-    },
-    body: JSON.stringify({
-      message: 'Hi ⊂◉‿◉つ from Private API. Only logged in users can see this',
-    }),
-  })
-}
 
 module.exports.landingApi = (event, context, callback) => {
   const response = {
