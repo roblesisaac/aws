@@ -35,6 +35,13 @@ functions:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
+  sheet:
+    handler: handler.sheet
+    events:
+      -http:
+        path: /{sitename}/sheet/{sheet}/{prop}/{name}
+        method: get
+        cors: true
   landing:
     handler: handler.landingPage
     events:
