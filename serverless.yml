@@ -25,9 +25,9 @@ functions:
     handler: handler.sheet
     events:
       - http:
-        path: /{sitename}/sheet/{sheet}/{prop}/{name}
-        method: get
-        cors: true
+          path: /{sitename}/sheet/{sheet}/{prop}/{name}
+          method: get
+          cors: true
   post:
     handler: api.rest
     events:
