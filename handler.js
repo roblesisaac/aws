@@ -16,7 +16,6 @@ module.exports.sheet = (event, context, callback) => {
     },
     body: 'Nothing yet.'
   };
-  return callback(null, response);
   models.site.findOne({url: siteName})
     .then(site => {
       if (!site) {
@@ -25,19 +24,20 @@ module.exports.sheet = (event, context, callback) => {
       }
       models.sheet.findOne({siteId: site._id, name: sheetName})
         .then(sheet => {
-          if(!sheet) {
-            response.body = JSON.stringify({message: 'No Sheet ' + sheetName});
-            return callback(null, response);
-          }
-          response.headers['Content-Type'] = "application/javascript";
-          let arr = sheet[prop];
-          let res = null;
-          for(var i=0; i<arr.length; i++) {
-            if(arr[i].name === name) res = arr[i].txt;
-            i=arr.length;
-          }
-          response.body = res;
           callback(null, response);
+          // if(!sheet) {
+          //   response.body = JSON.stringify({message: 'No Sheet ' + sheetName});
+          //   return callback(null, response);
+          // }
+          // response.headers['Content-Type'] = "application/javascript";
+          // let arr = sheet[prop];
+          // let res = null;
+          // for(var i=0; i<arr.length; i++) {
+          //   if(arr[i].name === name) res = arr[i].txt;
+          //   i=arr.length;
+          // }
+          // response.body = res;
+          // callback(null, response);
         });
     });
 };
