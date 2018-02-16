@@ -67,7 +67,7 @@ const rhtml = function(site, sheets) {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
       <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
       <script src="https://unpkg.com/vue"></script>
-      <script src="https://www.blockometry.com/plaza/sheet/sheets/script/main"></script>
+      <script src="https://www.blockometry.com/plaza/sheet/sheets/scripts/main"></script>
       <script type="text/javascript">
         var site = new Vue({
           data: {
