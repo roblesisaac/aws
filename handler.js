@@ -6,6 +6,11 @@ const models = {
 
 const rhtml = function(site, sheets) {
   site = site || {name: 'plysheet', url: 'plysheet'};
+  site.sheets = {};
+  for (var i in sheets) {
+    sheets[i]._id = JSON.stringify(sheets[i]._id);
+    site.sheets[sheets[i].name] = sheets[i];
+  }
   return `
     <html>
       <head>
@@ -28,7 +33,7 @@ const rhtml = function(site, sheets) {
             id: '${site._id}',
             name: '${site.name}',
             url: '${site.url}',
-            sheets: ${sheets}
+            sheets: ${site.sheets}
           },
           el: "#app",
           methods: {
