@@ -73,8 +73,7 @@ const rhtml = function(site, sheets) {
           data: {
             id: '${site._id}',
             name: '${site.name}',
-            url: '${site.url}',
-            sheet: ${site.sheets}
+            url: '${site.url}'
           },
           el: "#app"
         });
