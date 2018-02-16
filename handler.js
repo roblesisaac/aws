@@ -89,6 +89,13 @@ module.exports.landingPage = (event, context, callback) => {
   if (event.pathParameters && event.pathParameters.sitename) {
     siteName = event.pathParameters.sitename;
   }
+  const response = {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html',
+    },
+    body: '<h1>Empty</h1>'
+  };
 
   connectToDb()
     .then(() => {
@@ -97,22 +104,12 @@ module.exports.landingPage = (event, context, callback) => {
           if(site) {
             models.sheet.find({siteId: site._id})
               .then(sheets => {
-                callback(null, {
-                  statusCode: 200,
-                  headers: {
-                    'Content-Type': 'text/html',
-                  },
-                  body: rhtml(site, sheets)
-                });                 
+                response.body = rhtml(site, sheets);
+                callback(null, response);                 
               });
           } else {
-            callback(null, {
-              statusCode: 200,
-              headers: {
-                'Content-Type': 'text/html',
-              },
-              body: `<h1>No ${siteName} exists</h1>`
-            });             
+            response.body = `<h1>No ${siteName} exists</h1>`;
+            callback(null, response);             
           }
         });      
     });
