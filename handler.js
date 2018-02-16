@@ -156,6 +156,27 @@ module.exports.landingPage = (event, context, callback) => {
     .then(() => {
       models.site.findOne({url: siteName})
         .then(function(site) {
+        site = site || {};
+        const sheet = {
+          "name" : "sheets",
+          "link" : "sheets",
+          "sort" : 1,
+          "load" : "",
+          "public" : "false",
+          "scripts": [{
+            name: "main",
+            txt: "console.log('here is the sheet script!')"
+          }],
+          "tmplts" : [{
+            name: "main",
+            txt: "<h1>here is the main text</h1>"
+          }],
+          "users": [{
+            username: "Eiken",
+            apps: ["all"]
+          }],
+          "siteId": site._id          
+        };
         const html = `
         <html>
           <head>
@@ -185,6 +206,8 @@ module.exports.landingPage = (event, context, callback) => {
               site userId: <input type="text" v-model="site.userId">
               <br>
               <button @click="createSite">Create</button>
+              <br>
+              <button @click="createSheet">Create Sheet</button>
             </div>
           </body>
           <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -209,7 +232,8 @@ module.exports.landingPage = (event, context, callback) => {
                 site: {
                   name: "plaza",
                   url: "plaza",
-                  userId: ""
+                  userId: "",
+                  sheet: '${sheet}',
                 }
               },
               el: "#app",
@@ -218,6 +242,11 @@ module.exports.landingPage = (event, context, callback) => {
                   axios.post("https://www.blockometry.com/plysheet/api/users", this.user).then(function(res){
                     console.log(res.data)
                   });
+                },
+                createSheet: function() {
+                  axios.post("https://www.blockometry.com/plysheet/api/sheets", this.sheet).then(function(res){
+                    console.log(res.data)
+                  });                  
                 },
                 createSite: function() {
                   axios.post("https://www.blockometry.com/plysheet/api/sites", this.site).then(function(res){
