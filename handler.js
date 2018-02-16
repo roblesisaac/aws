@@ -14,8 +14,9 @@ module.exports.sheet = (event, context, callback) => {
     headers: {
       'Content-Type': 'text/html',
     },
-    body: null
+    body: 'Nothing yet.'
   };
+  return callback(null, response);
   models.site.findOne({url: siteName})
     .then(site => {
       if (!site) {
@@ -29,7 +30,14 @@ module.exports.sheet = (event, context, callback) => {
             return callback(null, response);
           }
           response.headers['Content-Type'] = "application/javascript";
-          response.body = sheet[prop];
+          let arr = sheet[prop];
+          let res = null;
+          for(var i=0; i<arr.length; i++) {
+            if(arr[i].name === name) res = arr[i].txt;
+            i=arr.length;
+          }
+          response.body = res;
+          callback(null, response);
         });
     });
 };
