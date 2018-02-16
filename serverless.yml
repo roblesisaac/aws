@@ -47,12 +47,6 @@ functions:
       - http:
           method: get
           path: /{sitename}
-  siteApi:
-    handler: handler.landingApi
-    events:
-      - http:
-          method: get
-          path: /{sitename}/api 
   auth:
     handler: auth.auth
     cors: true
