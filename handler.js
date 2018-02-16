@@ -4,7 +4,7 @@ const models = {
   site: require('./models/sites')
 };
 
-const rhtml = function(site) {
+const rhtml = function(site, sheets) {
   site = site || {name: 'plysheet', url: 'plysheet'};
   return `
     <html>
@@ -38,6 +38,7 @@ const rhtml = function(site) {
             }
           }
         });
+        console.log(${sheets})
       </script>
     </html>`;
 };
@@ -63,7 +64,7 @@ module.exports.landingPage = (event, context, callback) => {
                   headers: {
                     'Content-Type': 'text/html',
                   },
-                  body: rhtml(site)
+                  body: rhtml(site, sheets)
                 });                 
               });
           } else {
