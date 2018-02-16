@@ -4,12 +4,42 @@ const models = {
   site: require('./models/sites')
 };
 
+module.exports.sheet = (event, context, callback) => {
+  const siteName = event.pathParameters.sitename;
+  const sheetName = event.pathParameters.sheet;
+  const prop = event.pathParameters.prop;
+  const name = event.pathParameters.name;
+  const response = {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html',
+    },
+    body: null
+  };
+  models.site.findOne({url: siteName})
+    .then(site => {
+      if (!site) {
+        response.body = JSON.stringify({message: 'No Site ' + siteName});
+        return callback(null, response);
+      }
+      models.sheet.findOne({siteId: site._id, name: sheetName})
+        .then(sheet => {
+          if(!sheet) {
+            response.body = JSON.stringify({message: 'No Sheet ' + sheetName});
+            return callback(null, response);
+          }
+          response.headers['Content-Type'] = "application/javascript";
+          response.body = sheet[prop];
+        });
+    });
+};
+
 const rhtml = function(site, sheets) {
   site = site || {name: 'plysheet', url: 'plysheet'};
   site.sheets = {};
   for (var i in sheets) {
     sheets[i]._id = JSON.stringify(sheets[i]._id);
-    site.sheets[sheets[i].name] = sheets[i];
+    site.sheet[sheets[i].name] = sheets[i];
   }
   return `
     <html>
@@ -20,29 +50,22 @@ const rhtml = function(site, sheets) {
       <body>
         <div id="app">
           <h1>Welcome to {{ url }}</h1>
-          <button @click="createSheet">Create Sheet</button>
         </div>
       </body>
       <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
       <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
       <script src="https://unpkg.com/vue"></script>
+      <script src="https://www.blockometry.com/plaza/sheet/sheets/script/main"></script>
       <script type="text/javascript">
         var site = new Vue({
           data: {
             id: '${site._id}',
             name: '${site.name}',
             url: '${site.url}',
-            sheets: ${site.sheets}
+            sheet: ${site.sheets}
           },
-          el: "#app",
-          methods: {
-            createSheet: function() {
-              axios.post("https://www.blockometry.com/plysheet/api/sheets", this.sheet).then(function(res){
-                console.log(res.data)
-              });                  
-            }
-          }
+          el: "#app"
         });
       </script>
     </html>`;
