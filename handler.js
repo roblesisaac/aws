@@ -157,26 +157,6 @@ module.exports.landingPage = (event, context, callback) => {
       models.site.findOne({url: siteName})
         .then(function(site) {
         site = site || {};
-        const sheet = {
-          "name" : "sheets",
-          "link" : "sheets",
-          "sort" : 1,
-          "load" : "",
-          "public" : "false",
-          "scripts": [{
-            name: "main",
-            txt: "console.log('here is the sheet script!')"
-          }],
-          "tmplts" : [{
-            name: "main",
-            txt: "<h1>here is the main text</h1>"
-          }],
-          "users": [{
-            username: "Eiken",
-            apps: ["all"]
-          }],
-          "siteId": site._id          
-        };
         const html = `
         <html>
           <head>
@@ -229,7 +209,26 @@ module.exports.landingPage = (event, context, callback) => {
                   name: "isaac robles",
                   password: "pass"
                 },
-                sheet: '${sheet}',
+                sheet: {
+                  "name" : "sheets",
+                  "link" : "sheets",
+                  "sort" : 1,
+                  "load" : "",
+                  "public" : "false",
+                  "scripts": [{
+                    name: "main",
+                    txt: "console.log('here is the sheet script!')"
+                  }],
+                  "tmplts" : [{
+                    name: "main",
+                    txt: "<h1>here is the main text</h1>"
+                  }],
+                  "users": [{
+                    username: "Eiken",
+                    apps: ["all"]
+                  }],
+                  "siteId": '${site._id}'   
+                },
                 site: {
                   name: "plaza",
                   url: "plaza",
