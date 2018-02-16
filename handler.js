@@ -14,7 +14,7 @@ const rhtml = function(site) {
       </head>
       <body>
         <div id="app">
-          <h1>Welcome to {{ site.url }}</h1>
+          <h1>Welcome to {{ url }}</h1>
           <button @click="createSheet">Create Sheet</button>
         </div>
       </body>
@@ -55,7 +55,6 @@ module.exports.landingPage = (event, context, callback) => {
     .then(() => {
       models.site.findOne({url: siteName})
         .then(function(site) {
-          site = site || {};
           const html = rhtml(site);
             callback(null, {
               statusCode: 200,
