@@ -46,9 +46,9 @@ functions:
     handler: api.put
     events:
       - http:
-        path: /{sitename}/api/{sheet}/{id}
-        method: put
-        cors: true
+          path: /{sitename}/api/{sheet}/{id}
+          method: put
+          cors: true
   landing:
     handler: handler.landingPage
     events:
