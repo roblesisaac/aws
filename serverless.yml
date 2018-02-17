@@ -29,26 +29,26 @@ functions:
           method: get
           cors: true
   post:
-    handler: api.rest
+    handler: api.post
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: post
           cors: true
   get:
-    handler: api.rest
+    handler: api.get
     events:
       - http:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
   put:
-    handler: api.rest
+    handler: api.put
     events:
       - http:
-        path: /{sitename}/api/{sheet}/{id}
-        method: put
-        cors: true
+          path: /{sitename}/api/{sheet}/{id}
+          method: get
+          cors: true
   landing:
     handler: handler.landingPage
     events:
