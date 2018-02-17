@@ -30,14 +30,14 @@ const res = function(model, event, callback) {
     }));
 };
 
-const setup = function(event, context, fn) {
+var setup = function(event, context, fn) {
   context.callbackWaitsForEmptyEventLoop = false;
-  let site = {
+  var site = {
     name: event.pathParameters.sitename,
     sheet: event.pathParameters.sheet,
-    model: models[event.pathParameters.sheet] || mongoose.model(url, new mongoose.Schema({name: String},{strict: false})),
+    model: models[event.pathParameters.sheet],
     err: {
-      statusCode: err.statusCode || 500,
+      statusCode: 500,
       headers: { 'Content-Type': 'text/plain' },
       body: 'Could not create the note.'      
     }
@@ -49,13 +49,13 @@ const setup = function(event, context, fn) {
 };
 
 module.exports.post = (event, context, callback) => {
-  setup(event, context, function(site) {
-      site.model.create(JSON.parse(event.body))
+  setup(event, context, function(res) {
+      res.model.create(JSON.parse(event.body))
         .then(data => callback(null, {
           statusCode: 200,
           body: JSON.stringify(data)
         }))
-        .catch(err => callback(null, site.err));    
+        .catch(err => callback(null, res.err));    
   });
 };
 
