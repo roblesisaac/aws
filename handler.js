@@ -3,6 +3,39 @@ const models = {
   sheet: require('./models/sheets'),
   site: require('./models/sites')
 };
+const sheets = {
+        scripts: [
+          {
+            _id: "5a86259595049a000101202a",
+            name: "main",
+            txt: "console.log('here is the sheet script!')"
+          }
+          ],
+          tmplts: [
+          {
+            _id: "5a86259595049a000101202b",
+            name: "main",
+            txt: "<h1>here is the main text</h1>"
+          }
+        ],
+        users: [
+          {
+            apps: [
+                "all"
+              ],
+            _id: "5a86259595049a000101202c",
+            username: "Eiken"
+          }
+        ],
+        _id: "5a86259595049a0001012029",
+        name: "sheets",
+        link: "sheets",
+        sort: 1,
+        load: "",
+        public: "false",
+        siteId: "5a861c183ec70e0001d72421",
+        __v: 0
+      };
 
 module.exports.sheet = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -61,6 +94,9 @@ const rhtml = function(site, sheets) {
       <body>
         <div id="app">
           <h1>Welcome to {{ url }}</h1>
+          <input type="text" v-model="posturl">
+          <textarea rows="30" v-model="txt"></textarea>
+          <button @click="save">Save</button>
         </div>
       </body>
       <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -73,9 +109,21 @@ const rhtml = function(site, sheets) {
           data: {
             id: '${site._id}',
             name: '${site.name}',
-            url: '${site.url}'
+            url: '${site.url}',
+            sheet: '${sheet}',
+            key: "scripts",
+            puturl: "https://www.blockometry.com/plaza/api/sheets/5a86259595049a0001012029",
+            txt: "text goes here"
           },
-          el: "#app"
+          el: "#app",
+          methods: {
+            save: function() {
+              this.sheet[this.key][0].txt = this.txt;
+              axios.put(this.puturl, this.sheet).then(function(res){
+                console.log(res.data);
+              });
+            }
+          }
         });
       </script>
     </html>`;
