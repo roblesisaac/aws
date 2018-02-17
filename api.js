@@ -43,8 +43,8 @@ const setup = function(event, context, fn) {
     }
   };
   connectToDb()
-    .then(() => {
-      fn(site);
+    .then(function(){
+      if(fn) fn(site);
     });  
 };
 
