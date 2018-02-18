@@ -35,10 +35,12 @@ module.exports.post = (event, context, callback) => {
 
 module.exports.get = (event, context, callback) => {
   setup(event, context, function(site) {
-      callback(null, {
+    site.model.find({})
+      .then(data => callback(null, {
         statusCode: 200,
-        body: JSON.stringify({message: 'test'})
-      });   
+        body: JSON.stringify(data)
+      }))
+      .catch(err => callback(null, site.err));   
   });
 };
 
