@@ -79,7 +79,7 @@ const rhtml = function(site, sheets) {
         var site = new Vue({
           created: function() {
             var vm = this;
-            ply.axios.get(this.ace.url).then(function(res){
+            axios.get(this.ace.url).then(function(res){
               vm.ace.send = res.data;
             });
           },
