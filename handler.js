@@ -61,7 +61,7 @@ const rhtml = function(site, sheets) {
       </head>
       <body>
         <div id="app" class="grid-x">
-          <div class="cell small-12>
+          <div class="cell small-12">
             <input type="text" v-model="ace.url">
             <br>
             <textarea rows="45"></textarea>
