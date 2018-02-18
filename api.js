@@ -66,7 +66,7 @@ module.exports.put = (event, context, callback) => {
   });
 };
 
-module.exports.put = (event, context, callback) => {
+module.exports.delete = (event, context, callback) => {
   dbSetup(event, context, function(res) {
       res.model.findByIdAndRemove(event.pathParameters.id)
         .then(data => callback(null, {
