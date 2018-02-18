@@ -56,6 +56,13 @@ functions:
           path: /{sitename}/api/{sheet}/{id}
           method: put
           cors: true
+  delete:
+    handler: api.delete
+    events:
+      - http:
+          path: /{sitename}/api/{sheet}/{id}
+          method: delete
+          cors: true
   landing:
     handler: handler.landingPage
     events:
