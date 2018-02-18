@@ -25,7 +25,7 @@ var setup = function(event, context, fn) {
 };
 
 module.exports.post = (event, context, callback) => {
-  setup(event, context, callback, function(site) {
+  setup(event, context, function(site) {
       callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
@@ -34,7 +34,7 @@ module.exports.post = (event, context, callback) => {
 };
 
 module.exports.get = (event, context, callback) => {
-  setup(event, context, callback, function(site) {
+  setup(event, context, function(site) {
       callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
@@ -43,7 +43,7 @@ module.exports.get = (event, context, callback) => {
 };
 
 module.exports.put = (event, context, callback) => {
-  setup(event, context, callback, function(site) {
+  setup(event, context, function(site) {
       callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
