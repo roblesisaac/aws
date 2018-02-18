@@ -42,6 +42,13 @@ functions:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
+  get:
+    handler: api.getOne
+    events:
+      - http:
+          path: /{sitename}/api/{sheet}/{id}
+          method: get
+          cors: true
   put:
     handler: api.put
     events:
