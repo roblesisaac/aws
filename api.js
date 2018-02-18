@@ -19,9 +19,7 @@ var setup = function(event, context, fn) {
     }
   };
   connectToDb()
-    .then(function(){
-      if(fn) fn(site);
-    });  
+    .then(() => fn(site));  
 };
 
 module.exports.post = (event, context, callback) => {
