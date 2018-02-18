@@ -64,7 +64,7 @@ const rhtml = function(site, sheets) {
           <div class="cell small-12">
             <input type="text" v-model="ace.url">
             <br>
-            <textarea rows="45"></textarea>
+            <textarea rows="45" v-model="ace.txt"></textarea>
             <button @click="saveSheet">Save</button>
           </div>
         </div>
@@ -97,7 +97,7 @@ const rhtml = function(site, sheets) {
           el: "#app",
           methods: {
             saveSheet: function() {
-              this.ace.send[this.ace.prop][0] = this.ace.txt;
+              this.ace.send[this.ace.prop][0].txt = this.ace.txt;
               axios.post(this.ace.url, this.ace.send).then(function(res){
                 console.log(res.data);
               });
