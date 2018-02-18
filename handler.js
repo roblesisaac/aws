@@ -75,36 +75,6 @@ const rhtml = function(site, sheets) {
       <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
       <script src="https://unpkg.com/vue"></script>
       <script src="https://www.blockometry.com/plaza/sheet/sheets/scripts/main"></script>
-      <script type="text/javascript">
-        var site = new Vue({
-          created: function() {
-            var vm = this;
-            axios.get(this.ace.url).then(function(res){
-              vm.ace.send = res.data;
-            });
-          },
-          data: {
-            id: '${site._id}',
-            name: '${site.name}',
-            url: '${site.url}',
-            ace: {
-              url: "https://www.blockometry.com/plaza/api/sheets/5a86259595049a0001012029",
-              prop: "scripts",
-              send: null,
-              txt: "console.log('hello word')"
-            }
-          },
-          el: "#app",
-          methods: {
-            saveSheet: function() {
-              this.ace.send[this.ace.prop][0].txt = this.ace.txt;
-              axios.put(this.ace.url, this.ace.send).then(function(res){
-                console.log(res.data);
-              });
-            }
-          }
-        });
-      </script>
     </html>`;
 };
 
