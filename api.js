@@ -25,24 +25,30 @@ var setup = function(event, context, fn) {
 };
 
 module.exports.post = (event, context, callback) => {
-  callback(null, {
+  setup(event, context, callback, function(site) {
+      callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
-      }); 
+      });   
+  });
 };
 
 module.exports.get = (event, context, callback) => {
-  callback(null, {
+  setup(event, context, callback, function(site) {
+      callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
-      }); 
+      });   
+  });
 };
 
 module.exports.put = (event, context, callback) => {
-  callback(null, {
+  setup(event, context, callback, function(site) {
+      callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
-      });
+      });   
+  });
 };
 
 // module.exports.getOne = (event, context, callback) => {
