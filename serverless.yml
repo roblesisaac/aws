@@ -47,7 +47,7 @@ functions:
     events:
       - http:
           path: /{sitename}/api/{sheet}/{id}
-          method: get
+          method: put
           cors: true
   landing:
     handler: handler.landingPage
