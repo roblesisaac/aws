@@ -98,7 +98,7 @@ const rhtml = function(site, sheets) {
           methods: {
             saveSheet: function() {
               this.ace.send[this.ace.prop][0].txt = this.ace.txt;
-              axios.post(this.ace.url, this.ace.send).then(function(res){
+              axios.put(this.ace.url, this.ace.send).then(function(res){
                 console.log(res.data);
               });
             }
