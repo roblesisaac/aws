@@ -63,6 +63,7 @@ const rhtml = function(site, sheets) {
         <div id="app" class="grid-x">
           <div class="cell small-12>
             <input type="text" v-model="ace.url">
+            <br>
             <textarea rows="45"></textarea>
             <button @click="saveSheet">Save</button>
           </div>
@@ -78,7 +79,7 @@ const rhtml = function(site, sheets) {
         var site = new Vue({
           created: function() {
             var vm = this;
-            ply.axios.get('https://www.blockometry.com/plaza/api/sheets/5a86259595049a0001012029).then(function(res){
+            ply.axios.get(this.ace.url).then(function(res){
               vm.ace.send = res.data;
             });
           },
