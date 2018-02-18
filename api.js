@@ -6,23 +6,23 @@ const models = {
   sheets: require('./models/sheets')
 };
 
-// var setup = function(event, context, fn) {
-//   context.callbackWaitsForEmptyEventLoop = false;
-//   var site = {
-//     name: event.pathParameters.sitename,
-//     sheet: event.pathParameters.sheet,
-//     model: models[event.pathParameters.sheet],
-//     err: {
-//       statusCode: 500,
-//       headers: { 'Content-Type': 'text/plain' },
-//       body: 'Could not create the note.'      
-//     }
-//   };
-//   connectToDb()
-//     .then(function(){
-//       if(fn) fn(site);
-//     });  
-// };
+var setup = function(event, context, fn) {
+  context.callbackWaitsForEmptyEventLoop = false;
+  var site = {
+    name: event.pathParameters.sitename,
+    sheet: event.pathParameters.sheet,
+    model: models[event.pathParameters.sheet],
+    err: {
+      statusCode: 500,
+      headers: { 'Content-Type': 'text/plain' },
+      body: 'Could not create the note.'      
+    }
+  };
+  connectToDb()
+    .then(function(){
+      if(fn) fn(site);
+    });  
+};
 
 module.exports.post = (event, context, callback) => {
   callback(null, {
