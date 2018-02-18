@@ -6,49 +6,43 @@ const models = {
   sheets: require('./models/sheets')
 };
 
-var setup = function(event, context, fn) {
-  context.callbackWaitsForEmptyEventLoop = false;
-  var site = {
-    name: event.pathParameters.sitename,
-    sheet: event.pathParameters.sheet,
-    model: models[event.pathParameters.sheet],
-    err: {
-      statusCode: 500,
-      headers: { 'Content-Type': 'text/plain' },
-      body: 'Could not create the note.'      
-    }
-  };
-  connectToDb()
-    .then(function(){
-      if(fn) fn(site);
-    });  
-};
+// var setup = function(event, context, fn) {
+//   context.callbackWaitsForEmptyEventLoop = false;
+//   var site = {
+//     name: event.pathParameters.sitename,
+//     sheet: event.pathParameters.sheet,
+//     model: models[event.pathParameters.sheet],
+//     err: {
+//       statusCode: 500,
+//       headers: { 'Content-Type': 'text/plain' },
+//       body: 'Could not create the note.'      
+//     }
+//   };
+//   connectToDb()
+//     .then(function(){
+//       if(fn) fn(site);
+//     });  
+// };
 
 module.exports.post = (event, context, callback) => {
-  setup(event, context, callback, function(site) {
-      callback(null, {
+  callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
-      });   
-  });
+      }); 
 };
 
 module.exports.get = (event, context, callback) => {
-  setup(event, context, callback, function(site) {
-      callback(null, {
+  callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
-      });   
-  });
+      }); 
 };
 
 module.exports.put = (event, context, callback) => {
-  setup(event, context, callback, function(site) {
-      callback(null, {
+  callback(null, {
         statusCode: 200,
         body: JSON.stringify({message: 'test'})
-      });   
-  });
+      });
 };
 
 // module.exports.getOne = (event, context, callback) => {
