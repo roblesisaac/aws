@@ -11,7 +11,7 @@ var setup = function(event, context, fn) {
   var site = {
     name: event.pathParameters.sitename,
     sheet: event.pathParameters.sheet,
-    model: models[event.pathParameters.sheet],
+    model: models[event.pathParameters.sheet] || mongoose.model(url, new mongoose.Schema({name: String},{strict: false})),
     err: {
       statusCode: 500,
       headers: { 'Content-Type': 'text/plain' },
@@ -22,12 +22,15 @@ var setup = function(event, context, fn) {
     .then(() => fn(site));  
 };
 
+
 module.exports.post = (event, context, callback) => {
   setup(event, context, function(site) {
-      callback(null, {
+    site.model.create(JSON.parse(event.body))
+      .then(data => callback(null, {
         statusCode: 200,
-        body: JSON.stringify({message: 'test'})
-      });   
+        body: JSON.stringify(data)
+      }))
+      .catch(err => callback(null, site.err));     
   });
 };
 
@@ -42,32 +45,27 @@ module.exports.get = (event, context, callback) => {
   });
 };
 
-module.exports.put = (event, context, callback) => {
+module.exports.getOne = (event, context, callback) => {
   setup(event, context, function(site) {
-      callback(null, {
+    site.model.findById(event.pathParameters.id)
+      .then(data => callback(null, {
         statusCode: 200,
-        body: JSON.stringify({message: 'test'})
-      });   
+        body: JSON.stringify(data)
+      }))
+      .catch(err => callback(null, site.err));  
   });
 };
 
-// module.exports.getOne = (event, context, callback) => {
-//   context.callbackWaitsForEmptyEventLoop = false;
-
-//   connectToDb()
-//     .then(() => {
-//       models.note.findById(event.pathParameters.id)
-//         .then(note => callback(null, {
-//           statusCode: 200,
-//           body: JSON.stringify(note)
-//         }))
-//         .catch(err => callback(null, {
-//           statusCode: err.statusCode || 500,
-//           headers: { 'Content-Type': 'text/plain' },
-//           body: 'Could not fetch the note.'
-//         }));
-//     });
-// };
+module.exports.put = (event, context, callback) => {
+  setup(event, context, function(site) {
+      site.model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
+        .then(data => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(data)
+        }))
+        .catch(err => callback(null, site.err));  
+  });
+};
 
 // module.exports.update = (event, context, callback) => {
 //   context.callbackWaitsForEmptyEventLoop = false;
