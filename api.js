@@ -49,35 +49,29 @@ var setup = function(event, context, fn) {
 };
 
 module.exports.post = (event, context, callback) => {
-  setup(event, context, function(res) {
-      res.model.create(JSON.parse(event.body))
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        }))
-        .catch(err => callback(null, res.err));    
+  setup(event, context, callback, function(site) {
+      callback(null, {
+        statusCode: 200,
+        body: 'test'
+      });   
   });
 };
 
 module.exports.get = (event, context, callback) => {
   setup(event, context, callback, function(site) {
-      site.model.find({})
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        }))
-        .catch(err => callback(null, site.err));    
+      callback(null, {
+        statusCode: 200,
+        body: 'test'
+      });   
   });
 };
 
 module.exports.put = (event, context, callback) => {
   setup(event, context, callback, function(site) {
-      site.model.find({})
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        }))
-        .catch(err => callback(null, site.err));    
+      callback(null, {
+        statusCode: 200,
+        body: 'test'
+      });   
   });
 };
 
