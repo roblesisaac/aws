@@ -1,8 +1,12 @@
 const connectToDb = require('./db');
-const models = {
-  sheet: require('./models/sheets'),
-  site: require('./models/sites')
-};
+// const fs = require('fs');
+// fs.readdir('views/partials/', function (err, data) {
+//   for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-4)] = fs.readFileSync('views/partials/' + data[i], 'utf8');
+//   for (var key in tmplts) defaults[key] = tmplts[key];
+//   for (var key in customs) tmplts[key] = customs[key];
+//   fn(tmplts);
+// });
+const models = { sheet: require('./models/sheets'), site: require('./models/sites') };
 
 module.exports.sheet = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -45,13 +49,7 @@ module.exports.sheet = (event, context, callback) => {
     });
 };
 
-const rhtml = function(site, sheets) {
-  site = site || {name: 'plysheet', url: 'plysheet'};
-  site.sheets = {};
-  // for (var i in sheets) {
-  //   sheets[i]._id = JSON.stringify(sheets[i]._id);
-  //   site.sheet[sheets[i].name] = sheets[i];
-  // }
+const rhtml = () => {
   return `
     <html>
       <head>
@@ -74,7 +72,7 @@ const rhtml = function(site, sheets) {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
       <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
       <script src="https://unpkg.com/vue"></script>
-      <script src="https://www.blockometry.com/plaza/sheet/sheets/scripts/main"></script>
+      <script src="https://www.blockometry.com/plaza/sheets/scripts/main"></script>
     </html>`;
 };
 
