@@ -72,7 +72,7 @@ const rhtml = () => {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
       <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
       <script src="https://unpkg.com/vue"></script>
-      <script src="https://www.blockometry.com/plaza/sheets/scripts/main"></script>
+      <script src="https://www.blockometry.com/plaza/sheet/sheets/scripts/main"></script>
     </html>`;
 };
 
