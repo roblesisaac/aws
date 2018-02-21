@@ -1,4 +1,6 @@
 const connectToDb = require('./db');
+const Vue = require('vue');
+const renderer = require('vue-server-renderer').createRenderer();
 // const fs = require('fs');
 // fs.readdir('views/partials/', function (err, data) {
 //   for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-4)] = fs.readFileSync('views/partials/' + data[i], 'utf8');
@@ -6,6 +8,36 @@ const connectToDb = require('./db');
 //   for (var key in customs) tmplts[key] = customs[key];
 //   fn(tmplts);
 // });
+
+module.exports.vue = (event, context, callback) => {
+  const app = new Vue({
+    data: {
+      url: event.pathParameters.sitename
+    },
+    template: `<div>The visited URL is: {{ url }}</div>`
+  });
+
+  renderer.renderToString(app, (err, html) => {
+    if (err) {
+      res.status(500).end('Internal Server Error');
+      return;
+    }
+    callback(null, {
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head><title>Hello</title></head>
+        <body>${html}</body>
+      </html>
+      `
+    });
+  });
+};
+
+
 const models = { sheet: require('./models/sheets'), site: require('./models/sites') };
 
 module.exports.sheet = (event, context, callback) => {
