@@ -43,7 +43,7 @@ functions:
           method: get
           cors: true
   get:
-    handler: api.get
+    handler: api.vue
     events:
       - http:
           path: /{sitename}/vue
