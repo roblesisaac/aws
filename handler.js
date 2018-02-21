@@ -97,7 +97,7 @@ module.exports.landingPage = (event, context, callback) => {
           if(site) {
             models.sheet.find({siteId: site._id})
               .then(sheets => {
-                response.body.replace('{{sheets}}', JSON.stringify(sheets));
+                response.body = response.body.replace('{{sheets}}', JSON.stringify(sheets));
                 callback(null, response);                 
               });
           } else {
