@@ -17,7 +17,7 @@ module.exports.vue = (event, context, callback) => {
     data: {
       url: event.pathParameters.sitename
     },
-    template: `<div>The visited URL is: {{ url }}</div><vue-counter></vue-counter>`
+    template: `<div>The visited URL is: {{ url }}<vue-counter></vue-counter></div>`
   });
 
   renderer.renderToString(app, (err, html) => {
