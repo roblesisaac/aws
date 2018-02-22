@@ -22,11 +22,10 @@ const loginUser = (username, password, next) => {
 
 const checkToken = (token, userId, next) => {
   if(!token || !userId) return next(JSON.stringify({success: false}));
-  next({message: 'Found used'})
-  // users.findById(userId)
-  //   .then(function(user){
-  //     next({message: 'Found user', user: user})
-  //   });
+  users.findById(userId)
+    .then(function(user){
+      next({message: 'Found user', user: user})
+    });
 // 	users.findOne({_id: userId}, function (err, user) {
 // 		if(!user) return next(JSON.stringify({success: false}));
 //     jwt.verify(token, user.password, function(err, decoded) {
