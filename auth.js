@@ -7,7 +7,6 @@ const loginUser = (username, password, next) => {
   
   connectToDb()
     .then(() => {
-    	// find the user
     	users.findOne({username: username}, function(err, user) {
     		if (err) throw err;
     		if (!user) {
@@ -31,13 +30,13 @@ const checkToken = (token, userId, next) => {
   
   connectToDb()
     .then(() => {
-    	users.findOne({_id: userId}, function (err, user) {
-    		if(!user) return next(JSON.stringify({success: false, message: 'nope'}));
-        jwt.verify(token, user.password, function(err, decoded) {
+    	users.findById(userId, (err, user) => {
+    		if(!user) return next({success: false, message: 'nope'});
+        jwt.verify(token, user.password, (err, decoded) => {
     			if (err) {
-    				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
+    				next({ success: false, message: 'You are logged out.' });
     			} else {
-    				next(JSON.stringify({success: true}));
+    				next({success: true});
     			}
     		});
     	});      
@@ -60,22 +59,16 @@ module.exports.test = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const token = event.headers['ply-token'];
   const userid = event.headers.userid;
-  checkToken(token, userid, (res) => {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(res)
+  if(token && userid) {
+    checkToken(token, userid, (res) => {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(res)
+      });
     });
-  });
-  // if(token && userid) {
-  //   checkToken(token, userid, (res) => {
-  //     callback(null, {
-  //       statusCode: 200,
-  //       body: res
-  //     });
-  //   });
-  // } else {
-  //   return callback('No auth provided');
-  // }
+  } else {
+    return callback('No auth provided');
+  }
 };
 
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
