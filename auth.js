@@ -3,26 +3,26 @@ const users = require('./models/users');
 const connectToDb = require('./db');
 
 const loginUser = (username, password, next) => {
-  
-  connectToDb()
-    .then(() => {
-      next({ success: false, name: 'isaac', usero: username, passo: password });
-    // 	users.findOne({username: username}, function(err, user) {
-    // 		if (err) throw err;
-    // 		if (!user) {
-    // 			next({ success: false, message: 'User not found.' });
-    // 		} else if (user) {
-    // 			user.comparePassword(password, function(err, isMatch){
-    // 				if(isMatch && isMatch === true) {
-    // 					// if user is found and password is right create a token
-    // 					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
-    // 				} else {
-    // 					next({ success: false, message: 'Authentication failed. Wrong password.' });
-    // 				}
-    // 			});
-    // 		}
-    // 	});
-    });
+  next({ success: false, name: 'isaac', usero: username, passo: password });
+  // connectToDb()
+  //   .then(() => {
+  //     next({ success: false, name: 'isaac', usero: username, passo: password });
+  //   	users.findOne({username: username}, function(err, user) {
+  //   		if (err) throw err;
+  //   		if (!user) {
+  //   			next({ success: false, message: 'User not found.' });
+  //   		} else if (user) {
+  //   			user.comparePassword(password, function(err, isMatch){
+  //   				if(isMatch && isMatch === true) {
+  //   					// if user is found and password is right create a token
+  //   					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
+  //   				} else {
+  //   					next({ success: false, message: 'Authentication failed. Wrong password.' });
+  //   				}
+  //   			});
+  //   		}
+  //   	});
+  //   });
 };
 
 module.exports.login = (event, context, callback) => {
