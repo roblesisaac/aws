@@ -21,17 +21,6 @@ var setup = function(event, context, fn) {
   connectToDb().then(() => fn(site));  
 };
 
-module.exports.test = (event, context, callback) => {
-  callback(null, {
-    statusCode: 200,
-    body: JSON.stringify({
-      context: context,
-      event: event
-    })
-  });
-};
-
-
 module.exports.post = (event, context, callback) => {
   setup(event, context, function(site) {
     site.model.create(JSON.parse(event.body))
