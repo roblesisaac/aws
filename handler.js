@@ -25,7 +25,7 @@ module.exports.vue = (event, context, callback) => {
     <!DOCTYPE html>
     <html lang="en">
       <head><title>Hello</title></head>
-      <body>${event.pathParameters.sitename}</body>
+      <body>hi</body>
     </html>
     `
   });
