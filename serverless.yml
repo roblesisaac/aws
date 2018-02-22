@@ -27,6 +27,12 @@ functions:
       - http:
           path: /test
           method: get
+  login:
+    handler: auth.login
+    events:
+      - http:
+          path: /login
+          method: post
   sheet:
     handler: handler.sheet
     events:
