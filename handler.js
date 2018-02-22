@@ -17,24 +17,37 @@ module.exports.vue = (event, context, callback) => {
     template: `<div>The visited URL is: {{ url }}</div>`
   });
 
-  renderer.renderToString(app, (err, html) => {
-    if (err) {
-      res.status(500).end('Internal Server Error');
-      return;
-    }
-    callback(null, {
-      headers: {
-        'Content-Type': 'text/html',
-      },
-      body: `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head><title>Hello</title></head>
-        <body>${html}</body>
-      </html>
-      `
-    });
+  callback(null, {
+    headers: {
+      'Content-Type': 'text/html',
+    },
+    body: `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head><title>Hello</title></head>
+      <body>${event.pathParameters.sitename}</body>
+    </html>
+    `
   });
+
+  // renderer.renderToString(app, (err, html) => {
+  //   if (err) {
+  //     res.status(500).end('Internal Server Error');
+  //     return;
+  //   }
+  //   callback(null, {
+  //     headers: {
+  //       'Content-Type': 'text/html',
+  //     },
+  //     body: `
+  //     <!DOCTYPE html>
+  //     <html lang="en">
+  //       <head><title>Hello</title></head>
+  //       <body>${html}</body>
+  //     </html>
+  //     `
+  //   });
+  // });
 };
 
 
