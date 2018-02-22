@@ -42,7 +42,7 @@ functions:
           path: /{sitename}/api/{sheet}
           method: get
           cors: true
-  get:
+  vue:
     handler: api.vue
     events:
       - http:
