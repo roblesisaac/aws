@@ -12,7 +12,7 @@ const loginUser = (username, password, next) => {
     			next({ success: false, message: 'User not found.' });
     		} else if (user) {
     			user.comparePassword(password, function(err, isMatch){
-    			  next({ mamatch: isMatch });
+    			  next({ mamatch: isMatch, user: username, pass: password });
     				// if(isMatch && isMatch === true) {
     				// 	// if user is found and password is right create a token
     				// 	next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
