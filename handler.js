@@ -11,6 +11,9 @@ const renderer = require('vue-server-renderer').createRenderer();
 
 module.exports.vue = (event, context, callback) => {
   const app = new Vue({
+    created: function() {
+      console.log('hhi')
+    },
     data: {
       url: event.pathParameters.sitename
     },
