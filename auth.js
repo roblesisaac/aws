@@ -3,7 +3,6 @@ const users = require('./models/users');
 const connectToDb = require('./db');
 
 const loginUser = (username, password, next) => {
-  context.callbackWaitsForEmptyEventLoop = false;
   
   connectToDb()
     .then(() => {
