@@ -49,7 +49,7 @@ module.exports.login = (event, context, callback) => {
   loginUser(username, password, (res) => {
     callback(null, {
       statusCode: 200,
-      body: res
+      body: JSON.stringify(res)
     });
   });
 };
