@@ -9,15 +9,16 @@ const loginUser = (username, password, next) => {
     	users.findOne({username: username}, function(err, user) {
     		if (err) throw err;
     		if (!user) {
-    			next(JSON.stringify({ success: false, message: 'User not found.' }));
+    			next({ success: false, message: 'User not found.' });
     		} else if (user) {
     			user.comparePassword(password, function(err, isMatch){
-    				if(isMatch && isMatch === true) {
-    					// if user is found and password is right create a token
-    					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
-    				} else {
-    					next({ success: false, message: 'Authentication failed. Wrong password.' });
-    				}
+    			  next({ mamatch: isMatch });
+    				// if(isMatch && isMatch === true) {
+    				// 	// if user is found and password is right create a token
+    				// 	next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
+    				// } else {
+    				// 	next({ success: false, message: 'Authentication failed. Wrong password.' });
+    				// }
     			});
     		}
     	});
@@ -25,7 +26,7 @@ const loginUser = (username, password, next) => {
 };
 
 const checkToken = (token, userId, next) => {
-  if(!token || !userId) return next(JSON.stringify({success: false}));
+  if(!token || !userId) return next({success: false});
   
   connectToDb()
     .then(() => {
@@ -44,9 +45,8 @@ const checkToken = (token, userId, next) => {
 
 module.exports.login = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const username = event.body.username;
-  const password = event.body.password;  
-  loginUser(username, password, (res) => {
+  
+  loginUser(event.body.username, event.body.password, (res) => {
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(res)
