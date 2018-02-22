@@ -10,14 +10,14 @@ const renderer = require('vue-server-renderer').createRenderer();
 // });
 
 module.exports.vue = (event, context, callback) => {
+  const counter = Vue.component('vue-counter', {
+    template: '<div>here is the counter</div>'
+  });
   const app = new Vue({
-    mounted: function() {
-      alert('hhi')
-    },
     data: {
       url: event.pathParameters.sitename
     },
-    template: `<div>The visited URL is: {{ url }}</div>`
+    template: `<div>The visited URL is: {{ url }}</div><vue-counter></vue-counter>`
   });
 
   renderer.renderToString(app, (err, html) => {
