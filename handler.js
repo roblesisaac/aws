@@ -10,39 +10,32 @@ const renderer = require('vue-server-renderer').createRenderer();
 // });
 
 module.exports.vue = (event, context, callback) => {
-  // const app = new Vue({
-  //   data: {
-  //     url: event.pathParameters.sitename
-  //   },
-  //   template: `<div>The visited URL is: {{ url }}</div>`
-  // });
-
-  callback(null, {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'text/html',
+  const app = new Vue({
+    data: {
+      url: event.pathParameters.sitename
     },
-    body: 'Nothing yet.'
+    template: `<div>The visited URL is: {{ url }}</div>`
   });
 
-  // renderer.renderToString(app, (err, html) => {
-  //   if (err) {
-  //     res.status(500).end('Internal Server Error');
-  //     return;
-  //   }
-  //   callback(null, {
-  //     headers: {
-  //       'Content-Type': 'text/html',
-  //     },
-  //     body: `
-  //     <!DOCTYPE html>
-  //     <html lang="en">
-  //       <head><title>Hello</title></head>
-  //       <body>${html}</body>
-  //     </html>
-  //     `
-  //   });
-  // });
+  renderer.renderToString(app, (err, html) => {
+    if (err) {
+      res.status(500).end('Internal Server Error');
+      return;
+    }
+    callback(null, {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head><title>Hello</title></head>
+        <body>${html}</body>
+      </html>
+      `
+    });
+  });
 };
 
 
