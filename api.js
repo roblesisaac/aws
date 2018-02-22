@@ -24,10 +24,10 @@ var setup = function(event, context, fn) {
 module.exports.test = (event, context, callback) => {
   callback(null, {
     statusCode: 200,
-    body: {
+    body: JSON.stringify({
       context: context,
       event: event
-    }
+    })
   });
 };
 
