@@ -1,16 +1,60 @@
 const jwt = require('jsonwebtoken');
+const users = require('./models/users');
 
-module.exports.test = (event, context, callback) => {
-  if(event.headers['ply-token']) {
+const loginUser = (username, password, next) => {
+	// find the user
+	users.findOne({username: username}, function(err, user) {
+		if (err) throw err;
+		if (!user) {
+			next(JSON.stringify({ success: false, message: 'User not found.' }));
+		} else if (user) {
+			user.comparePassword(password, function(err, isMatch){
+				if(isMatch && isMatch === true) {
+					// if user is found and password is right create a token
+					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
+				} else {
+					next(JSON.stringify({ success: false, message: 'Authentication failed. Wrong password.' }));
+				}
+			});
+		}
+	});
+};
+
+const checkToken = (token, userId, next) => {
+  if(!token || !userId) return next(JSON.stringify({success: false}));
+	users.findById(userId, function (err, user) {
+		if(!user) return next(JSON.stringify({success: false}));
+    jwt.verify(token, user.password, function(err, decoded) {
+			if (err) {
+				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
+			} else {
+				next(decoded);
+			}
+		});
+	});
+};
+
+module.exports.login = (event, context, callback) => {
+  loginUser(username, password, (res) => {
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify({
-        context: context,
-        event: event
-      })
+      body: res
+    });
+  });
+};
+
+module.exports.test = (event, context, callback) => {
+  const token = event.headers['ply-token'];
+  const userid = event.headers.userid;
+  if(token && userid) {
+    checkToken(token, userid, (res) => {
+      callback(null, {
+        statusCode: 200,
+        body: res
+      });
     });
   } else {
-    callback('No auth provided');
+    return callback('No auth provided');
   }
 };
 
