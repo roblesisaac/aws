@@ -27,13 +27,13 @@ const loginUser = (username, password, next) => {
 
 module.exports.login = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  
-  loginUser(event.body.username, event.body.password, (res) => {
     callback(null, {
       statusCode: 200,
-      body: event.body
-    });
-  });
+      body: JSON.stringify(event.body.username)
+    });  
+  // loginUser(event.body.username, event.body.password, (res) => {
+
+  // });
 };
 
 const checkToken = (token, userId, next) => {
