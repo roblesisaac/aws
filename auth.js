@@ -6,7 +6,7 @@ const loginUser = (username, password, next) => {
   
   connectToDb()
     .then(() => {
-      next({ success: false, user: username, pass: password });
+      next({ success: false, name: 'isaac', usero: username, passo: password });
     // 	users.findOne({username: username}, function(err, user) {
     // 		if (err) throw err;
     // 		if (!user) {
