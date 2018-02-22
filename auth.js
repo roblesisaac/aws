@@ -21,18 +21,18 @@ const loginUser = (username, password, next) => {
 };
 
 const checkToken = (token, userId, next) => {
-  if(!token || !userId) return next(JSON.stringify({success: false}));
-	users.findOne({_id: userId}, function (err, user) {
-	  return next(JSON.stringify({message: true}));
-		// if(!user) return next(JSON.stringify({success: false}));
-  //   jwt.verify(token, user.password, function(err, decoded) {
-		// 	if (err) {
-		// 		next(JSON.stringify({ success: false, message: 'You are logged out.' }));
-		// 	} else {
-		// 		next(JSON.stringify({success: true}));
-		// 	}
-		// });
-	});
+  return next(JSON.stringify({success: false}));
+//   if(!token || !userId) return next(JSON.stringify({success: false}));
+// 	users.findOne({_id: userId}, function (err, user) {
+// 		if(!user) return next(JSON.stringify({success: false}));
+//     jwt.verify(token, user.password, function(err, decoded) {
+// 			if (err) {
+// 				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
+// 			} else {
+// 				next(JSON.stringify({success: true}));
+// 			}
+// 		});
+// 	});
 };
 
 module.exports.login = (event, context, callback) => {
@@ -49,9 +49,11 @@ module.exports.login = (event, context, callback) => {
 module.exports.test = (event, context, callback) => {
   const token = event.headers['ply-token'];
   const userid = event.headers.userid;
-  callback(null, {
-    statusCode: 200,
-    body: res
+  checkToken(token, userid, (res) => {
+    callback(null, {
+      statusCode: 200,
+      body: res
+    });
   });
   // if(token && userid) {
   //   checkToken(token, userid, (res) => {
