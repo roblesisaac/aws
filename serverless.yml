@@ -22,7 +22,7 @@ custom:
 
 functions:
   test: 
-    handler: api.test
+    handler: auth.test
     events:
       - http:
           path: /test
