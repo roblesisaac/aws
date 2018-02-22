@@ -17,7 +17,7 @@ const loginUser = (username, password, next) => {
     					// if user is found and password is right create a token
     					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
     				} else {
-    					next(JSON.stringify({ success: false, message: 'Authentication failed. Wrong password.' }));
+    					next({ success: false, message: 'Authentication failed. Wrong password.' });
     				}
     			});
     		}
