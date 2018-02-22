@@ -21,8 +21,8 @@ const loginUser = (username, password, next) => {
 };
 
 const checkToken = (token, userId, next) => {
-  next({message: 'Found usedfsr'})
-  // if(!token || !userId) return next(JSON.stringify({success: false}));
+  if(!token || !userId) return next(JSON.stringify({success: false}));
+  next({message: 'Found used'})
   // users.findById(userId)
   //   .then(function(user){
   //     next({message: 'Found user', user: user})
