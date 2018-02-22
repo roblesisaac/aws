@@ -18,16 +18,11 @@ module.exports.vue = (event, context, callback) => {
   // });
 
   callback(null, {
+    statusCode: 200,
     headers: {
       'Content-Type': 'text/html',
     },
-    body: `
-    <!DOCTYPE html>
-    <html lang="en">
-      <head><title>Hello</title></head>
-      <body>hi</body>
-    </html>
-    `
+    body: 'Nothing yet.'
   });
 
   // renderer.renderToString(app, (err, html) => {
