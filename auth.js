@@ -21,11 +21,12 @@ const loginUser = (username, password, next) => {
 };
 
 const checkToken = (token, userId, next) => {
-  if(!token || !userId) return next(JSON.stringify({success: false}));
-  users.findById(userId)
-    .then(function(user){
-      next(JSON.stringify({message: 'Found user', user: user}))
-    });
+  next({message: 'Found usedfsr'})
+  // if(!token || !userId) return next(JSON.stringify({success: false}));
+  // users.findById(userId)
+  //   .then(function(user){
+  //     next({message: 'Found user', user: user})
+  //   });
 // 	users.findOne({_id: userId}, function (err, user) {
 // 		if(!user) return next(JSON.stringify({success: false}));
 //     jwt.verify(token, user.password, function(err, decoded) {
@@ -55,7 +56,7 @@ module.exports.test = (event, context, callback) => {
   checkToken(token, userid, (res) => {
     callback(null, {
       statusCode: 200,
-      body: res
+      body: JSON.stringify(res)
     });
   });
   // if(token && userid) {
