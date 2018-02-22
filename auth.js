@@ -25,6 +25,17 @@ const loginUser = (username, password, next) => {
     });
 };
 
+module.exports.login = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  
+  loginUser(event.body.username, event.body.password, (res) => {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(event.body)
+    });
+  });
+};
+
 const checkToken = (token, userId, next) => {
   if(!token || !userId) return next({success: false});
   
@@ -41,17 +52,6 @@ const checkToken = (token, userId, next) => {
     		});
     	});      
     });
-};
-
-module.exports.login = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  
-  loginUser(event.body.username, event.body.password, (res) => {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(res)
-    });
-  });
 };
 
 module.exports.test = (event, context, callback) => {
