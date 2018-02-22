@@ -10,12 +10,12 @@ const renderer = require('vue-server-renderer').createRenderer();
 // });
 
 module.exports.vue = (event, context, callback) => {
-  const app = new Vue({
-    data: {
-      url: event.pathParameters.sitename
-    },
-    template: `<div>The visited URL is: {{ url }}</div>`
-  });
+  // const app = new Vue({
+  //   data: {
+  //     url: event.pathParameters.sitename
+  //   },
+  //   template: `<div>The visited URL is: {{ url }}</div>`
+  // });
 
   callback(null, {
     headers: {
