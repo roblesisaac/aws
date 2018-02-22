@@ -21,18 +21,17 @@ const loginUser = (username, password, next) => {
 };
 
 const checkToken = (token, userId, next) => {
-  return next(JSON.stringify({success: false}));
-//   if(!token || !userId) return next(JSON.stringify({success: false}));
-// 	users.findOne({_id: userId}, function (err, user) {
-// 		if(!user) return next(JSON.stringify({success: false}));
-//     jwt.verify(token, user.password, function(err, decoded) {
-// 			if (err) {
-// 				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
-// 			} else {
-// 				next(JSON.stringify({success: true}));
-// 			}
-// 		});
-// 	});
+  if(!token || !userId) return next(JSON.stringify({success: false}));
+	users.findOne({_id: userId}, function (err, user) {
+		if(!user) return next(JSON.stringify({success: false}));
+    jwt.verify(token, user.password, function(err, decoded) {
+			if (err) {
+				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
+			} else {
+				next(JSON.stringify({success: true}));
+			}
+		});
+	});
 };
 
 module.exports.login = (event, context, callback) => {
