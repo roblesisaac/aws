@@ -1,44 +1,51 @@
 const jwt = require('jsonwebtoken');
 const users = require('./models/users');
+const connectToDb = require('./db');
 
 const loginUser = (username, password, next) => {
-	// find the user
-	users.findOne({username: username}, function(err, user) {
-		if (err) throw err;
-		if (!user) {
-			next(JSON.stringify({ success: false, message: 'User not found.' }));
-		} else if (user) {
-			user.comparePassword(password, function(err, isMatch){
-				if(isMatch && isMatch === true) {
-					// if user is found and password is right create a token
-					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
-				} else {
-					next(JSON.stringify({ success: false, message: 'Authentication failed. Wrong password.' }));
-				}
-			});
-		}
-	});
+  context.callbackWaitsForEmptyEventLoop = false;
+  
+  connectToDb()
+    .then(() => {
+    	// find the user
+    	users.findOne({username: username}, function(err, user) {
+    		if (err) throw err;
+    		if (!user) {
+    			next(JSON.stringify({ success: false, message: 'User not found.' }));
+    		} else if (user) {
+    			user.comparePassword(password, function(err, isMatch){
+    				if(isMatch && isMatch === true) {
+    					// if user is found and password is right create a token
+    					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
+    				} else {
+    					next(JSON.stringify({ success: false, message: 'Authentication failed. Wrong password.' }));
+    				}
+    			});
+    		}
+    	});
+    });
 };
 
 const checkToken = (token, userId, next) => {
   if(!token || !userId) return next(JSON.stringify({success: false}));
-  users.findById(userId)
-    .then(function(user){
-      next({message: 'Found user', user: user})
+  
+  connectToDb()
+    .then(() => {
+    	users.findOne({_id: userId}, function (err, user) {
+    		if(!user) return next(JSON.stringify({success: false, message: 'nope'}));
+        jwt.verify(token, user.password, function(err, decoded) {
+    			if (err) {
+    				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
+    			} else {
+    				next(JSON.stringify({success: true}));
+    			}
+    		});
+    	});      
     });
-// 	users.findOne({_id: userId}, function (err, user) {
-// 		if(!user) return next(JSON.stringify({success: false}));
-//     jwt.verify(token, user.password, function(err, decoded) {
-// 			if (err) {
-// 				next(JSON.stringify({ success: false, message: 'You are logged out.' }));
-// 			} else {
-// 				next(JSON.stringify({success: true}));
-// 			}
-// 		});
-// 	});
 };
 
 module.exports.login = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const username = event.body.username;
   const password = event.body.password;  
   loginUser(username, password, (res) => {
@@ -50,6 +57,7 @@ module.exports.login = (event, context, callback) => {
 };
 
 module.exports.test = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const token = event.headers['ply-token'];
   const userid = event.headers.userid;
   checkToken(token, userid, (res) => {
