@@ -9,22 +9,17 @@ const renderer = require('vue-server-renderer').createRenderer();
 //   fn(tmplts);
 // });
 
+const models = { sheet: require('./models/sheets'), site: require('./models/sites') };
+
 module.exports.vue = (event, context, callback) => {
-  const counter = Vue.component('vue-counter', {
-    template: '<div>here is the counter</div>'
-  });
   const app = new Vue({
     data: {
       url: event.pathParameters.sitename
     },
-    template: `<div>The visited URL is: {{ url }}<vue-counter></vue-counter></div>`
+    template: `<div>The visited URL is: {{ url }}</div>`
   });
 
   renderer.renderToString(app, (err, html) => {
-    if (err) {
-      res.status(500).end('Internal Server Error');
-      return;
-    }
     callback(null, {
       statusCode: 200,
       headers: {
@@ -40,9 +35,6 @@ module.exports.vue = (event, context, callback) => {
     });
   });
 };
-
-
-const models = { sheet: require('./models/sheets'), site: require('./models/sites') };
 
 module.exports.sheet = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -118,7 +110,7 @@ module.exports.landingPage = (event, context, callback) => {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
             <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
             <script src="https://unpkg.com/vue"></script>
-            <script src="https://www.blockometry.com/plaza/sheet/sheets/scripts/main"></script>
+            <script src="https://www.blockometry.com/plaza/sheets/scripts/main"></script>
             <script type="text/javascript">
               site.sheet = {{sheets}}
             </script>
