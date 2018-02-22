@@ -1,13 +1,17 @@
 const jwt = require('jsonwebtoken');
 
 module.exports.test = (event, context, callback) => {
-  callback(null, {
-    statusCode: 200,
-    body: JSON.stringify({
-      context: context,
-      event: event
-    })
-  });
+  if(event.headers['ply-token']) {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({
+        context: context,
+        event: event
+      })
+    });
+  } else {
+    callback('No auth provided');
+  }
 };
 
 // Reusable Authorizer function, set on `authorizer` field in serverless.yml
