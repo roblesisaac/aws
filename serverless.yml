@@ -21,7 +21,8 @@ custom:
     createRoute53Record: true
 
 functions:
-  test: api.test
+  test: 
+    handler: api.test
     events:
       - http:
           path: /test
