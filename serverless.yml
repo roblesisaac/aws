@@ -25,7 +25,7 @@ functions:
     handler: handler.sheet
     events:
       - http:
-          path: /{sitename}/sheet/{sheet}/{prop}/{name}
+          path: /{sitename}/{sheet}/{prop}/{name}
           method: get
           cors: true
   post:
