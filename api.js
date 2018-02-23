@@ -23,7 +23,9 @@ var setup = function(event, context, fn) {
 };
 
 const createModel = (event, context, next) => {
-  next('Not');
+  next(null, {
+    obj: 'hi'
+  });
   // context.callbackWaitsForEmptyEventLoop = false;
   // const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   // connectToDb().then(() => {
@@ -55,14 +57,18 @@ module.exports.test = (event, context, callback) => {
         statusCode: 200,
         body: JSON.stringify({ message: error })
       });
-      return;
-    }
-    model.find({})
-      .then(data => callback(null, {
+    } else {
+      callback(null, {
         statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, err));
+        body: JSON.stringify({message: 'no errors!'})
+      })
+    }
+    // model.find({})
+    //   .then(data => callback(null, {
+    //     statusCode: 200,
+    //     body: JSON.stringify(data)
+    //   }))
+    //   .catch(err => callback(null, err));
   });
 };
 
