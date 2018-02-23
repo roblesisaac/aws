@@ -23,8 +23,8 @@ var setup = function(event, context, fn) {
 };
 
 const createModel = (event, context, next) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  // context.callbackWaitsForEmptyEventLoop = false;
+  // const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   next('sjkdlfkldsajfklds');
   // connectToDb().then(() => {
   //   //get site
