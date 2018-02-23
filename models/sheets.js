@@ -19,7 +19,7 @@ const sheetSchema = new mongoose.Schema({
     "name" : String,
     "link" : String,
     "sort" : Number,
-    "load" : String,
+    "_init" : String,
     "public" : Boolean,
     "scripts": [script],
     "_schema" : [schema],
