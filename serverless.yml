@@ -19,11 +19,11 @@ custom:
     createRoute53Record: true
 
 functions:
-  test: 
+  auth: 
     handler: auth.auth
     events:
       - http:
-          path: /test
+          path: /auth
           method: get
   login:
     handler: auth.login
