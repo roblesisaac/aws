@@ -33,7 +33,7 @@ const createModel = (event, context, next) => {
         models.sheets.findOne({ siteId: site._id, name: path.sheet })
           .then(sheet => {
             if(sheet.public) {
-              next(null, sheet);
+              next(null, models[event.pathParameters.sheet]);
             } else {
               checkToken(event, context, (res) => {
                 if(res.success === true) {
