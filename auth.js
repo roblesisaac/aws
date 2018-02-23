@@ -5,15 +5,15 @@ const connectToDb = require('./db');
 const loginUser = (user, next) => {
   connectToDb()
     .then(() => {
-    	users.findOne({username: user.username}, function(err, User) {
+    	users.findOne({username: user.username}, function(err, fUser) {
     		if (err) throw err;
-    		if (!User) {
+    		if (!fUser) {
     			next({ success: false, message: 'User not found.' });
-    		} else if (User) {
-    			User.comparePassword(password, function(err, isMatch){
+    		} else if (fUser) {
+    			fUser.comparePassword(user.password, function(err, isMatch){
     				if(isMatch && isMatch === true) {
     					// if user is found and password is right create a token
-    					next(jwt.sign({ _id: User._id, username: User.username, name: User.name,	password: User.password	}, User.password, {	expiresIn: '15h' }));
+    					next(jwt.sign({ _id: fUser._id, username: fUser.username, name: fUser.name,	password: fUser.password	}, fUser.password, {	expiresIn: '15h' }));
     				} else {
     					next({ success: false, message: 'Authentication failed. Wrong password.' });
     				}
