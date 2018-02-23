@@ -10,10 +10,10 @@ const script = {
   txt: String
 };
 
-const schma = {
+const schema = {
   prop: String,
   type: String
-}
+};
 
 const sheetSchema = new mongoose.Schema({
     "name" : String,
@@ -22,7 +22,7 @@ const sheetSchema = new mongoose.Schema({
     "load" : String,
     "public" : Boolean,
     "scripts": [script],
-    "schma" : [schma],
+    "schma" : [schema],
     "tmplts" : [script],
     "users": [user],
     "siteId": String
