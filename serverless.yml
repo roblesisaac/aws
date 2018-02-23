@@ -19,12 +19,6 @@ custom:
     createRoute53Record: true
 
 functions:
-  auth:
-    handler: api.auth
-    events:
-      - http:
-          path: /auth
-          method: get
   login:
     handler: auth.login
     events:
