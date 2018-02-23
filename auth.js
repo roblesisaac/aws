@@ -2,39 +2,36 @@ const jwt = require('jsonwebtoken');
 const users = require('./models/users');
 const connectToDb = require('./db');
 
-const loginUser = (username, password, next) => {
-  next({ success: false, name: 'isaac', usero: username, passo: password });
-  // connectToDb()
-  //   .then(() => {
-  //     next({ success: false, name: 'isaac', usero: username, passo: password });
-  //   	users.findOne({username: username}, function(err, user) {
-  //   		if (err) throw err;
-  //   		if (!user) {
-  //   			next({ success: false, message: 'User not found.' });
-  //   		} else if (user) {
-  //   			user.comparePassword(password, function(err, isMatch){
-  //   				if(isMatch && isMatch === true) {
-  //   					// if user is found and password is right create a token
-  //   					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
-  //   				} else {
-  //   					next({ success: false, message: 'Authentication failed. Wrong password.' });
-  //   				}
-  //   			});
-  //   		}
-  //   	});
-  //   });
+const loginUser = (user, next) => {
+  next({ success: false, name: 'isaac', usero: user.username, passo: user.password });
+  connectToDb()
+    .then(() => {
+    	users.findOne({username: user.username}, function(err, User) {
+    		if (err) throw err;
+    		if (!User) {
+    			next({ success: false, message: 'User not found.' });
+    		} else if (User) {
+    			User.comparePassword(password, function(err, isMatch){
+    				if(isMatch && isMatch === true) {
+    					// if user is found and password is right create a token
+    					next(jwt.sign({ _id: User._id, username: User.username, name: User.name,	password: User.password	}, User.password, {	expiresIn: '15h' }));
+    				} else {
+    					next({ success: false, message: 'Authentication failed. Wrong password.' });
+    				}
+    			});
+    		}
+    	});
+    });
 };
 
 module.exports.login = (event, context, callback) => {
-  // context.callbackWaitsForEmptyEventLoop = false;
-  var user = JSON.parse(event.body);
+  context.callbackWaitsForEmptyEventLoop = false;
+  loginUser(JSON.parse(event.body), (res) => {
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify({user: user, username: user.username})
-    });  
-  // loginUser(event.body.username, event.body.password, (res) => {
-
-  // });
+      body: JSON.stringify(res)
+    });
+  });
 };
 
 const checkToken = (token, userId, next) => {
