@@ -26,25 +26,25 @@ const createModel = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   connectToDb().then(() => {
-    next(null, 'here here');
-    //get site
-    // models.sites.findOne({ url: site.url })
-    //   .then(site => {
-    //     //get sheet
-    //     models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
-    //       if(sheet.public) {
-    //         fn(null, models[event.pathParameters.sheet]);
-    //       } else {
-    //         checkToken(event, context, (res) => {
-    //           if(res.success === true) {
-    //             next(null, models[event.pathParameters.sheet]);
-    //           } else {
-    //             next(res.message);
-    //           }
-    //         });
-    //       }
-    //     });
-    //   });
+    // get site
+    models.sites.findOne({ url: site.url })
+      .then(site => {
+        //get sheet
+        next(null, site);
+        // models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
+        //   if(sheet.public) {
+        //     fn(null, models[event.pathParameters.sheet]);
+        //   } else {
+        //     checkToken(event, context, (res) => {
+        //       if(res.success === true) {
+        //         next(null, models[event.pathParameters.sheet]);
+        //       } else {
+        //         next(res.message);
+        //       }
+        //     });
+        //   }
+        // });
+      });
   });  
 };
 
@@ -53,7 +53,7 @@ module.exports.test = (event, context, callback) => {
     if(error) {
       callback(null, {
         statusCode: 200,
-        body: JSON.stringify({ message: 'error' })
+        body: JSON.stringify({ message: error })
       });
     } else {
       callback(null, {
