@@ -8,6 +8,11 @@ const user = {
 const script = {
   name: String,
   txt: String
+};
+
+const schma = {
+  prop: String,
+  type: String
 }
 
 const sheetSchema = new mongoose.Schema({
@@ -17,6 +22,7 @@ const sheetSchema = new mongoose.Schema({
     "load" : String,
     "public" : Boolean,
     "scripts": [script],
+    "schma" : [schma],
     "tmplts" : [script],
     "users": [user],
     "siteId": String
