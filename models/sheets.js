@@ -15,7 +15,7 @@ const sheetSchema = new mongoose.Schema({
     "link" : String,
     "sort" : Number,
     "load" : String,
-    "public" : String,
+    "public" : Boolean,
     "scripts": [script],
     "tmplts" : [script],
     "users": [user],
