@@ -23,7 +23,7 @@ var setup = function(event, context, fn) {
 };
 
 const createModel = (event, context, next) => {
-  // context.callbackWaitsForEmptyEventLoop = false;
+  context.callbackWaitsForEmptyEventLoop = false;
   // const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   next('sjkdlfkldsajfklds');
   // connectToDb().then(() => {
@@ -52,7 +52,7 @@ module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify({ message: 'error2' })
+      body: JSON.stringify({ message: 'error3' })
     });
     // if(error) {
     //   callback(null, {
