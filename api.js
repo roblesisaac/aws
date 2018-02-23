@@ -52,7 +52,7 @@ module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(site)
+      body: JSON.stringify(error)
     });
     // if(error) {
     //   callback(null, {
