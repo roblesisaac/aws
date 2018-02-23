@@ -24,27 +24,26 @@ var setup = function(event, context, fn) {
 
 const createModel = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   connectToDb().then(() => {
     // get site
-    models.sites.findOne({ url: site.url })
+    models.sites.findOne({ url: path.url })
       .then(site => {
         //get sheet
-        models.sheets.findOne({ siteId: site._id, name: site.sheet })
+        models.sheets.findOne({ siteId: site._id, name: path.sheet })
           .then(sheet => {
-            next(null, sheet)
-            // if(sheet.public) {
-            //   next(null, sheet)
-            // } else {
-            //   next('sheet not public')
-            //   // checkToken(event, context, (res) => {
-            //   //   if(res.success === true) {
-            //   //     next(null, models[event.pathParameters.sheet]);
-            //   //   } else {
-            //   //     next(res.message);
-            //   //   }
-            //   // });
-            // }
+            if(sheet.public) {
+              next(null, sheet)
+            } else {
+              next('sheet not public')
+              // checkToken(event, context, (res) => {
+              //   if(res.success === true) {
+              //     next(null, models[event.pathParameters.sheet]);
+              //   } else {
+              //     next(res.message);
+              //   }
+              // });
+            }
           });
       });
   });  
