@@ -1,5 +1,6 @@
 const connectToDb = require('./db');
 const mongoose = require('mongoose');
+const checkToken = require('./auth').checkToken;
 const models = {
   users: require('./models/users'),
   sites: require('./models/sites'),
@@ -19,6 +20,14 @@ var setup = function(event, context, fn) {
     }
   };
   connectToDb().then(() => fn(site));  
+};
+
+module.exports.auth = (event, context, callback) => {
+  const response = { statusCode: 200 };
+  checkToken(event, context, (res) => {
+    response.body = JSON.stringify(res);
+    callback(null, response);
+  });
 };
 
 module.exports.post = (event, context, callback) => {
