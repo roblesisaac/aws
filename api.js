@@ -27,9 +27,10 @@ const loginUser = (username, password, next) => {
 
 module.exports.login = (event, context, callback) => {
   // context.callbackWaitsForEmptyEventLoop = false;
+  var user = JSON.parse(event.body);
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify({isaac: JSON.parse(event.body).username || 'not'})
+      body: JSON.stringify({user: user, username: user.username})
     });  
   // loginUser(event.body.username, event.body.password, (res) => {
 
