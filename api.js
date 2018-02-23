@@ -50,12 +50,16 @@ const createModel = (event, context, next) => {
 
 module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
-    if(error) {
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'error' })
-      });
-    }
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'error' })
+    });
+    // if(error) {
+    //   callback(null, {
+    //     statusCode: 200,
+    //     body: JSON.stringify({ message: 'error' })
+    //   });
+    // }
     // model.find({})
     //   .then(data => callback(null, {
     //     statusCode: 200,
