@@ -22,6 +22,46 @@ var setup = function(event, context, fn) {
   connectToDb().then(() => fn(site));  
 };
 
+const createModel = (event, context, next) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  connectToDb().then(() => {
+    //get site
+    models.sites.findOne({ url: site.url })
+      .then(site => {
+        //get sheet
+        models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
+          if(sheet.public) {
+            fn(null, models[event.pathParameters.sheet]);
+          } else {
+            checkToken(event, context, (res) => {
+              if(res.success === true) {
+                next(null, models[event.pathParameters.sheet]);
+              } else {
+                next(res.message);
+              }
+            });
+          }
+        });
+      });
+  });  
+};
+
+module.exports.test = (event, context, callback) => {
+  createModel(event, context, function(error, model) {
+    if(err) return callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({ message: error })
+    });
+    model.find({})
+      .then(data => callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(data)
+      }))
+      .catch(err => callback(null, err));
+  });
+};
+
 module.exports.auth = (event, context, callback) => {
   const response = { statusCode: 200 };
   checkToken(event, context, (res) => {
