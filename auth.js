@@ -3,7 +3,6 @@ const users = require('./models/users');
 const connectToDb = require('./db');
 
 const loginUser = (user, next) => {
-  next({ success: false, name: 'isaac', usero: user.username, passo: user.password });
   connectToDb()
     .then(() => {
     	users.findOne({username: user.username}, function(err, User) {
