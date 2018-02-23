@@ -59,14 +59,12 @@ module.exports.auth = (event, context, callback) => {
     checkToken(token, userid, (res) => {
       callback(null, {
         statusCode: 200,
-        body: JSON.stringify({
-          event: event
-        })
+        body: JSON.stringify(res)
       });
     });
   } else {
-  callback(null, {
-    statusCode: 200,
+    callback(null, {
+      statusCode: 200,
       body: JSON.stringify({
         event: event
       })
