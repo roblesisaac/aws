@@ -30,20 +30,21 @@ const createModel = (event, context, next) => {
     models.sites.findOne({ url: site.url })
       .then(site => {
         //get sheet
-        next(null, site);
-        // models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
-        //   if(sheet.public) {
-        //     fn(null, models[event.pathParameters.sheet]);
-        //   } else {
-        //     checkToken(event, context, (res) => {
-        //       if(res.success === true) {
-        //         next(null, models[event.pathParameters.sheet]);
-        //       } else {
-        //         next(res.message);
-        //       }
-        //     });
-        //   }
-        // });
+        models.sheets.findOne({ siteId: site._id, name: site.sheet })
+          .then(sheet => {
+            if(sheet.public) {
+              next(null, sheet)
+            } else {
+              next('sheet not public')
+              // checkToken(event, context, (res) => {
+              //   if(res.success === true) {
+              //     next(null, models[event.pathParameters.sheet]);
+              //   } else {
+              //     next(res.message);
+              //   }
+              // });
+            }
+          });
       });
   });  
 };
