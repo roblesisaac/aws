@@ -53,22 +53,23 @@ const checkToken = (token, userId, next) => {
 
 module.exports.auth = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  // const token = event.headers['ply-token'];
-  // const userid = event.headers.userid;
+  const token = event.headers['ply-token'];
+  const userid = event.headers.userid;
+  if(token && userid) {
+    checkToken(token, userid, (res) => {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify({
+          event: event
+        })
+      });
+    });
+  } else {
   callback(null, {
     statusCode: 200,
-    body: JSON.stringify({
-      event: event
-    })
-  });
-  // if(token && userid) {
-  //   checkToken(token, userid, (res) => {
-  //     callback(null, {
-  //       statusCode: 200,
-  //       body: JSON.stringify(res)
-  //     });
-  //   });
-  // } else {
-  //   return callback('No auth provided');
-  // }
+      body: JSON.stringify({
+        event: event
+      })
+    });
+  }
 };
