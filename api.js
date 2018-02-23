@@ -25,27 +25,27 @@ var setup = function(event, context, fn) {
 const createModel = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  connectToDb().then(() => {
-    //get site
-    next(null, {site: 'her it is'});
-    // models.sites.findOne({ url: site.url })
-    //   .then(site => {
-    //     //get sheet
-    //     models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
-    //       if(sheet.public) {
-    //         fn(null, models[event.pathParameters.sheet]);
-    //       } else {
-    //         checkToken(event, context, (res) => {
-    //           if(res.success === true) {
-    //             next(null, models[event.pathParameters.sheet]);
-    //           } else {
-    //             next(res.message);
-    //           }
-    //         });
-    //       }
-    //     });
-    //   });
-  });  
+  next(null, {site: 'her it is'});
+  // connectToDb().then(() => {
+  //   //get site
+  //   models.sites.findOne({ url: site.url })
+  //     .then(site => {
+  //       //get sheet
+  //       models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
+  //         if(sheet.public) {
+  //           fn(null, models[event.pathParameters.sheet]);
+  //         } else {
+  //           checkToken(event, context, (res) => {
+  //             if(res.success === true) {
+  //               next(null, models[event.pathParameters.sheet]);
+  //             } else {
+  //               next(res.message);
+  //             }
+  //           });
+  //         }
+  //       });
+  //     });
+  // });  
 };
 
 module.exports.test = (event, context, callback) => {
