@@ -55,19 +55,14 @@ module.exports.auth = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const token = event.headers['ply-token'];
   const userid = event.headers.userid;
+  const response = { statusCode: 200 };
   if(token && userid) {
     checkToken(token, userid, (res) => {
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(res)
-      });
+      response.body = JSON.stringify(res);
+      callback(null, response);
     });
   } else {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        event: event
-      })
-    });
+    response.body = JSON.stringify({message: 'No token or userid provided'});
+    callback(null, response);
   }
 };
