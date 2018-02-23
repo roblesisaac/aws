@@ -33,9 +33,10 @@ module.exports.login = (event, context, callback) => {
   });
 };
 
-const checkToken = (token, userId, next) => {
-  if(!token || !userId) return next({success: false});
-  
+const checkToken = (event, next) => {
+  const token = event.headers['ply-token'];
+  const userId = event.headers.userid;
+  if(!token || !userId) return next({success: false, message: 'No token or userid provided'});
   connectToDb()
     .then(() => {
     	users.findById(userId, (err, user) => {
@@ -53,16 +54,9 @@ const checkToken = (token, userId, next) => {
 
 module.exports.auth = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const token = event.headers['ply-token'];
-  const userid = event.headers.userid;
   const response = { statusCode: 200 };
-  if(token && userid) {
-    checkToken(token, userid, (res) => {
-      response.body = JSON.stringify(res);
-      callback(null, response);
-    });
-  } else {
-    response.body = JSON.stringify({message: 'No token or userid provided'});
+  checkToken(event, (res) => {
+    response.body = JSON.stringify(res);
     callback(null, response);
-  }
+  });
 };
