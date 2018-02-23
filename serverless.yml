@@ -19,6 +19,12 @@ custom:
     createRoute53Record: true
 
 functions:
+  test:
+    handler: api.test
+    events:
+      - http:
+          path: /test
+          method: get
   login:
     handler: auth.login
     events:
