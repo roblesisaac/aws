@@ -23,7 +23,7 @@ functions:
     handler: api.test
     events:
       - http:
-          path: /{sitename}/api/{sheet}/test
+          path: /{sitename}/test/{sheet}
           method: get
   login:
     handler: auth.login
