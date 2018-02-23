@@ -53,7 +53,7 @@ module.exports.test = (event, context, callback) => {
     if(error) {
       callback(null, {
         statusCode: 200,
-        body: JSON.stringify({ message: error })
+        body: JSON.stringify({ message: 'error' })
       });
     }
     // model.find({})
