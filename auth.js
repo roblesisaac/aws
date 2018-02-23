@@ -33,7 +33,8 @@ module.exports.login = (event, context, callback) => {
   });
 };
 
-const checkToken = (event, next) => {
+module.exports.checkToken = (event, context, next) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const token = event.headers['ply-token'];
   const userId = event.headers.userid;
   if(!token || !userId) return next({success: false, message: 'No token or userid provided'});
@@ -50,13 +51,4 @@ const checkToken = (event, next) => {
     		});
     	});      
     });
-};
-
-module.exports.auth = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  const response = { statusCode: 200 };
-  checkToken(event, (res) => {
-    response.body = JSON.stringify(res);
-    callback(null, response);
-  });
 };
