@@ -24,48 +24,48 @@ var setup = function(event, context, fn) {
 
 const createModel = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  const site = event;
-  next(site);
-  // connectToDb().then(() => {
-  //   //get site
-  //   models.sites.findOne({ url: site.url })
-  //     .then(site => {
-  //       //get sheet
-  //       models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
-  //         if(sheet.public) {
-  //           fn(null, models[event.pathParameters.sheet]);
-  //         } else {
-  //           checkToken(event, context, (res) => {
-  //             if(res.success === true) {
-  //               next(null, models[event.pathParameters.sheet]);
-  //             } else {
-  //               next(res.message);
-  //             }
-  //           });
-  //         }
-  //       });
-  //     });
-  // });  
+  const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  connectToDb().then(() => {
+    //get site
+    models.sites.findOne({ url: site.url })
+      .then(site => {
+        //get sheet
+        models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
+          if(sheet.public) {
+            fn(null, models[event.pathParameters.sheet]);
+          } else {
+            checkToken(event, context, (res) => {
+              if(res.success === true) {
+                next(null, models[event.pathParameters.sheet]);
+              } else {
+                next(res.message);
+              }
+            });
+          }
+        });
+      });
+  });  
 };
 
 module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(error)
-    });
-    // if(error) {
-    //   callback(null, {
-    //     statusCode: 200,
-    //     body: JSON.stringify({ message: 'error' })
-    //   });
-    // }
-    // model.find({})
-    //   .then(data => callback(null, {
-    //     statusCode: 200,
-    //     body: JSON.stringify(data)
-    //   }))
-    //   .catch(err => callback(null, err));
+    if(error) {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify({ message: 'error' })
+      });
+    } else {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(model)
+      });
+      // model.find({})
+      //   .then(data => callback(null, {
+      //     statusCode: 200,
+      //     body: JSON.stringify(data)
+      //   }))
+      //   .catch(err => callback(null, err)); 
+    }
   });
 };
 
