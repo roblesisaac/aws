@@ -1,84 +1,108 @@
+const jwt = require('jsonwebtoken');
+const users = require('./models/users');
 const connectToDb = require('./db');
-const mongoose = require('mongoose');
-const models = {
-  users: require('./models/users'),
-  sites: require('./models/sites'),
-  sheets: require('./models/sheets')
+
+const loginUser = (username, password, next) => {
+  next({ success: false, name: 'isaac', usero: username, passo: password });
+  // connectToDb()
+  //   .then(() => {
+  //     next({ success: false, name: 'isaac', usero: username, passo: password });
+  //   	users.findOne({username: username}, function(err, user) {
+  //   		if (err) throw err;
+  //   		if (!user) {
+  //   			next({ success: false, message: 'User not found.' });
+  //   		} else if (user) {
+  //   			user.comparePassword(password, function(err, isMatch){
+  //   				if(isMatch && isMatch === true) {
+  //   					// if user is found and password is right create a token
+  //   					next(jwt.sign({ _id: user._id, username: user.username, name: user.name,	password: user.password	}, user.password, {	expiresIn: '15h' }));
+  //   				} else {
+  //   					next({ success: false, message: 'Authentication failed. Wrong password.' });
+  //   				}
+  //   			});
+  //   		}
+  //   	});
+  //   });
 };
 
-var setup = function(event, context, fn) {
+module.exports.login = (event, context, callback) => {
+  // context.callbackWaitsForEmptyEventLoop = false;
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({isaac: JSON.parse(event.body).username || 'not'})
+    });  
+  // loginUser(event.body.username, event.body.password, (res) => {
+
+  // });
+};
+
+const checkToken = (token, userId, next) => {
+  if(!token || !userId) return next({success: false});
+  
+  connectToDb()
+    .then(() => {
+    	users.findById(userId, (err, user) => {
+    		if(!user) return next({success: false, message: 'nope'});
+        jwt.verify(token, user.password, (err, decoded) => {
+    			if (err) {
+    				next({ success: false, message: 'You are logged out.' });
+    			} else {
+    				next({success: true});
+    			}
+    		});
+    	});      
+    });
+};
+
+module.exports.test = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  var site = {
-    name: event.pathParameters.sitename,
-    sheet: event.pathParameters.sheet,
-    model: models[event.pathParameters.sheet] || mongoose.model(url, new mongoose.Schema({name: String},{strict: false})),
-    err: {
-      statusCode: 500,
-      headers: { 'Content-Type': 'text/plain' },
-      body: 'Could not create the note.'      
-    }
-  };
-  connectToDb().then(() => fn(site));  
-};
-
-module.exports.post = (event, context, callback) => {
-  setup(event, context, function(site) {
-    site.model.create(JSON.parse(event.body))
-      .then(data => callback(null, {
+  const token = event.headers['ply-token'];
+  const userid = event.headers.userid;
+  if(token && userid) {
+    checkToken(token, userid, (res) => {
+      callback(null, {
         statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, site.err));     
-  });
+        body: JSON.stringify(res)
+      });
+    });
+  } else {
+    return callback('No auth provided');
+  }
 };
 
-module.exports.get = (event, context, callback) => {
-  setup(event, context, function(site) {
-    site.model.find({})
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, site.err));   
-  });
-};
+// Reusable Authorizer function, set on `authorizer` field in serverless.yml
+module.exports.auth = (event, context, callback) => {
+  console.log('event', event)
+  if (!event.authorizationToken) {
+    return callback('Unauthorized')
+  }
 
-module.exports.getOne = (event, context, callback) => {
-  setup(event, context, function(site) {
-    site.model.findById(event.pathParameters.id)
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, site.err));  
-  });
-};
+  const tokenParts = event.authorizationToken.split(' ')
+  const tokenValue = tokenParts[1]
 
-module.exports.put = (event, context, callback) => {
-  setup(event, context, function(site) {
-      site.model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        }))
-        .catch(err => callback(null, site.err));  
-  });
-};
-
-// module.exports.delete = (event, context, callback) => {
-//   context.callbackWaitsForEmptyEventLoop = false;
-
-//   connectToDb()
-//     .then(() => {
-//       models.note.findByIdAndRemove(event.pathParameters.id)
-//         .then(note => callback(null, {
-//           statusCode: 200,
-//           body: JSON.stringify({ message: 'Removed note with id: ' + note._id, note: note })
-//         }))
-//         .catch(err => callback(null, {
-//           statusCode: err.statusCode || 500,
-//           headers: { 'Content-Type': 'text/plain' },
-//           body: 'Could not fetch the notes.'
-//         }));
-//     });
-// };
+  if (!(tokenParts[0].toLowerCase() === 'bearer' && tokenValue)) {
+    // no auth token!
+    return callback('Unauthorized')
+  }
+  const options = {
+    audience: AUTH0_CLIENT_ID,
+  }
+  // decode base64 secret. ref: http://bit.ly/2hA6CrO
+  const secret = new Buffer.from(AUTH0_CLIENT_SECRET, 'base64')
+  try {
+    jwt.verify(tokenValue, secret, options, (verifyError, decoded) => {
+      if (verifyError) {
+        console.log('verifyError', verifyError)
+        // 401 Unauthorized
+        console.log(`Token invalid. ${verifyError}`)
+        return callback('Unauthorized')
+      }
+      // is custom authorizer function
+      console.log('valid from customAuthorizer', decoded)
+      return callback(null, generatePolicy(decoded.sub, 'Allow', event.methodArn))
+    })
+   } catch (err) {
+    console.log('catch error. Invalid token', err)
+    return callback('Unauthorized')
+  }
+}
