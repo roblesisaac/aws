@@ -33,16 +33,15 @@ const createModel = (event, context, next) => {
         models.sheets.findOne({ siteId: site._id, name: path.sheet })
           .then(sheet => {
             if(sheet.public) {
-              next(null, sheet)
+              next(null, sheet);
             } else {
-              next('sheet not public')
-              // checkToken(event, context, (res) => {
-              //   if(res.success === true) {
-              //     next(null, models[event.pathParameters.sheet]);
-              //   } else {
-              //     next(res.message);
-              //   }
-              // });
+              checkToken(event, context, (res) => {
+                if(res.success === true) {
+                  next(null, models[event.pathParameters.sheet]);
+                } else {
+                  next(res.message);
+                }
+              });
             }
           });
       });
