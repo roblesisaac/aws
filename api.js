@@ -25,7 +25,7 @@ var setup = function(event, context, fn) {
 const createModel = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  next({erro: 'sjkdlfkldsajfklds'}, {site: 'her it is'});
+  next('sjkdlfkldsajfklds', {site: 'her it is'});
   // connectToDb().then(() => {
   //   //get site
   //   models.sites.findOne({ url: site.url })
