@@ -49,7 +49,7 @@ const createModel = (event, context, next) => {
 
 module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
-    if(err) return callback(null, {
+    if(error) return callback(null, {
       statusCode: 200,
       body: JSON.stringify({ message: error })
     });
