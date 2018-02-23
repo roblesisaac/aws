@@ -27,24 +27,24 @@ const createModel = (event, context, next) => {
   const site = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   connectToDb().then(() => {
     //get site
-    models.sites.findOne({ url: site.url })
-      .then(site => {
-        //get sheet
-        next(null, site);
-        // models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
-        //   if(sheet.public) {
-        //     fn(null, models[event.pathParameters.sheet]);
-        //   } else {
-        //     checkToken(event, context, (res) => {
-        //       if(res.success === true) {
-        //         next(null, models[event.pathParameters.sheet]);
-        //       } else {
-        //         next(res.message);
-        //       }
-        //     });
-        //   }
-        // });
-      });
+    next(null, {site: 'her it is'});
+    // models.sites.findOne({ url: site.url })
+    //   .then(site => {
+    //     //get sheet
+    //     models.sheets.findOne({ siteId: site._id, name: site.sheet }, (sheet) => {
+    //       if(sheet.public) {
+    //         fn(null, models[event.pathParameters.sheet]);
+    //       } else {
+    //         checkToken(event, context, (res) => {
+    //           if(res.success === true) {
+    //             next(null, models[event.pathParameters.sheet]);
+    //           } else {
+    //             next(res.message);
+    //           }
+    //         });
+    //       }
+    //     });
+    //   });
   });  
 };
 
@@ -59,7 +59,7 @@ module.exports.test = (event, context, callback) => {
       callback(null, {
         statusCode: 200,
         body: JSON.stringify(model)
-      })
+      });
     }
     // model.find({})
     //   .then(data => callback(null, {
