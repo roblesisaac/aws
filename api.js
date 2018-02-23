@@ -53,7 +53,7 @@ module.exports.test = (event, context, callback) => {
     statusCode: 200,
     body: JSON.stringify({ message: 'error' })
   });
-  createModel(event, context, function(error, model) {
+  // createModel(event, context, function(error, model) {
     // if(error) {
     //   callback(null, {
     //     statusCode: 200,
@@ -66,7 +66,7 @@ module.exports.test = (event, context, callback) => {
     //     body: JSON.stringify(data)
     //   }))
     //   .catch(err => callback(null, err));
-  });
+  // });
 };
 
 module.exports.auth = (event, context, callback) => {
