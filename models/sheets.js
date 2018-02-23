@@ -10,18 +10,12 @@ const script = {
   txt: String
 }
 
-const schema = {
-  prop: String,
-  type: String
-}
-
 const sheetSchema = new mongoose.Schema({
     "name" : String,
     "link" : String,
     "sort" : Number,
     "load" : String,
     "public" : Boolean,
-    "schema": [schema],
     "scripts": [script],
     "tmplts" : [script],
     "users": [user],
