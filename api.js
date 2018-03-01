@@ -60,7 +60,10 @@ const printError = (error) => {
 module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
     if(error) {
-      callback(printError(error));
+      callback({
+    statusCode: 200,
+    body: JSON.stringify({ error: error })    
+  });
       return;
     }
     model.find({})
