@@ -59,13 +59,16 @@ const printError = (callback, error) => {
 
 module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
-    model.find({})
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, err)); 
+    if(error) {
+      printError(callback, error);
+    } else {
+      model.find({})
+        .then(data => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(data)
+        }))
+        .catch(err => callback(null, err));  
+    }
   });
 };
 
