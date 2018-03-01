@@ -23,33 +23,33 @@ var setup = function(event, context, fn) {
 };
 
 const createModelFromSheet = (sheet, next) => {
-  const types = {
-    'string': String,
-    'number': Number,
-    'date': Date,
-    'buffer': Buffer,
-    'boolean': Boolean,
-    'mixed': Mixed,
-    'objectid': Objectid,
-    'array': Array
-  };
+  // const types = {
+  //   'string': String,
+  //   'number': Number,
+  //   'date': Date,
+  //   'buffer': Buffer,
+  //   'boolean': Boolean,
+  //   'mixed': Mixed,
+  //   'objectid': Objectid,
+  //   'array': Array
+  // };
   const options = {
     strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
-  const arr = sheet._schema || [{}];
-  let schema = {};
-  for(var s in arr) {
-    let obj = arr[s] || {};
-    obj.prop = obj.prop || 'prop';
-    obj.type = (obj.type || 'string').toLowerCase();
-    if(options[obj.prop]) {
-      options[obj.prop] = obj.type;
-    } else {
-      schema[obj.prop] = types[obj.type] || String;
-    }
-  }
-  const model = mongoose.model(options.collection, new mongoose.Schema({},{strict: false}));
+  // const arr = sheet._schema || [{}];
+  // let schema = {};
+  // for(var s in arr) {
+  //   let obj = arr[s] || {};
+  //   obj.prop = obj.prop || 'prop';
+  //   obj.type = (obj.type || 'string').toLowerCase();
+  //   if(options[obj.prop]) {
+  //     options[obj.prop] = obj.type;
+  //   } else {
+  //     schema[obj.prop] = types[obj.type] || String;
+  //   }
+  // }
+  const model = mongoose.model(options.collection, new mongoose.Schema({name: Sring}));
   next(model);
 };
 
