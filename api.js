@@ -51,7 +51,7 @@ const createModel = (event, context, next) => {
 };
 
 const printError = (callback, error) => {
-  return callback({
+  callback({
     statusCode: 200,
     body: JSON.stringify({ error: error })    
   });
