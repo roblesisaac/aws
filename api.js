@@ -51,12 +51,18 @@ const createModel = (event, context, next) => {
 };
 
 const printError = (error) => {
-  return { statusCode: 200, body: JSON.stringify({ error: error }) };
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ error: error })    
+  };
 };
 
 module.exports.test = (event, context, callback) => {
   createModel(event, context, function(error, model) {
-    if(error) return callback(printError(error));
+    if(error) {
+      callback(printError(error));
+      return;
+    }
     model.find({})
       .then(data => callback(null, {
         statusCode: 200,
