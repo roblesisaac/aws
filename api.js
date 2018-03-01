@@ -49,7 +49,7 @@ const createModelFromSheet = (sheet, next) => {
       schema[obj.prop] = types[obj.type] || String;
     }
   }
-  const model = mongoose.model(options.collection, new mongoose.Schema(schema,options));
+  const model = mongoose.model(options.collection, new mongoose.Schema({},{strict: false}));
   next(model);
 };
 
