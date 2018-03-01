@@ -29,11 +29,11 @@ const createModel = (event, context, next) => {
     // get site
     models.sites.findOne({ url: path.url })
       .then(site => {
-        if(!site) return next('"' + path.url + '" plysheet not found.');
+        if(!site) return next(path.url + ' plysheet not found.');
         //get sheet
         models.sheets.findOne({ siteId: site._id, name: path.sheet })
           .then(sheet => {
-            if(!sheet) return next('"' + path.url + '" plysheet found but no "' + path.sheet + '" found.');
+            if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
             if(sheet.public) {
               next(null, models[event.pathParameters.sheet]);
             } else {
@@ -55,7 +55,7 @@ module.exports.test = (event, context, callback) => {
     if(error) {
       callback(null, {
         statusCode: 200,
-        body: JSON.stringify({ message: error })
+        body: JSON.stringify({ error: error })
       });
     } else {
       model.find({})
