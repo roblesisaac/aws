@@ -64,14 +64,14 @@ module.exports.test = (event, context, callback) => {
     statusCode: 200,
     body: JSON.stringify({ error: error })    
   });
-      return;
-    }
+    } else {
     model.find({})
       .then(data => callback(null, {
         statusCode: 200,
         body: JSON.stringify(data)
       }))
       .catch(err => callback(null, err)); 
+    }
   });
 };
 
