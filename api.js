@@ -22,7 +22,38 @@ var setup = function(event, context, fn) {
   connectToDb().then(() => fn(site));  
 };
 
-const createModel = (event, context, next) => {
+const createModelFromSheet = (sheet, next) => {
+  const types = {
+    'string': String,
+    'number': Number,
+    'date': Date,
+    'buffer': Buffer,
+    'boolean': Boolean,
+    'mixed': Mixed,
+    'objectid': Objectid,
+    'array': Array
+  };
+  const options = {
+    strict: true,
+    collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
+  };
+  const arr = sheet._schema || [{}];
+  let schema = {};
+  for(var s in arr) {
+    let obj = arr[s] || {};
+    obj.prop = obj.prop || 'prop';
+    obj.type = (obj.type || 'string').toLowerCase();
+    if(options[obj.prop]) {
+      options[obj.prop] = obj.type;
+    } else {
+      schema[obj.prop] = types[obj.type] || String;
+    }
+  }
+  const model = mongoose.model(options.collection, new mongoose.Schema(schema,options));
+  next(model);
+};
+
+const getModel = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   connectToDb().then(() => {
@@ -35,11 +66,15 @@ const createModel = (event, context, next) => {
           .then(sheet => {
             if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
             if(sheet.public) {
-              next(null, models[event.pathParameters.sheet]);
+              createModelFromSheet(sheet, function(model){
+                next(null, model);
+              });
             } else {
               checkToken(event, context, (res) => {
                 if(res.success === true) {
-                  next(null, models[event.pathParameters.sheet]);
+                  createModelFromSheet(sheet, function(model){
+                    next(null, model);
+                  });
                 } else {
                   next(res.message);
                 }
@@ -58,7 +93,7 @@ const printError = (callback, error) => {
 };
 
 module.exports.test = (event, context, callback) => {
-  createModel(event, context, function(error, model) {
+  getModel(event, context, function(error, model) {
     if(error) return printError(callback, error);
     model.find({})
       .then(data => callback(null, {
