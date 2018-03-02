@@ -45,7 +45,7 @@ const createModelFromSheet = (sheet, next) => {
     if(options[obj.prop]) {
       options[obj.prop] = obj.type;
     } else {
-      schema[obj.prop] = String;
+      schema[obj.prop] = types[obj.type] || String;
     }
   }
   sessionModels[sheet._id] = sessionModels[sheet._id] || mongoose.model(options.collection, new mongoose.Schema({name: String}));
