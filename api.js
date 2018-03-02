@@ -42,12 +42,12 @@ const createModelFromSheet = (sheet, next) => {
   let arr = sheet._schema || [{}];
   for(var s in arr) {
     let obj = arr[s] || {};
-    obj.prop = obj.prop || 'prop';
-    obj.type = (obj.type || 'string').toLowerCase();
-    if(options[obj.prop]) {
-      options[obj.prop] = obj.type;
-    } else if(reserved.indexOf(obj.prop) === -1) {
-      schema[obj.prop] = types[obj.type] || String;
+    obj.propName = obj.propName || 'propName';
+    obj.propType = (obj.propType || 'string').toLowerCase();
+    if(options[obj.propName]) {
+      options[obj.propName] = obj.propType;
+    } else if(reserved.indexOf(obj.propName) === -1) {
+      schema[obj.propName] = types[obj.propType] || String;
     }
   }
   sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
