@@ -152,10 +152,11 @@ module.exports.put = (event, context, callback) => {
           statusCode: 200,
           body: JSON.stringify(data)
         }))
-        .catch(err => {
-          site.err.body = err;
-          callback(null, site.err);
-        });  
+        .catch(err => callback(null, {
+          statusCode: 200,
+          headers: { 'Content-Type': 'text/plain' },
+          body: err     
+    }));  
   });
 };
 
