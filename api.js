@@ -30,6 +30,7 @@ const types = {
   'boolean': Boolean,
   'array': Array
 };
+const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 
 const createModelFromSheet = (sheet, next) => {
   if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
@@ -45,7 +46,7 @@ const createModelFromSheet = (sheet, next) => {
     obj.type = (obj.type || 'string').toLowerCase();
     if(options[obj.prop]) {
       options[obj.prop] = obj.type;
-    } else {
+    } else if(reserved.indexOf(obj.prop) === -1) {
       schema[obj.prop] = types[obj.type] || String;
     }
   }
