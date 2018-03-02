@@ -18,7 +18,7 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 const createModelFromSheet = (sheet, next) => {
   if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
   let options = {
-    strict: false,
+    strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
   let schema = {};
