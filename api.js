@@ -114,13 +114,14 @@ module.exports.auth = (event, context, callback) => {
 };
 
 module.exports.post = (event, context, callback) => {
-  setup(event, context, function(site) {
-    site.model.create(JSON.parse(event.body))
+  getModel(event, context, function(error, model) {
+    if(error) return printError(callback, error);
+    model.create(JSON.parse(event.body))
       .then(data => callback(null, {
         statusCode: 200,
         body: JSON.stringify(data)
       }))
-      .catch(err => callback(null, site.err));     
+      .catch(err => callback(null, err)); 
   });
 };
 
@@ -137,28 +138,26 @@ module.exports.get = (event, context, callback) => {
 };
 
 module.exports.getOne = (event, context, callback) => {
-  setup(event, context, function(site) {
-    site.model.findById(event.pathParameters.id)
+  getModel(event, context, function(error, model) {
+    if(error) return printError(callback, error);
+    model.findById(event.pathParameters.id)
       .then(data => callback(null, {
         statusCode: 200,
         body: JSON.stringify(data)
       }))
-      .catch(err => callback(null, site.err));  
+      .catch(err => callback(null, err)); 
   });
 };
 
 module.exports.put = (event, context, callback) => {
-  setup(event, context, function(site) {
-      site.model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
+  getModel(event, context, function(error, model) {
+    if(error) return printError(callback, error);
+      model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
         .then(data => callback(null, {
           statusCode: 200,
           body: JSON.stringify(data)
         }))
-        .catch(err => callback(null, {
-          statusCode: 200,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'nope'     
-    }));  
+      .catch(err => callback(null, err)); 
   });
 };
 
