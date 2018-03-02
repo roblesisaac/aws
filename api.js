@@ -155,7 +155,7 @@ module.exports.put = (event, context, callback) => {
         .catch(err => callback(null, {
           statusCode: 200,
           headers: { 'Content-Type': 'text/plain' },
-          body: err     
+          body: 'nope'     
     }));  
   });
 };
