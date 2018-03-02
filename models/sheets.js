@@ -22,7 +22,7 @@ const sheetSchema = new mongoose.Schema({
     "_init" : String,
     "public" : Boolean,
     "scripts": [script],
-    "plyschema" : [schema],
+    "_schema" : [schema],
     "tmplts" : [script],
     "users": [user],
     "siteId": String
