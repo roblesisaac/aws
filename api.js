@@ -25,16 +25,16 @@ var setup = function(event, context, fn) {
 const sessionModels = {};
 
 const createModelFromSheet = (sheet, next) => {
-  const types = {
-    'string': String,
-    'number': Number,
-    'date': Date,
-    'buffer': Buffer,
-    'boolean': Boolean,
-    'mixed': Mixed,
-    'objectid': Objectid,
-    'array': Array
-  };
+  // const types = {
+  //   'string': String,
+  //   'number': Number,
+  //   'date': Date,
+  //   'buffer': Buffer,
+  //   'boolean': Boolean,
+  //   'mixed': Mixed,
+  //   'objectid': Objectid,
+  //   'array': Array
+  // };
   const options = {
     strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
@@ -48,7 +48,7 @@ const createModelFromSheet = (sheet, next) => {
     if(options[obj.prop]) {
       options[obj.prop] = obj.type;
     } else {
-      schema[obj.prop] = types[obj.type] || String;
+      schema[obj.prop] = String;
     }
   }
   sessionModels[sheet._id] = sessionModels[sheet._id] || mongoose.model(options.collection, new mongoose.Schema({name: String}));
