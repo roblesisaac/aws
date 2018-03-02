@@ -19,12 +19,6 @@ custom:
     createRoute53Record: true
 
 functions:
-  test:
-    handler: api.test
-    events:
-      - http:
-          path: /{sitename}/test/{sheet}
-          method: get
   login:
     handler: auth.login
     events:
