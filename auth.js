@@ -13,7 +13,10 @@ const loginUser = (user, next) => {
     			fUser.comparePassword(user.password, function(err, isMatch){
     				if(isMatch && isMatch === true) {
     					// if user is found and password is right create a token
-    					next(jwt.sign({ _id: fUser._id, username: fUser.username, name: fUser.name,	password: fUser.password	}, fUser.password, {	expiresIn: '15h' }));
+    					next({
+    					  'ply-token': jwt.sign({ _id: fUser._id, username: fUser.username, name: fUser.name,	password: fUser.password	}, fUser.password, {	expiresIn: '15h' }),
+    					  userid: fUser._id
+    					});
     				} else {
     					next({ success: false, message: 'Authentication failed. Wrong password.' });
     				}
