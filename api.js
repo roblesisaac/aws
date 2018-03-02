@@ -125,13 +125,14 @@ module.exports.post = (event, context, callback) => {
 };
 
 module.exports.get = (event, context, callback) => {
-  setup(event, context, function(site) {
-    site.model.find({})
+  getModel(event, context, function(error, model) {
+    if(error) return printError(callback, error);
+    model.find({})
       .then(data => callback(null, {
         statusCode: 200,
         body: JSON.stringify(data)
       }))
-      .catch(err => callback(null, site.err));   
+      .catch(err => callback(null, err)); 
   });
 };
 
