@@ -12,7 +12,7 @@ const script = {
 
 const schm = {
   name: String,
-  text: String
+  txt: String
 };
 
 const sheetSchema = new mongoose.Schema({
