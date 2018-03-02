@@ -14,7 +14,7 @@ var setup = function(event, context, fn) {
     sheet: event.pathParameters.sheet,
     model: models[event.pathParameters.sheet] || mongoose.model(url, new mongoose.Schema({name: String},{strict: false})),
     err: {
-      statusCode: 500,
+      statusCode: 200,
       headers: { 'Content-Type': 'text/plain' },
       body: 'Could not create the note.'      
     }
