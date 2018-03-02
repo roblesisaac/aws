@@ -76,26 +76,6 @@ const printError = (callback, error) => {
   });
 };
 
-module.exports.test = (event, context, callback) => {
-  getModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
-    model.find({})
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, err)); 
-  });
-};
-
-module.exports.auth = (event, context, callback) => {
-  const response = { statusCode: 200 };
-  checkToken(event, context, (res) => {
-    response.body = JSON.stringify(res);
-    callback(null, response);
-  });
-};
-
 module.exports.post = (event, context, callback) => {
   getModel(event, context, function(error, model) {
     if(error) return printError(callback, error);
