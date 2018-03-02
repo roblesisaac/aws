@@ -53,7 +53,7 @@ const createModelFromSheet = (sheet, next) => {
   //   }
   // }
   models[options.collection] = mongoose.model(options.collection, new mongoose.Schema({name: String}));
-  next(model);
+  next(models[options.collection]);
 };
 
 const getModel = (event, context, next) => {
