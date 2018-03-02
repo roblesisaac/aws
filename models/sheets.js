@@ -10,7 +10,7 @@ const script = {
   txt: String
 };
 
-const schema = {
+const schm = {
   prop: String,
   type: String
 };
@@ -22,7 +22,7 @@ const sheetSchema = new mongoose.Schema({
     "_init" : String,
     "public" : Boolean,
     "scripts": [script],
-    "_schema" : [schema],
+    "_schema" : [schm],
     "tmplts" : [script],
     "users": [user],
     "siteId": String
