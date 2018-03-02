@@ -38,7 +38,7 @@ const createModelFromSheet = (sheet, next) => {
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
   let schema = {};
-  const arr = sheet._schema || [{}];
+  let arr = sheet._schema || [{}];
   for(var s in arr) {
     let obj = arr[s] || {};
     obj.prop = obj.prop || 'prop';
