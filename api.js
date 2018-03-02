@@ -25,6 +25,7 @@ var setup = function(event, context, fn) {
 const sessionModels = {};
 
 const createModelFromSheet = (sheet, next) => {
+  if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
   const types = {
     'string': String,
     'number': Number,
@@ -48,7 +49,7 @@ const createModelFromSheet = (sheet, next) => {
       schema[obj.prop] = types[obj.type] || String;
     }
   }
-  sessionModels[sheet._id] = sessionModels[sheet._id] || mongoose.model(options.collection, new mongoose.Schema(schema, options));
+  sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
   next(sessionModels[sheet._id]);
 };
 
