@@ -23,22 +23,22 @@ var setup = function(event, context, fn) {
 };
 
 const sessionModels = {};
+const types = {
+  'string': String,
+  'number': Number,
+  'date': Date,
+  'boolean': Boolean,
+  'array': Array
+};
 
 const createModelFromSheet = (sheet, next) => {
   if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
-  const types = {
-    'string': String,
-    'number': Number,
-    'date': Date,
-    'boolean': Boolean,
-    'array': Array
-  };
-  const options = {
+  let options = {
     strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
-  const arr = sheet._schema || [{}];
   let schema = {};
+  const arr = sheet._schema || [{}];
   for(var s in arr) {
     let obj = arr[s] || {};
     obj.prop = obj.prop || 'prop';
