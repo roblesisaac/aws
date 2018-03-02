@@ -22,6 +22,8 @@ var setup = function(event, context, fn) {
   connectToDb().then(() => fn(site));  
 };
 
+const models = {};
+
 const createModelFromSheet = (sheet, next) => {
   // const types = {
   //   'string': String,
@@ -37,6 +39,7 @@ const createModelFromSheet = (sheet, next) => {
     strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
+  if(models[options.collection]) return next(models[options.collection]);
   // const arr = sheet._schema || [{}];
   // let schema = {};
   // for(var s in arr) {
@@ -49,7 +52,7 @@ const createModelFromSheet = (sheet, next) => {
   //     schema[obj.prop] = types[obj.type] || String;
   //   }
   // }
-  const model = mongoose.model(options.collection, new mongoose.Schema({name: String}));
+  models[options.collection] = mongoose.model(options.collection, new mongoose.Schema({name: String}));
   next(model);
 };
 
