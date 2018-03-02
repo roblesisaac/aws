@@ -153,7 +153,7 @@ module.exports.put = (event, context, callback) => {
           body: JSON.stringify(data)
         }))
         .catch(err => {
-          site.err = err;
+          site.err.body = err;
           callback(null, site.err);
         });  
   });
