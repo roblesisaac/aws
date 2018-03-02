@@ -11,8 +11,8 @@ const script = {
 };
 
 const schm = {
-  name: String,
-  txt: String
+  propName: String,
+  propType: String
 };
 
 const sheetSchema = new mongoose.Schema({
