@@ -22,7 +22,7 @@ var setup = function(event, context, fn) {
   connectToDb().then(() => fn(site));  
 };
 
-const models = {};
+const sessionModels = {};
 
 const createModelFromSheet = (sheet, next) => {
   // const types = {
@@ -39,7 +39,7 @@ const createModelFromSheet = (sheet, next) => {
     strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
-  if(models[options.collection]) return next(models[options.collection]);
+  if(sessionModels[options.collection]) return next(sessionModels[options.collection]);
   // const arr = sheet._schema || [{}];
   // let schema = {};
   // for(var s in arr) {
@@ -52,8 +52,8 @@ const createModelFromSheet = (sheet, next) => {
   //     schema[obj.prop] = types[obj.type] || String;
   //   }
   // }
-  models[options.collection] = mongoose.model(options.collection, new mongoose.Schema({name: String}));
-  next(models[options.collection]);
+  sessionModels[options.collection] = mongoose.model(options.collection, new mongoose.Schema({name: String}));
+  next(sessionModels[options.collection]);
 };
 
 const getModel = (event, context, next) => {
