@@ -29,10 +29,7 @@ const createModelFromSheet = (sheet, next) => {
     'string': String,
     'number': Number,
     'date': Date,
-    'buffer': Buffer,
     'boolean': Boolean,
-    'mixed': Mixed,
-    'objectid': Objectid,
     'array': Array
   };
   const options = {
