@@ -51,7 +51,7 @@ const createModelFromSheet = (sheet, next) => {
   //     schema[obj.prop] = types[obj.type] || String;
   //   }
   // }
-  sessionModels[options.collection] = sessionModels[options.collection] || mongoose.model(options.collection, new mongoose.Schema({name: String}));
+  sessionModels[options.collection] = mongoose.model(options.collection, new mongoose.Schema({name: String}));
   next(sessionModels[options.collection]);
 };
 
