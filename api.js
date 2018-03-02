@@ -34,7 +34,7 @@ const types = {
 const createModelFromSheet = (sheet, next) => {
   if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
   let options = {
-    strict: true,
+    strict: false,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
   };
   let schema = {};
