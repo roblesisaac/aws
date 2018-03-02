@@ -25,16 +25,16 @@ var setup = function(event, context, fn) {
 const sessionModels = {};
 
 const createModelFromSheet = (sheet, next) => {
-  // const types = {
-  //   'string': String,
-  //   'number': Number,
-  //   'date': Date,
-  //   'buffer': Buffer,
-  //   'boolean': Boolean,
-  //   'mixed': Mixed,
-  //   'objectid': Objectid,
-  //   'array': Array
-  // };
+  const types = {
+    'string': String,
+    'number': Number,
+    'date': Date,
+    'buffer': Buffer,
+    'boolean': Boolean,
+    'mixed': Mixed,
+    'objectid': Objectid,
+    'array': Array
+  };
   const options = {
     strict: true,
     collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
