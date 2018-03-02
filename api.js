@@ -2,26 +2,9 @@ const connectToDb = require('./db');
 const mongoose = require('mongoose');
 const checkToken = require('./auth').checkToken;
 const models = {
-  users: require('./models/users'),
   sites: require('./models/sites'),
   sheets: require('./models/sheets')
 };
-
-var setup = function(event, context, fn) {
-  context.callbackWaitsForEmptyEventLoop = false;
-  var site = {
-    name: event.pathParameters.sitename,
-    sheet: event.pathParameters.sheet,
-    model: models[event.pathParameters.sheet] || mongoose.model(url, new mongoose.Schema({name: String},{strict: false})),
-    err: {
-      statusCode: 200,
-      headers: { 'Content-Type': 'text/plain' },
-      body: 'Could not create the note.'      
-    }
-  };
-  connectToDb().then(() => fn(site));  
-};
-
 const sessionModels = {};
 const types = {
   'string': String,
