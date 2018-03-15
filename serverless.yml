@@ -26,7 +26,7 @@ functions:
           path: /login
           method: post
   sheet:
-    handler: handler.sheet
+    hanlandingandler.sheet
     events:
       - http:
           path: /{sitename}/{sheet}/{prop}/{name}
@@ -47,7 +47,7 @@ functions:
           method: get
           cors: true
   vue:
-    handler: handler.vue
+    hlanding handler.vue
     events:
       - http:
           path: /{sitename}/vue
@@ -75,13 +75,13 @@ functions:
           method: delete
           cors: true
   landing:
-    handler: handler.landingPage
+    handler: landing.landingPage
     events:
       - http:
           method: get
           path: /
   siteLanding:
-    handler: handler.landingPage
+    handler: landing.landingPage
     events:
       - http:
           method: get
