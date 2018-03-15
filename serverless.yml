@@ -26,7 +26,7 @@ functions:
           path: /login
           method: post
   sheet:
-    hanlandingandler.sheet
+    handler: landing.sheet
     events:
       - http:
           path: /{sitename}/{sheet}/{prop}/{name}
