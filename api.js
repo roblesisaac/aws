@@ -81,38 +81,6 @@ const getModel = (event, context, next) => {
   });
 };
 
-const getModel2 = (event, context, next) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  connectToDb().then(() => {
-    // get site
-    models.sites.findOne({ url: path.url })
-      .then(site => {
-        if(!site) return next(path.url + ' plysheet not found.');
-        //get sheet
-        models.sheets.findOne({ siteId: site._id, name: path.sheet })
-          .then(sheet => {
-            if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
-            if(sheet.public) {
-              createModelFromSheet(sheet, function(model){
-                next(null, model);
-              });
-            } else {
-              checkToken(event, context, (res) => {
-                if(res.success === true) {
-                  createModelFromSheet(sheet, function(model){
-                    next(null, model);
-                  });
-                } else {
-                  next(res.message);
-                }
-              });
-            }
-          });
-      });
-  });  
-};
-
 const printError = (callback, error) => {
   return callback(null, {
     statusCode: 200,
