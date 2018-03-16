@@ -60,11 +60,8 @@ const checkIfSheetIsPublic = (event, context, sheet, next) => {
     next(null, sheet);
   } else {
     checkToken(event, context, (res) => {
-      if(res.success === true) {
-        next(null, sheet);
-      } else {
-        next(res.message);
-      }
+      if(res.success === true) return next(null, sheet);
+      next(res.message);
     });
   }
 };
@@ -88,14 +85,16 @@ const printError = (callback, error) => {
   });
 };
 
-// module.exports.component = (event, context, callback) => {
-//   const path = {
-//     site: event.pathParameters.sitename,
-//     sheet: event.pathParameters.sheet,
-//     prop: event.pathParameters.sheet
-//   };
-  
-// };
+module.exports.component = (event, context, callback) => {
+  findSheet(event, context, function(err, sheet){
+    if(err) return next(err);
+    callback(null, {
+      statusCode: 200,
+      'content-type': 'application/javascript',
+      body: sheet
+    });
+  });
+};
 
 module.exports.post = (event, context, callback) => {
   getModel(event, context, function(error, model) {
