@@ -91,7 +91,7 @@ module.exports.component = (event, context, callback) => {
     callback(null, {
       statusCode: 200,
       'Content-Type': 'application/javascript',
-      body: sheet
+      body: 'sheet'
     });
   });
 };
