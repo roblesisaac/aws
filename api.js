@@ -90,7 +90,8 @@ module.exports.component = (event, context, callback) => {
     if(err) return printError(callback, err);
     callback(null, {
       statusCode: 200,
-      body: 'sheet'
+      'Content-Type': 'application/javascript',
+      body: sheet
     });
   });
 };
