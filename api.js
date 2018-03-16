@@ -91,7 +91,8 @@ module.exports.post = (event, context, callback) => {
 module.exports.get = (event, context, callback) => {
   getModel(event, context, function(error, model) {
     if(error) return printError(callback, error);
-    model.find({})
+    let params = event.queryStringParameters || {};
+    model.find(params)
       .then(data => callback(null, {
         statusCode: 200,
         body: JSON.stringify(data)
