@@ -29,7 +29,7 @@ functions:
     handler: api.component
     events:
       - http:
-          path: /{sitename}/{sheet}
+          path: /{sitename}/{sheet}/component
           method: get
           cors: true
   sheet:
