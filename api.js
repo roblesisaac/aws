@@ -37,7 +37,51 @@ const createModelFromSheet = (sheet, next) => {
   next(sessionModels[sheet._id]);
 };
 
+const findSheet = (event, context, next) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  connectToDb().then(() => {
+    // get site
+    models.sites.findOne({ url: path.url })
+      .then(site => {
+        if(!site) return next(path.url + ' plysheet not found.');
+        //get sheet
+        models.sheets.findOne({ siteId: site._id, name: path.sheet })
+          .then(sheet => {
+            if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
+            next(null, sheet);
+          });
+      });
+  });   
+};
+
+const checkIfSheetIsPublic = (event, context, sheet, next) => {
+  if(sheet.public) {
+    next(null, sheet);
+  } else {
+    checkToken(event, context, (res) => {
+      if(res.success === true) {
+        next(null, sheet);
+      } else {
+        next(res.message);
+      }
+    });
+  }
+};
+
 const getModel = (event, context, next) => {
+  findSheet(event, context, function(err1, sheet){
+    if(err1) return next(err1);
+    checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
+      if(err2) return next(err2);
+        createModelFromSheet(sheet, function(model){
+          next(null, model);
+        });      
+    });
+  });
+};
+
+const getModel2 = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   connectToDb().then(() => {
@@ -75,6 +119,15 @@ const printError = (callback, error) => {
     body: JSON.stringify({ error: error })    
   });
 };
+
+// module.exports.component = (event, context, callback) => {
+//   const path = {
+//     site: event.pathParameters.sitename,
+//     sheet: event.pathParameters.sheet,
+//     prop: event.pathParameters.sheet
+//   };
+  
+// };
 
 module.exports.post = (event, context, callback) => {
   getModel(event, context, function(error, model) {
