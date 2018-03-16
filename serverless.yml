@@ -25,6 +25,13 @@ functions:
       - http:
           path: /login
           method: post
+  component:
+    handler: api.component
+    events:
+      - http:
+          path: /{sitename}/{sheet}
+          method: get
+          cors: true
   sheet:
     handler: landing.sheet
     events:
