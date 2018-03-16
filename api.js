@@ -19,7 +19,7 @@ const createModelFromSheet = (sheet, next) => {
   if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
   let options = {
     strict: true,
-    collection: (sheet.name || sheet.url || JSON.stringify(sheet._id))
+    collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
   };
   let schema = {};
   let arr = sheet._schema || [{}];
