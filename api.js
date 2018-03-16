@@ -87,7 +87,7 @@ const printError = (callback, error) => {
 
 module.exports.component = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
-    if(err) return next(err);
+    if(err) return printError(callback, err);
     callback(null, {
       statusCode: 200,
       'content-type': 'application/javascript',
