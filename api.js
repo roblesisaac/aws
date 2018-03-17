@@ -87,12 +87,10 @@ const printError = (callback, error) => {
 
 module.exports.temp = (event, context, callback) => {
   models.sheets.find()
-    .then(sheets => {
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify('sheets')
-      });
-    }); 
+    .then(sheets => callback(null, {
+      statusCode: 200,
+      body: JSON.stringify('sheets')
+    })); 
 };
 
 module.exports.component = (event, context, callback) => {
