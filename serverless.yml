@@ -36,7 +36,7 @@ functions:
     handler: api.temp
     events:
       - http:
-          path: /temp/temp/temp/temp
+          path: /temp/temp/temp/temp/temp
           method: get
           cors: true
   sheet:
