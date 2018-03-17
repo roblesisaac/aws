@@ -46,7 +46,7 @@ const findSheet = (event, context, next) => {
       .then(site => {
         if(!site) return next(path.url + ' plysheet not found.');
         //get sheet
-        models.sheets.findOne({ name: path.sheet })
+        models.sheets.findOne({ siteId: site._id, name: path.sheet })
           .then(sheet => {
             if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
             next(null, sheet);
