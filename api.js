@@ -86,10 +86,14 @@ const printError = (callback, error) => {
 };
 
 module.exports.temp = (event, context, callback) => {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify('sheets')
-    })
+  connectToDb().then(() => {
+    models.sheets.find({}).then(function(sheets){
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(sheets)
+      })
+    });     
+  });
 };
 
 module.exports.component = (event, context, callback) => {
