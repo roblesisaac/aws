@@ -88,12 +88,13 @@ const printError = (callback, error) => {
 module.exports.component = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
+    const body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
     callback(null, {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/javascript',
       },
-      body: sheet.script || 'no ' + sheet.script
+      body: body
     });
   });
 };
