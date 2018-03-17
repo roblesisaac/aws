@@ -86,6 +86,7 @@ const printError = (callback, error) => {
 };
 
 module.exports.temp = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   connectToDb().then(() => {
     models.sheets.find({}).then(function(sheets){
       callback(null, {
