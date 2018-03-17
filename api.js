@@ -94,7 +94,7 @@ module.exports.component = (event, context, callback) => {
     arr.push(sheet);
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(mongoose.connection.models)
+      body: JSON.stringify(mongoose)
     });
   });
 };
