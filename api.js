@@ -93,7 +93,7 @@ module.exports.component = (event, context, callback) => {
       headers: {
         'Content-Type': 'application/javascript',
       },
-      body: sheet || 'no ' + event.pathParameters.prop
+      body: JSON.stringify(sheet.script) || 'no ' + event.pathParameters.prop
     });
   });
 };
