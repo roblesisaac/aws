@@ -29,7 +29,7 @@ functions:
     handler: api.component
     events:
       - http:
-          path: /{sitename}/{sheet}/component
+          path: /{sitename}/{sheet}/{prop}
           method: get
           cors: true
   sheet:
@@ -37,6 +37,13 @@ functions:
     events:
       - http:
           path: /{sitename}/{sheet}/{prop}/{name}
+          method: get
+          cors: true
+  vue:
+    handler: landing.vue
+    events:
+      - http:
+          path: /{sitename}/vue
           method: get
           cors: true
   post:
@@ -51,13 +58,6 @@ functions:
     events:
       - http:
           path: /{sitename}/api/{sheet}
-          method: get
-          cors: true
-  vue:
-    handler: landing.vue
-    events:
-      - http:
-          path: /{sitename}/vue
           method: get
           cors: true
   getOne:
