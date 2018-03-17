@@ -89,9 +89,11 @@ module.exports.component = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
     const body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
+    let arr = [];
+    for(var key in sheet) arr.push(key);
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(sheet)
+      body: JSON.stringify(arr)
     });
   });
 };
