@@ -91,7 +91,7 @@ module.exports.component = (event, context, callback) => {
     const body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
     callback(null, {
       statusCode: 200,
-      body: sheet
+      body: JSON.stringify(sheet)
     });
   });
 };
