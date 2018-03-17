@@ -85,6 +85,14 @@ const printError = (callback, error) => {
   });
 };
 
+module.exports.temp = (event, context, callback) => {
+  models.sheets.find({})
+    .then(sheets =>  callback(null, {
+        statusCode: 200,
+        body: JSON.stringify(sheets)
+      }));  
+};
+
 module.exports.component = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
