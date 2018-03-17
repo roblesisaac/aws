@@ -86,16 +86,10 @@ const printError = (callback, error) => {
 };
 
 module.exports.temp = (event, context, callback) => {
-  models.sheets.find({ })
-    .then(sheets => {
       callback(null, {
         statusCode: 200,
-        headers: {
-          'Content-Type': 'application/javascript',
-        },
-        body: JSON.stringify(sheets)
+        body: JSON.stringify('sheets')
       });
-    }); 
 };
 
 module.exports.component = (event, context, callback) => {
