@@ -32,13 +32,6 @@ functions:
           path: /{sitename}/{sheet}/{prop}
           method: get
           cors: true
-  temp:
-    handler: api.temp
-    events:
-      - http:
-          path: /temp/temp/temp/temp/temp
-          method: get
-          cors: true
   sheet:
     handler: landing.sheet
     events:
