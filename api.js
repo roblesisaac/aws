@@ -91,6 +91,7 @@ module.exports.component = (event, context, callback) => {
     const body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
     let arr = [];
     for(var key in sheet) arr.push(key);
+    arr.push(sheet);
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(arr)
