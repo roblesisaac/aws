@@ -86,7 +86,7 @@ const printError = (callback, error) => {
 };
 
 module.exports.temp = (event, context, callback) => {
-  models.sheets.find({ })
+  models.sheets.find()
     .then(sheets => {
       callback(null, {
         statusCode: 200,
