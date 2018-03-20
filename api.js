@@ -93,7 +93,11 @@ module.exports.component = (event, context, callback) => {
     for(var key in sheet) arr.push(key);
     arr.push(sheet);
     arr.push(sheet._js);
-    arr.push(sessionModels);
+    var t = {};
+    for(var k in sessionModels) {
+      t[k];
+    }
+    arr.push(t);
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(arr)
