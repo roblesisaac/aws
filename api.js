@@ -98,6 +98,7 @@ module.exports.component = (event, context, callback) => {
       t[k];
     }
     arr.push(t);
+    arr.push({test: 'hkshdfj'});
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(arr)
