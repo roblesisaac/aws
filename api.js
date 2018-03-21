@@ -85,7 +85,7 @@ const printError = (callback, error) => {
   });
 };
 
-module.exports.component = (event, context, callback) => {
+module.exports.sheetProp = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
     const body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
