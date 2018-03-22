@@ -1,32 +1,31 @@
-const connectToDb = require('./db');
-const checkToken = require('./auth').checkToken;
-const models = {
-  users: require('./models/users'),
-  sites: require('./models/sites'),
-  sheets: require('./models/sheets')
-};
+// const connectToDb = require('./db');
+// const models = {
+//   users: require('./models/users'),
+//   sites: require('./models/sites'),
+//   sheets: require('./models/sheets')
+// };
 
-function areThereAnyYet(name, data, next) {
-  models[name].find().then(function(res) {
-    if(res.length === 0) {
-      createFirst(name, data, function(firstItem) {
-        next(firstItem);
-      });
-    } else {
-      next(res[0]);
-    }
-  });      
-}
-function createFirst(name, data, next) {
-  models[name].create(data).then(function(res){
-    next(res);
-  });
-}
+// function areThereAnyYet(name, data, next) {
+//   models[name].find().then(function(res) {
+//     if(res.length === 0) {
+//       createFirst(name, data, function(firstItem) {
+//         next(firstItem);
+//       });
+//     } else {
+//       next(res[0]);
+//     }
+//   });      
+// }
+// function createFirst(name, data, next) {
+//   models[name].create(data).then(function(res){
+//     next(res);
+//   });
+// }
 
 module.exports.setUp = (event, context, callback) => {
   callback(null, {
     statusCode: 200,
-    body: 'hi'
+    body: JSON.stringify(['hi'])
   }); 
   // context.callbackWaitsForEmptyEventLoop = false;
   // connectToDb().then(() => {
