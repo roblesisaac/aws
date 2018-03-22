@@ -41,20 +41,14 @@ module.exports.init = (event, context, callback) => {
           js: "const login = (user) => { axios.post('https://www.blockometry.com/login', {username: user.username, password: user.password}).then(function(res){ window.sessionStorage['ply-token'] = res.data['ply-token']; window.sessionStorage.userid = res.data.userid; }); }; var instance = axios.create({ headers: { 'ply-token': window.sessionStorage['ply-token'], userid: window.sessionStorage.userid} }); var ply = new Vue({ created: function() { console.log('hi') var vm = this; instance.get(this.ace.url).then(function(res){ vm.ace.send = res.data; vm.ace.txt = ((res.data[vm.ace.prop] || [])[0] || {}).txt; }); }, data: { ace: { url: 'https://www.blockometry.com/plaza/api/sheets/5a86259595049a0001012029', prop: 'scripts', send: null, txt: null }, link: sheets[0].name, sheets: sheets }, el: '#app', methods: { saveSheet: function() { this.ace.send[this.ace.prop][0].txt = this.ace.txt; instance.put(this.ace.url, this.ace.send).then(function(res){ console.log(res.data); }); } } });"
         };
         areThereAnyYet('sheets', firstSheet, function(sheet){
-          models.sheets.findByIdAndRemove(sheet._id)
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify('data')
-        }))
-      .catch(err => callback(null, err));
-          // callback(null, {
-          //   statusCode: 200,
-          //   body: JSON.stringify({
-          //     user: user,
-          //     site: site,
-          //     sheet: sheet
-          //   })
-          // }); 
+          callback(null, {
+            statusCode: 200,
+            body: JSON.stringify({
+              user: user,
+              site: site,
+              sheet: sheet
+            })
+          }); 
         });
       });  
     });
