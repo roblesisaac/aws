@@ -5,11 +5,6 @@ const user = {
   apps: [String]
 };
 
-const script = {
-  name: String,
-  txt: String
-};
-
 const schm = {
   propName: String,
   propType: String
@@ -21,17 +16,11 @@ const sheetSchema = new mongoose.Schema({
     "sort" : Number,
     "_init" : String,
     "public" : Boolean,
-    "scripts": [script],
+    "js": String,
     "_schema" : [schm],
-    "tmplts" : [script],
+    "tmplt" : String,
     "users": [user],
     "siteId": String
 });
-
-// sheetSchema.pre('save', function (next) {
-//     var userId = this.userId;
-//     if (this.url === '') this.url = this.name;
-//     next();
-// });
 
 module.exports = mongoose.model('sheet', sheetSchema);
