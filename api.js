@@ -89,19 +89,9 @@ module.exports.sheetProp = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
     const body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
-    let arr = [];
-    for(var key in sheet) arr.push(key);
-    arr.push(sheet);
-    arr.push(sheet._js);
-    var t = {};
-    for(var k in sessionModels) {
-      t[k];
-    }
-    arr.push(t);
-    arr.push({test: 'hkshdfj'});
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(arr)
+      body: JSON.stringify(body)
     });
   });
 };
