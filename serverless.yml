@@ -20,11 +20,11 @@ custom:
 
 functions:
   setup:
-    handler: api.setup
+    handler: setup.setup
     events:
       - http:
           method: get
-          path: /plysheet/setup
+          path: /plysheet/api/setup
   landing:
     handler: landing.landingPage
     events:
