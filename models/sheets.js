@@ -18,7 +18,7 @@ const sheetSchema = new mongoose.Schema({
     "public" : Boolean,
     "js": String,
     "_schema" : [schm],
-    "tmplt" : String,
+    "templates" : Array,
     "users": [user],
     "siteId": String
 });
