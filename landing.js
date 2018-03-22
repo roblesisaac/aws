@@ -114,7 +114,7 @@ module.exports.landingPage = (event, context, callback) => {
             <script type="text/javascript">
               var sheets = {{sheets}}
             </script>
-            <script src="https://www.blockometry.com/plaza/sheets/scripts/main"></script>
+            <script src="https://www.blockometry.com/plaza/sheets/js"></script>
           </html>`
   };
 
