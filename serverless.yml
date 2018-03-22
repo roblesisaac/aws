@@ -20,7 +20,7 @@ custom:
 
 functions:
   setup:
-    handler: setup.setup
+    handler: setup.init
     events:
       - http:
           method: get
