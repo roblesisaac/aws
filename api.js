@@ -88,8 +88,10 @@ const printError = (callback, error) => {
 module.exports.temp = (event, context, callback) => {
   callback(null, {
     statusCode: 200,
-    event: event,
-    context: context
+    body: JSON.stringify({
+      event: event,
+      context: context
+    })
   });
 };
 
