@@ -116,7 +116,7 @@ module.exports.landingPage = (event, context, callback) => {
                 site: {{site}},
                 user: {},
                 sheets: {{sheets}},
-                link: sheets[0].name
+                link: {{link}}
               };
             </script>
             <script src="https://www.blockometry.com/plaza/sheets/js"></script>
@@ -132,6 +132,7 @@ module.exports.landingPage = (event, context, callback) => {
               .then(sheets => {
                 response.body = response.body.replace('{{site}}', JSON.stringify(site));
                 response.body = response.body.replace('{{sheets}}', JSON.stringify(sheets));
+                response.body = response.body.replace('{{link}}', sheets[0].link);
                 callback(null, response);                 
               });
           } else {
