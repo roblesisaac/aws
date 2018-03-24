@@ -85,24 +85,18 @@ const printError = (callback, error) => {
   });
 };
 
-module.exports.temp = (event, context, callback) => {
-  callback(null, {
-    statusCode: 200,
-    body: JSON.stringify({
-      event: event,
-      context: context
-    })
-  });
-};
-
 module.exports.sheetProp = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
-    var body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
+    const prop = event.pathParameters.prop.split('?')[0];
+    const params = event.pathParameters.prop.split('?')[1];
+    const body = sheet[prop] || 'no ' + event.pathParameters.prop;
+    let type = 'application/javascript';
+    if(prop.indexOf('css') > -1) type = 'text/css';
     callback(null, {
       statusCode: 200,
       headers: {
-        'Content-Type': 'application/javascript',
+        'Content-Type': type,
       },
       body: body
     });
