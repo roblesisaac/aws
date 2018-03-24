@@ -85,15 +85,24 @@ const printError = (callback, error) => {
   });
 };
 
+module.exports.temp = (event, context, callback) => {
+  callback(null, {
+    statusCode: 200,
+    event: event,
+    context: context
+  });
+};
+
 module.exports.sheetProp = (event, context, callback) => {
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
+    var body = sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop;
     callback(null, {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/javascript',
       },
-      body: sheet[event.pathParameters.prop] || 'no ' + event.pathParameters.prop
+      body: body
     });
   });
 };
