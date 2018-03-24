@@ -97,14 +97,7 @@ module.exports.landingPage = (event, context, callback) => {
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
             </head>
             <body>
-              <div id="app" class="grid-x">
-                <div class="cell small-12">
-                  <input type="text" v-model="ace.url">
-                  <br>
-                  <textarea rows="45" v-model="ace.txt"></textarea>
-                  <button @click="saveSheet">Save</button>
-                </div>
-              </div>
+              <div id="app" class="grid-x"></div>
             </body>
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
