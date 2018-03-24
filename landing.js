@@ -132,7 +132,7 @@ module.exports.landingPage = (event, context, callback) => {
               .then(sheets => {
                 response.body = response.body.replace('{{site}}', JSON.stringify(site));
                 response.body = response.body.replace('{{sheets}}', JSON.stringify(sheets));
-                response.body = response.body.replace('{{link}}', sheets[0].link);
+                response.body = response.body.replace('{{link}}', JSON.stringify(sheets[0].link));
                 callback(null, response);                 
               });
           } else {
