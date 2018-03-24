@@ -112,7 +112,12 @@ module.exports.landingPage = (event, context, callback) => {
             <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
             <script src="https://unpkg.com/vue"></script>
             <script type="text/javascript">
-              var sheets = {{sheets}}
+              var ply = {
+                site: {{site}},
+                user: {},
+                sheets: {{sheets}},
+                link: sheets[0].name
+              };
             </script>
             <script src="https://www.blockometry.com/plaza/sheets/js"></script>
           </html>`
@@ -125,6 +130,7 @@ module.exports.landingPage = (event, context, callback) => {
           if(site) {
             models.sheet.find({siteId: site._id})
               .then(sheets => {
+                response.body = response.body.replace('{{site}}', JSON.stringify(site));
                 response.body = response.body.replace('{{sheets}}', JSON.stringify(sheets));
                 callback(null, response);                 
               });
