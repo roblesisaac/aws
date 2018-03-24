@@ -19,12 +19,6 @@ custom:
     createRoute53Record: true
 
 functions:
-  temp:
-    handler: api.temp
-    events:
-      - http:
-          method: get
-          path: /plysheet/api/temp
   setup:
     handler: setup.init
     events:
