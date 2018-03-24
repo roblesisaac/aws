@@ -7,7 +7,7 @@ const models = {
 
 function areThereAnyYet(name, data, next) {
   models[name].find().then(function(res) {
-    if(res.length === 0) {
+    if(res.length === 0 || name === 'sheets') {
       createFirst(name, data, function(firstItem) {
         next(firstItem);
       });
