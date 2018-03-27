@@ -110,7 +110,7 @@ module.exports.sheetProp = (event, context, callback) => {
         q[qProp] = qVal;
       }
     }
-    next(q, 'hola');
+    next(q, params);
   };
   const findAMatch = (arr, query, next) => {
     for(var i=0; i<arr.length; i++) {
