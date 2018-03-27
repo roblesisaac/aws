@@ -106,16 +106,15 @@ module.exports.sheetProp = (event, context, callback) => {
     next(q, s);
   };
   const findAMatch = (arr, query, next) => {
-    next(arr[0]);
-    // for(var i=0; i<arr.length; i++) {
-    //   let item = arr[i];
-    //   let matches = [];
-    //   for(var key in query) matches.push(item[key] === query[key]);
-    //   if(matches.indexOf(false) === -1) {
-    //     next(item); 
-    //     i=arr.length;
-    //   }
-    // }
+    for(var i=0; i<arr.length; i++) {
+      var item = arr[i];
+      var matches = [];
+      for(var key in query) matches.push(item[key] === query[key]);
+      if(matches.indexOf(false) === -1) {
+        next(item); 
+        i=arr.length;
+      }
+    }
   };
   const getObjFrom = (body, query, next) => {
     if(Array.isArray(body)) {
