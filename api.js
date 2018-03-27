@@ -106,7 +106,7 @@ module.exports.sheetProp = (event, context, callback) => {
     next(q, s);
   };
   const findAMatch = (arr, query, next) => {
-    let match = {};
+    let match;
     for(var i=0; i<arr.length; i++) {
       let item = arr[i];
       let matches = [];
@@ -116,7 +116,7 @@ module.exports.sheetProp = (event, context, callback) => {
         match = item;
       }
     }
-    next(arr);
+    next(match || arr);
   };
   const getObjFrom = (body, query, next) => {
     if(Array.isArray(body)) {
