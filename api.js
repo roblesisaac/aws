@@ -99,7 +99,7 @@ module.exports.sheetProp = (event, context, callback) => {
   };
   const createQueryObj = (params, next) => {
     params = params.split('&');
-    const q = {};
+    let q = {};
     let s;
     for(var p in params) {
       let qProp = params[p].split('=')[0];
