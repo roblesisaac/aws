@@ -97,20 +97,13 @@ module.exports.sheetProp = (event, context, callback) => {
   const isReady = (body) => {
     return ['object', 'array'].indexOf(typeof body) === -1;
   };
-  const createQueryObj = (params, next) => {
-    params = params.split('&');
-    let q = {};
+  const createQueryObj = (queryStringParameters, next) => {
+    let q = queryStringParameters || {};
     let s;
-    for(var p in params) {
-      let qProp = params[p].split('=')[0];
-      let qVal = params[p].split('=')[1];
-      if(qProp === 'select'){
-        s = qVal;
-      } else { 
-        q[qProp] = qVal;
-      }
+    for(var p in q) {
+      if(p === 'select') s = q[p];
     }
-    next(q, params);
+    next(q, s);
   };
   const findAMatch = (arr, query, next) => {
     for(var i=0; i<arr.length; i++) {
@@ -141,12 +134,11 @@ module.exports.sheetProp = (event, context, callback) => {
     if(isReady(body)) {
       res(body);  
     } else {
-      const propParams = propUncut.split('?')[1] || '';
+      const queryStringParameters = event.queryStringParameters;
       createQueryObj(propParams, function(query, select) {
         getObjFrom(body, query, function(obj) {
           res(JSON.stringify({
-            event: event,
-            propParams: propUncut,
+            last: queryStringParameters,
             query: query,
             select: select,
             body: obj
