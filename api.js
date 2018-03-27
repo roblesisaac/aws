@@ -139,8 +139,7 @@ module.exports.sheetProp = (event, context, callback) => {
           res(JSON.stringify({
             last: queryStringParameters,
             query: query,
-            select: select,
-            body: obj
+            select: select
           }));
         // getObjFrom(body, query, function(obj) {
         //   res(obj[select] || select + ' not found.');
