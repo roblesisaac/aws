@@ -98,11 +98,11 @@ module.exports.sheetProp = (event, context, callback) => {
     return ['object', 'array'].indexOf(typeof body) === -1;
   };
   const createQueryObj = (queryStringParameters, next) => {
-    let q = queryStringParameters || {};
-    let s;
-    for(var p in q) {
-      if(p === 'select') s = q[p];
-    }
+    // let q = queryStringParameters || {};
+    // let s;
+    // for(var p in q) {
+    //   if(p === 'select') s = q[p];
+    // }
     next('q', 's');
   };
   const findAMatch = (arr, query, next) => {
@@ -117,13 +117,14 @@ module.exports.sheetProp = (event, context, callback) => {
     }
   };
   const getObjFrom = (body, query, next) => {
-    if(Array.isArray(body)) {
-      findAMatch(body, query, function(obj){
-        next(obj);
-      });
-    } else {
-      next(body);
-    }
+    next(body);
+    // if(Array.isArray(body)) {
+    //   findAMatch(body, query, function(obj){
+    //     next(obj);
+    //   });
+    // } else {
+    //   next(body);
+    // }
   };
   //execute the functions
   findSheet(event, context, function(err, sheet){
