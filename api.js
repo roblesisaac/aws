@@ -132,16 +132,16 @@ module.exports.sheetProp = (event, context, callback) => {
       next(body);
     }
   };
-  // let type = 'application/javascript';
   //execute the functions
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
-    const prop = event.pathParameters.prop.split('?')[0];
-    const body = sheet[prop] || 'no ' + event.pathParameters.prop;
+    const propUncut = event.pathParameters.prop;
+    const prop = propUncut.split('?')[0];
+    const body = sheet[prop] || 'no ' + prop;
     if(isReady(body)) {
       res(body);  
     } else {
-      const propParams = prop.split('?')[1] || '';
+      const propParams = propUncut.split('?')[1] || '';
       createQueryObj(propParams, function(query, select) {
         getObjFrom(body, query, function(obj) {
           res(JSON.stringify({
