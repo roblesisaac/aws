@@ -145,6 +145,7 @@ module.exports.sheetProp = (event, context, callback) => {
       createQueryObj(propParams, function(query, select) {
         getObjFrom(body, query, function(obj) {
           res(JSON.stringify({
+            event: event,
             propParams: propUncut,
             query: query,
             select: select,
