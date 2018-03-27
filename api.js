@@ -113,7 +113,7 @@ module.exports.sheetProp = (event, context, callback) => {
       for(var key in query) matches.push(item[key] === query[key]);
       if(matches.indexOf(false) === -1) {
         // next(item); 
-        // i=arr.length;
+        i=arr.length;
         console.log('hi')
       }
       resp = item;
