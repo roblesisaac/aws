@@ -116,7 +116,7 @@ module.exports.sheetProp = (event, context, callback) => {
         match = item;
       }
     }
-    next(match);
+    next(arr);
   };
   const getObjFrom = (body, query, next) => {
     if(Array.isArray(body)) {
