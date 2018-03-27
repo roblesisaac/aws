@@ -103,7 +103,7 @@ module.exports.sheetProp = (event, context, callback) => {
     for(var p in q) {
       if(p === 'select') s = q[p];
     }
-    next(q, s);
+    next('q', 's');
   };
   const findAMatch = (arr, query, next) => {
     for(var i=0; i<arr.length; i++) {
@@ -138,7 +138,7 @@ module.exports.sheetProp = (event, context, callback) => {
       createQueryObj(propParams, function(query, select) {
         getObjFrom(body, query, function(obj) {
           res(JSON.stringify({
-            last: queryStringParameters,
+            last: event.queryStringParameters,
             query: query,
             select: select,
             body: obj
