@@ -136,15 +136,15 @@ module.exports.sheetProp = (event, context, callback) => {
     } else {
       const queryStringParameters = event.queryStringParameters;
       createQueryObj(queryStringParameters, function(query, select) {
-        getObjFrom(body, query, function(obj) {
           res(JSON.stringify({
             last: queryStringParameters,
             query: query,
             select: select,
             body: obj
           }));
-          // res(obj[select] || select + ' not found.');
-        }); 
+        // getObjFrom(body, query, function(obj) {
+        //   res(obj[select] || select + ' not found.');
+        // }); 
       });
     }
   });
