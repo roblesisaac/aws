@@ -99,10 +99,8 @@ module.exports.sheetProp = (event, context, callback) => {
   };
   const createQueryObj = (queryStringParameters, next) => {
     let q = queryStringParameters || {};
-    let s;
-    for(var p in q) {
-      if(p === 'select') s = q[p];
-    }
+    let s = q.select || 'selector is not defined';
+    delete q.select;
     next(q, s);
   };
   const findAMatch = (arr, query, next) => {
