@@ -139,7 +139,12 @@ module.exports.sheetProp = (event, context, callback) => {
       const queryStringParameters = event.queryStringParameters;
       createQueryObj(queryStringParameters, function(query, select) {
         getObjFrom(body, query, function(obj) {
-          res(obj[select] || select + ' not found.');
+          res(JSON.stringify({
+            obj: obj,
+            select: select,
+            query: query
+          }));
+          // res(obj[select] || select + ' not found.');
         }); 
       });
     }
