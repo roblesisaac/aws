@@ -98,12 +98,12 @@ module.exports.sheetProp = (event, context, callback) => {
     return ['object', 'array'].indexOf(typeof body) === -1;
   };
   const createQueryObj = (queryStringParameters, next) => {
-    // let q = queryStringParameters || {};
-    // let s;
-    // for(var p in q) {
-    //   if(p === 'select') s = q[p];
-    // }
-    next('q', 's');
+    let q = queryStringParameters || {};
+    let s;
+    for(var p in q) {
+      if(p === 'select') s = q[p];
+    }
+    next(q, s);
   };
   const findAMatch = (arr, query, next) => {
     for(var i=0; i<arr.length; i++) {
@@ -117,14 +117,13 @@ module.exports.sheetProp = (event, context, callback) => {
     }
   };
   const getObjFrom = (body, query, next) => {
-    next(body);
-    // if(Array.isArray(body)) {
-    //   findAMatch(body, query, function(obj){
-    //     next(obj);
-    //   });
-    // } else {
-    //   next(body);
-    // }
+    if(Array.isArray(body)) {
+      findAMatch(body, query, function(obj){
+        next(obj);
+      });
+    } else {
+      next(body);
+    }
   };
   //execute the functions
   findSheet(event, context, function(err, sheet){
@@ -136,10 +135,10 @@ module.exports.sheetProp = (event, context, callback) => {
       res(body);  
     } else {
       const queryStringParameters = event.queryStringParameters;
-      createQueryObj(propParams, function(query, select) {
+      createQueryObj(queryStringParameters, function(query, select) {
         getObjFrom(body, query, function(obj) {
           res(JSON.stringify({
-            last: event.queryStringParameters,
+            last: queryStringParameters,
             query: query,
             select: select,
             body: obj
