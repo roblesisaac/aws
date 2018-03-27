@@ -84,22 +84,67 @@ const printError = (callback, error) => {
     body: JSON.stringify({ error: error })    
   });
 };
-
+      
 module.exports.sheetProp = (event, context, callback) => {
+  // define the functions
+  const res = (string, type) => {
+    callback(null, {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/javascript' },
+      body: (string || "").toString()
+    });       
+  };
+  const isReady = (body) => {
+    return ['object', 'array'].indexOf(typeof body) === -1;
+  };
+  const createQueryObj = (params) => {
+    params = params.split('&');
+    const q = {};
+    for(var p in params) {
+      let qProp = params[p].split('=')[0];
+      let qVal = params[p].split('=')[1];
+      q[qProp] = qVal;
+    }
+    return q;
+  };
+  const findAMatch = (arr, query, next) => {
+    for(var i=0; i<arr.length; i++) {
+      let item = arr[i];
+      let matches = [];
+      for(var key in query) {
+        if(key !== 'select') matches.push(item[key] === query[key]);
+      }
+      if(matches.indexOf(false) === -1) {
+        next(item); 
+        i=arr.length;
+      }
+    }
+  };
+  const getObjFrom = (body, query, next) => {
+    if(Array.isArray(body)) {
+      findAMatch(body, query, function(obj){
+        next(obj);
+      });
+    } else {
+      next(body);
+    }
+  };
+  // let type = 'application/javascript';
+  //execute the functions
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
     const prop = event.pathParameters.prop.split('?')[0];
-    const params = event.pathParameters.prop.split('?')[1];
     const body = sheet[prop] || 'no ' + event.pathParameters.prop;
-    let type = 'application/javascript';
-    if(prop.indexOf('css') > -1) type = 'text/css';
-    callback(null, {
-      statusCode: 200,
-      headers: {
-        'Content-Type': type,
-      },
-      body: body
-    });
+    if(isReady(body)) {
+      res(body);  
+    } else {
+      const propParams = prop.split('?')[1] || '';
+      createQueryObj(propParams, function(query, select) {
+        getObjFrom(body, query, function(obj) {
+          res(obj[select] || select + ' not found.');
+        }); 
+      });
+    }
   });
 };
 
