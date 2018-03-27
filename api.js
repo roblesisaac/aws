@@ -144,7 +144,12 @@ module.exports.sheetProp = (event, context, callback) => {
       const propParams = prop.split('?')[1] || '';
       createQueryObj(propParams, function(query, select) {
         getObjFrom(body, query, function(obj) {
-          res(obj[select] || select + ' not found.');
+          res(JSON.stringify({
+            query: query,
+            select: select,
+            body: obj
+          }));
+          // res(obj[select] || select + ' not found.');
         }); 
       });
     }
