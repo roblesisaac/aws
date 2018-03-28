@@ -87,10 +87,12 @@ const printError = (callback, error) => {
       
 module.exports.sheetProp = (event, context, callback) => {
   // define the functions
-  const res = (string, type) => {
+  const res = (string, isCss) => {
+    let type;
+    isCss ? type = 'text/css' : type = 'application/javascript';
     callback(null, {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/javascript' },
+      headers: { 'Content-Type': type },
       body: (string || "").toString()
     });       
   };
@@ -137,7 +139,13 @@ module.exports.sheetProp = (event, context, callback) => {
       const queryStringParameters = event.queryStringParameters;
       createQueryObj(queryStringParameters, function(query, select) {
         getObjFrom(body, query, function(obj) {
-          res(obj[select] || select + ' not found.');
+          let isCss;
+          if(query.name.includes('css')) isCss = true;
+          res(obj[select] || JSON.stringify({
+            query: query,
+            select: select,
+            body: obj
+          }), isCss);
         }); 
       });
     }
