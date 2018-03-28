@@ -96,7 +96,7 @@ module.exports.landingPage = (event, context, callback) => {
               <title>${siteName}</title>
               <meta charset="utf-8" />
               <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-              <link rel="stylesheet" href="https://www.blockometry.com/plaza/tmplts/js" />
+              <link rel="stylesheet" href="https://www.blockometry.com/plaza/sheets/templates?name=css&select=text" />
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
             </head>
             <body>
