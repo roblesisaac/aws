@@ -99,6 +99,9 @@ module.exports.landingPage = (event, context, callback) => {
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
               <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
               <link rel="stylesheet" href="https://www.blockometry.com/plaza/sheets/templates?name=css&select=text" />
+              <link href="https://fonts.googleapis.com/css?family=Work+Sans:900|Lobster" rel="stylesheet">
+              <link href="https://fonts.googleapis.com/css?family=Coda:800|Maven+Pro:900" rel="stylesheet">
+              <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
             </head>
             <body>
               <div id="app" class="grid-x"></div>
