@@ -108,6 +108,7 @@ module.exports.landingPage = (event, context, callback) => {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
             <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
             <script src="https://unpkg.com/vue"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
             <script type="text/javascript">
               var ply = {{ply}};
             </script>
