@@ -59,7 +59,7 @@ module.exports.landingPage = (event, context, callback) => {
             sheets: sheets,
             link: sheets[0].name
           };
-          response.body = response.body.replace('{{data}}', JSON.stringify(ply));
+          response.body = response.body.replace('{{data}}', JSON.stringify(data));
           callback(null, response); 
         });
       } else {
