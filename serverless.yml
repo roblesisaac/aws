@@ -26,13 +26,13 @@ functions:
           method: get
           path: /plysheet/api/setup
   landing:
-    handler: landing.landingPage
+    handler: api.landingPage
     events:
       - http:
           method: get
           path: /
   siteLanding:
-    handler: landing.landingPage
+    handler: api.landingPage
     events:
       - http:
           method: get
