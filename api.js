@@ -1,15 +1,18 @@
 const ply = require('ply');
 
 module.exports.sheets = (event, context, callback) => {
-  ply.findSheet(event, context, function(err, sheet) {
-    ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
-      if(err) {
-        ply.error(callback, err);
-      } else {
-        ply.res(callback, JSON.stringify(sheet));
-      }
-    });
+  ply.getModer(event, context, function(message) {
+    ply.res(message);
   });
+  // ply.findSheet(event, context, function(err, sheet) {
+  //   ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
+  //     if(err) {
+  //       ply.error(callback, err);
+  //     } else {
+  //       ply.res(callback, JSON.stringify(sheet));
+  //     }
+  //   });
+  // });
 };
 
 module.exports.sheetProp = (event, context, callback) => {
