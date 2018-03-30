@@ -1,6 +1,5 @@
 const connectToDb = require('./db');
 const mongoose = require('mongoose');
-const checkToken = require('./auth').checkToken;
 const ply = require('ply');
 const models = {
   sites: require('./models/sites'),
