@@ -21,6 +21,21 @@ const ply = {
         isConnected = db.connections[0].readyState;
       });    
   },
+  checkIfSheetIsPublic: function(event, context, sheet, next) {
+    if(sheet.public) {
+      next(null, sheet);
+    } else {
+      const token = event.headers.token;
+      const userId = event.headers.userid;
+      ply.checkToken(context, token, userId, function(err, decoded) {
+        if(err) {
+          next(err);
+        } else {
+          next(null, sheet);
+        }
+      });
+    }      
+  },
   checkToken: function(context, token, userid, next) {
     if(!token || !userid) return next('No token or userid provided');
     this.connect(context).then(function(){
@@ -56,6 +71,17 @@ const ply = {
         });
       });
     });      
+  },
+  getModel: function(event, context, next) {
+    this.findSheet(event, context, function(err1, sheet){
+      if(err1) return next(err1);
+      checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
+        if(err2) return next(err2);
+          createModelFromSheet(sheet, function(model){
+            next(null, model);
+          });      
+      });
+    });
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
