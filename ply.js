@@ -44,20 +44,16 @@ const ply = {
       })
     }); 
   },
-  findSheet: function(event, context, next) {
-    const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  findSheet: function(context, siteUrl, sheetName, next) {
     this.connect(context).then(() => {
       // get site
-      models.sites.findOne({ url: path.url })
-        .then(site => {
-          if(!site) return next(path.url + ' plysheet not found.');
-          //get sheet
-          models.sheets.findOne({ siteId: site._id, name: path.sheet })
-            .then(sheet => {
-              if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
-              next(null, sheet);
-            });
+      models.sites.findOne({ url: siteUrl }).then(function(site){
+        if(!site) return next(siteUrl + ' plysheet not found.');
+        models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
+          if(!sheet) return next(siteUrl + ' plysheet found but no ' + sheetName + ' sheet found.');
+          next(null, sheet);
         });
+      });
     });      
   },
   login: function(context, user, next) {
