@@ -45,7 +45,11 @@ const checkIfSheetIsPublic = (event, context, sheet, next) => {
     const userId = event.headers.userId;
     ply.checkToken(context, token, userId, function(err, decoded) {
       if(err) {
-        next(err);
+        next({
+          error: err,
+          token: token,
+          userId: userId
+        });
       } else {
         next(null, sheet);
       }
