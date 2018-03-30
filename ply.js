@@ -36,7 +36,7 @@ const ply = {
     } else {
       const token = event.headers.token;
       const userId = event.headers.userid;
-      ply.checkToken(context, token, userId, function(err, decoded) {
+      this.checkToken(context, token, userId, function(err, decoded) {
         if(err) {
           next(err);
         } else {
