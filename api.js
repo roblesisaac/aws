@@ -48,8 +48,8 @@ const checkIfSheetIsPublic = (event, context, sheet, next) => {
   }
 };
 
-const getModel = (context, query, next) => {
-  ply.findSheet(context, query, function(err1, sheet){
+const getModel = (event, context, next) => {
+  ply.findSheet(event, context, function(err1, sheet){
     if(err1) return next(err1);
     checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
       if(err2) return next(err2);
@@ -135,7 +135,7 @@ module.exports.sheets = (event, context, callback) => {
 };
 
 module.exports.post = (event, context, callback) => {
-  getModel(context, event.pathParameters, function(error, model) {
+  getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
     model.create(JSON.parse(event.body))
       .then(data => callback(null, {
@@ -147,7 +147,7 @@ module.exports.post = (event, context, callback) => {
 };
 
 module.exports.get = (event, context, callback) => {
-  getModel(context, event.pathParameters, function(error, model) {
+  getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
     let params = event.queryStringParameters || {};
     model.find(params)
@@ -160,7 +160,7 @@ module.exports.get = (event, context, callback) => {
 };
 
 module.exports.getOne = (event, context, callback) => {
-  getModel(context, event.pathParameters, function(error, model) {
+  getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
     model.findById(event.pathParameters.id)
       .then(data => callback(null, {
@@ -172,7 +172,7 @@ module.exports.getOne = (event, context, callback) => {
 };
 
 module.exports.put = (event, context, callback) => {
-  getModel(context, event.pathParameters, function(error, model) {
+  getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
       model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
         .then(data => callback(null, {
@@ -184,7 +184,7 @@ module.exports.put = (event, context, callback) => {
 };
 
 module.exports.delete = (event, context, callback) => {
-  getModel(context, event.pathParameters, function(error, model) {
+  getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
       model.findByIdAndRemove(event.pathParameters.id)
         .then(data => callback(null, {
