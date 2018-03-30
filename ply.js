@@ -45,7 +45,7 @@ const ply = {
         });
     });      
   },
-  login: function(user, next) {
+  login: function(context, user, next) {
     this.connect(context).then(function(){
     	models.users.findOne({username: user.username}, function(err, foundUser) {
     		if (err) return next(err);
