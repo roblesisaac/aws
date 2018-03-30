@@ -1,8 +1,10 @@
 const checkToken = require('./auth').checkToken;
 const DB = process.env.DB;
+const jwt = require('jsonwebtoken');
 const models = {
   sites: require('./models/sites'),
-  sheets: require('./models/sheets')
+  sheets: require('./models/sheets'),
+  user: require('./models/users')
 };
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -19,6 +21,14 @@ const ply = {
         isConnected = db.connections[0].readyState;
       });    
   },
+  error: function(callback, err) {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({
+        error: err
+      })
+    }); 
+  },
   findSheet: function(event, context, next) {
     const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
     this.connect(context).then(() => {
@@ -34,6 +44,33 @@ const ply = {
             });
         });
     });      
+  },
+  login: function(user, next) {
+    this.connect(context).then(function(){
+    	models.users.findOne({username: user.username}, function(err, foundUser) {
+    		if (err) return next(err);
+    		if (!foundUser) {
+    			next(user.username + ' not found');
+    		} else if (foundUser) {
+    			foundUser.comparePassword(user.password, function(err2, isMatch){
+    				if(isMatch && isMatch === true) {
+    					next(null, {
+    					  'ply-token': jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
+    					  userid: foundUser._id
+    					});
+    				} else {
+    					next('Authentication failed. Wrong password.');
+    				}
+    			});
+    		}
+    	});
+    });
+  },
+  res: function(callback, body) {
+    callback(null, {
+      statusCode: 200,
+      body: body
+    }); 
   },
   sheets: function() {
     return 'test three';
