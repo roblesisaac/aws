@@ -1,6 +1,6 @@
-const connectToDb = require('./db');
 const Vue = require('vue');
 const renderer = require('vue-server-renderer').createRenderer();
+const ply = require('ply');
 // const fs = require('fs');
 // fs.readdir('views/partials/', function (err, data) {
 //   for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-4)] = fs.readFileSync('views/partials/' + data[i], 'utf8');
@@ -11,36 +11,7 @@ const renderer = require('vue-server-renderer').createRenderer();
 
 const models = { sheet: require('./models/sheets'), site: require('./models/sites') };
 
-module.exports.vue = (event, context, callback) => {
-  const app = new Vue({
-    data: {
-      url: event.pathParameters.sitename
-    },
-    template: `<div>The visited URL is: {{ url }}</div>`
-  });
-
-  renderer.renderToString(app, (err, html) => {
-    callback(null, {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'text/html',
-      },
-      body: `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <title>Hello</title>
-        </head>
-        <body>${html}</body>
-      </html>
-      `
-    });
-  });
-};
-
 module.exports.landingPage = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  
   let siteName = 'plysheet';
   if (event.pathParameters && event.pathParameters.sitename) {
     siteName = event.pathParameters.sitename;
@@ -72,33 +43,56 @@ module.exports.landingPage = (event, context, callback) => {
         <script src="https://unpkg.com/vue"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
         <script type="text/javascript">
-          var ply = {{ply}};
+          var ply = {{data}};
         </script>
         <script src="https://www.blockometry.com/plaza/sheets/js"></script>
       </html>
     `
   };
-
-  connectToDb()
-    .then(() => {
-      models.site.findOne({url: siteName})
-        .then(function(site) {
-          if(site) {
-            models.sheet.find({siteId: site._id})
-              .then(sheets => {
-                var ply = {
-                  site: site,
-                  user: {},
-                  sheets: sheets,
-                  link: sheets[0].name
-                };
-                response.body = response.body.replace('{{ply}}', JSON.stringify(ply));
-                callback(null, response);                 
-              });
-          } else {
-            response.body = `<h1>No ${siteName} exists</h1>`;
-            callback(null, response);             
-          }
-        });      
+  ply.connect(context).then(function(){
+    models.site.findOne({url: siteName}).then(function(site){
+      if(site) {
+        models.sheet.find({siteId: site._id}).then(function(sheet){
+          var data = {
+            site: site,
+            user: {},
+            sheets: sheets,
+            link: sheets[0].name
+          };
+          response.body = response.body.replace('{{data}}', JSON.stringify(ply));
+          callback(null, response); 
+        });
+      } else {
+        response.body = `<h1>No ${siteName} exists</h1>`;
+        callback(null, response);             
+      }
     });
+  });
+};
+
+module.exports.vue = (event, context, callback) => {
+  const app = new Vue({
+    data: {
+      url: event.pathParameters.sitename
+    },
+    template: `<div>The visited URL is: {{ url }}</div>`
+  });
+
+  renderer.renderToString(app, (err, html) => {
+    callback(null, {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <title>Hello</title>
+        </head>
+        <body>${html}</body>
+      </html>
+      `
+    });
+  });
 };
