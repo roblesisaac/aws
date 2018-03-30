@@ -38,24 +38,6 @@ const createModelFromSheet = (sheet, next) => {
   next(sessionModels[sheet._id]);
 };
 
-const findSheet = (event, context, next) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  connectToDb().then(() => {
-    // get site
-    models.sites.findOne({ url: path.url })
-      .then(site => {
-        if(!site) return next(path.url + ' plysheet not found.');
-        //get sheet
-        models.sheets.findOne({ siteId: site._id, name: path.sheet })
-          .then(sheet => {
-            if(!sheet) return next(path.url + ' plysheet found but no ' + path.sheet + ' sheet found.');
-            next(null, sheet);
-          });
-      });
-  });   
-};
-
 const checkIfSheetIsPublic = (event, context, sheet, next) => {
   if(sheet.public) {
     next(null, sheet);
@@ -68,7 +50,7 @@ const checkIfSheetIsPublic = (event, context, sheet, next) => {
 };
 
 const getModel = (event, context, next) => {
-  findSheet(event, context, function(err1, sheet){
+  handler.findSheet(event, context, function(err1, sheet){
     if(err1) return next(err1);
     checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
       if(err2) return next(err2);
@@ -129,7 +111,7 @@ module.exports.sheetProp = (event, context, callback) => {
     }
   };
   //execute the functions
-  findSheet(event, context, function(err, sheet){
+  handler.findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
     const propRaw = event.pathParameters.prop;
     const prop = propRaw.split('?')[0];
