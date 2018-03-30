@@ -134,8 +134,8 @@ module.exports.sheets = (event, context, callback) => {
   });
 };
 
-module.exports.post = (context, event, callback) => {
-  getModel(context, event, function(error, model) {
+module.exports.post = (event, context, callback) => {
+  getModel(context, event.pathParameters, function(error, model) {
     if(error) return ply.error(callback, error);
     model.create(JSON.parse(event.body))
       .then(data => callback(null, {
@@ -146,8 +146,8 @@ module.exports.post = (context, event, callback) => {
   });
 };
 
-module.exports.get = (context, event, callback) => {
-  getModel(event, context, function(error, model) {
+module.exports.get = (event, context, callback) => {
+  getModel(context, event.pathParameters, function(error, model) {
     if(error) return ply.error(callback, error);
     let params = event.queryStringParameters || {};
     model.find(params)
@@ -159,8 +159,8 @@ module.exports.get = (context, event, callback) => {
   });
 };
 
-module.exports.getOne = (context, event, callback) => {
-  getModel(event, context, function(error, model) {
+module.exports.getOne = (event, context, callback) => {
+  getModel(context, event.pathParameters, function(error, model) {
     if(error) return ply.error(callback, error);
     model.findById(event.pathParameters.id)
       .then(data => callback(null, {
@@ -171,8 +171,8 @@ module.exports.getOne = (context, event, callback) => {
   });
 };
 
-module.exports.put = (context, event, callback) => {
-  getModel(event, context, function(error, model) {
+module.exports.put = (event, context, callback) => {
+  getModel(context, event.pathParameters, function(error, model) {
     if(error) return ply.error(callback, error);
       model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
         .then(data => callback(null, {
@@ -183,8 +183,8 @@ module.exports.put = (context, event, callback) => {
   });
 };
 
-module.exports.delete = (context, event, callback) => {
-  getModel(event, context, function(error, model) {
+module.exports.delete = (event, context, callback) => {
+  getModel(context, event.pathParameters, function(error, model) {
     if(error) return ply.error(callback, error);
       model.findByIdAndRemove(event.pathParameters.id)
         .then(data => callback(null, {
