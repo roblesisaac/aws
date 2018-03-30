@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const users = require('./models/users');
 const connectToDb = require('./db');
+const ply = require('./ply');
 
 const loginUser = (user, next) => {
   connectToDb()
@@ -26,13 +27,24 @@ const loginUser = (user, next) => {
     });
 };
 
-module.exports.login = (event, context, callback) => {
+module.exports.login1 = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   loginUser(JSON.parse(event.body), (res) => {
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(res)
     });
+  });
+};
+
+module.exports.login = (event, context, callback) => {
+  const user = JSON.parse(event.body);
+  ply.login(user, function(err, tokenObj){
+    if(err) {
+      ply.error(callback, err);     
+    } else {
+      ply.res(callback, JSON.stringify(tokenObj));
+    }
   });
 };
 
