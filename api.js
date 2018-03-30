@@ -1,6 +1,7 @@
 const connectToDb = require('./db');
 const mongoose = require('mongoose');
 const checkToken = require('./auth').checkToken;
+const handler = require('handler');
 const models = {
   sites: require('./models/sites'),
   sheets: require('./models/sheets')
@@ -99,7 +100,7 @@ module.exports.sheetProp = (event, context, callback) => {
   const isReady = (body) => {
     return ['object', 'array'].indexOf(typeof body) === -1;
   };
-  const createQueryObj = (queryStringParameters, next) => {
+  const createQueryFilterObjFrom = (queryStringParameters, next) => {
     let q = queryStringParameters || {};
     let s = q.select || 'selector is not defined';
     delete q.select;
@@ -130,14 +131,14 @@ module.exports.sheetProp = (event, context, callback) => {
   //execute the functions
   findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
-    const propUncut = event.pathParameters.prop;
-    const prop = propUncut.split('?')[0];
+    const propRaw = event.pathParameters.prop;
+    const prop = propRaw.split('?')[0];
     const body = sheet[prop] || 'no ' + prop;
     if(isReady(body)) {
-      res(body);  
+      res(body);
     } else {
       const queryStringParameters = event.queryStringParameters;
-      createQueryObj(queryStringParameters, function(query, select) {
+      createQueryFilterObjFrom(queryStringParameters, function(query, select) {
         getObjFrom(body, query, function(obj) {
           let isCss;
           if(query.name.includes('css')) isCss = true;
@@ -150,6 +151,13 @@ module.exports.sheetProp = (event, context, callback) => {
       });
     }
   });
+};
+
+module.exports.sheets = (event, context, callback) => {
+  callback(null, {
+    statusCode: 200,
+    body: handler.sheets()
+  })
 };
 
 module.exports.post = (event, context, callback) => {
