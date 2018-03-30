@@ -78,7 +78,7 @@ const ply = {
       }
     }
     sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(sessionModels[sheet._id]);    
+    next(models.sheets);    
   },
   error: function(callback, err) {
     callback(null, {
