@@ -21,6 +21,21 @@ const ply = {
         isConnected = db.connections[0].readyState;
       });    
   },
+  checkToken: function(context, token, userId, next) {
+    if(!token || !userId) return next('No token or userid provided');
+    this.connect(context).then(function(){
+    	models.users.findById(userId, (err, user) => {
+    		if(!user) return next('no user found with this id: '+userId);
+        jwt.verify(token, user.password, (err2, decoded) => {
+    			if (err2) {
+    				next('You are logged out with this error: '+ err2);
+    			} else {
+    				next(null, decoded);
+    			}
+    		});
+    	}); 
+    });
+  },
   error: function(callback, err) {
     callback(null, {
       statusCode: 200,
