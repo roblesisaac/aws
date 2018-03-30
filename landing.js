@@ -88,36 +88,36 @@ module.exports.landingPage = (event, context, callback) => {
   }
   const response = {
     statusCode: 200,
-    headers: {
-      'Content-Type': 'text/html',
-    },
-    body: `<html>
-            <head>
-              <title>${siteName}</title>
-              <meta charset="utf-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
-              <link rel="stylesheet" href="https://www.blockometry.com/plaza/sheets/templates?name=slidecss&select=text">
-              <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-              <link rel="stylesheet" href="https://www.blockometry.com/plaza/sheets/templates?name=css&select=text" />
-              <link href="https://fonts.googleapis.com/css?family=Work+Sans:900|Lobster" rel="stylesheet">
-              <link href="https://fonts.googleapis.com/css?family=Coda:800|Maven+Pro:900" rel="stylesheet">
-              <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-            </head>
-            <body>
-              <div id="app" class="grid-x"></div>
-            </body>
-            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
-            <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
-            <script src="https://unpkg.com/vue"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
-            <script type="text/javascript">
-              var ply = {{ply}};
-            </script>
-            <script src="https://www.blockometry.com/plaza/sheets/js"></script>
-          </html>`
+    headers: { 'Content-Type': 'text/html' },
+    body:`
+      <html>
+        <head>
+          <title>${siteName}</title>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
+          <link rel="stylesheet" href="https://www.blockometry.com/plaza/sheets/templates?name=slidecss&select=text">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+          <link rel="stylesheet" href="https://www.blockometry.com/plaza/sheets/templates?name=css&select=text" />
+          <link href="https://fonts.googleapis.com/css?family=Work+Sans:900|Lobster" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css?family=Coda:800|Maven+Pro:900" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+        </head>
+        <body>
+          <div id="app" class="grid-x"></div>
+        </body>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
+        <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/vue"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+        <script type="text/javascript">
+          var ply = {{ply}};
+        </script>
+        <script src="https://www.blockometry.com/plaza/sheets/js"></script>
+      </html>
+    `
   };
 
   connectToDb()
