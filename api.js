@@ -68,9 +68,12 @@ module.exports.sheetProp = (event, context, callback) => {
 };
 
 module.exports.sheets = (event, context, callback) => {
-  callback(null, {
-    statusCode: 200,
-    body: ply.sheets()
+  ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
+    if(err) {
+      ply.error(err);
+    } else {
+      ply.res(JSON.stringify(sheet));
+    }
   });
 };
 
