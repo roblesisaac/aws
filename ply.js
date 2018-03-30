@@ -1,4 +1,3 @@
-const checkToken = require('./auth').checkToken;
 const DB = process.env.DB;
 const jwt = require('jsonwebtoken');
 const models = {
@@ -105,12 +104,13 @@ const ply = {
   getModel: function(event, context, next) {
     this.findSheet(event, context, function(err1, sheet){
       if(err1) return next(err1);
-      this.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
-        if(err2) return next(err2);
-          this.createModelFromSheet(sheet, function(model){
-            next(null, model);
-          });      
-      });
+      next(null, sheet)
+      // this.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
+      //   if(err2) return next(err2);
+      //     this.createModelFromSheet(sheet, function(model){
+      //       next(null, model);
+      //     });      
+      // });
     });
   },
   login: function(context, user, next) {
