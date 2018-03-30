@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const models = {
   sites: require('./models/sites'),
   sheets: require('./models/sheets'),
-  user: require('./models/users')
+  users: require('./models/users')
 };
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -48,7 +48,10 @@ const ply = {
   login: function(context, user, next) {
     this.connect(context).then(function(){
     	models.users.findOne({username: user.username}, function(err, foundUser) {
-    		if (err) return next(err);
+    		if (err) {
+    		  next(err);
+    		  return;
+    		}
     		if (!foundUser) {
     			next(user.username + ' not found');
     		} else if (foundUser) {
