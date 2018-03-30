@@ -44,7 +44,8 @@ const ply = {
       })
     }); 
   },
-  findSheet: function(context, query, next) {
+  findSheet: function(event, context, next) {
+    var query = event.pathParameters;
     this.connect(context).then(() => {
       // get site
       models.sites.findOne({ url: query.sitename }).then(function(site){
