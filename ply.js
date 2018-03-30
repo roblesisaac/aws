@@ -60,6 +60,7 @@ const ply = {
     });
   },
   createModelFromSheet: function(sheet, next) {
+    next('hi');
     // if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
     // let options = {
     //   strict: true,
@@ -78,7 +79,7 @@ const ply = {
     //   }
     // }
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(models.sheets);    
+    // next(sessionModels[sheet._id]);    
   },
   error: function(callback, err) {
     callback(null, {
