@@ -1,9 +1,10 @@
 const ply = require('ply');
 
 module.exports.sheets = (event, context, callback) => {
-  ply.getModel(event, context, function(message) {
-    ply.res(callback, message);
-  });
+  ply.res(callback, 'message');
+  // ply.getModel(event, context, function(message) {
+    
+  // });
   // ply.findSheet(event, context, function(err, sheet) {
   //   ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
   //     if(err) {
