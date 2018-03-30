@@ -35,7 +35,7 @@ module.exports.connect = (context) => {
 
 module.exports.findSheet = (event, context, next) => {
   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  module.exports.connect().then(() => {
+  module.exports.connect(context).then(() => {
     // get site
     models.sites.findOne({ url: path.url })
       .then(site => {
