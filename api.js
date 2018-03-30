@@ -42,9 +42,14 @@ const checkIfSheetIsPublic = (event, context, sheet, next) => {
   if(sheet.public) {
     next(null, sheet);
   } else {
-    checkToken(event, context, (res) => {
-      if(res.success === true) return next(null, sheet);
-      next(res.message);
+    const token = event.headers.plyToken;
+    const userId = event.headers.userId;
+    ply.checkToken(context, token, userId, function(err, decoded) {
+      if(err) {
+        next(err);
+      } else {
+        next(null, sheet);
+      }
     });
   }
 };
@@ -156,7 +161,7 @@ module.exports.post = (event, context, callback) => {
 
 module.exports.get = (event, context, callback) => {
   getModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
+    if(error) return ply.error(callback, error);
     let params = event.queryStringParameters || {};
     model.find(params)
       .then(data => callback(null, {
