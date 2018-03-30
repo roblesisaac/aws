@@ -50,6 +50,13 @@ functions:
           path: /{sitename}/{sheet}/{prop}
           method: get
           cors: true
+  sheets:
+    handler: api.sheets
+    events:
+      - http:
+          path: /{sitename}/a/b/c/sheets
+          method: get
+          cors: true
   post:
     handler: api.post
     events:
