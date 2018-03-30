@@ -47,10 +47,10 @@ const ply = {
   findSheet: function(context, query, next) {
     this.connect(context).then(() => {
       // get site
-      models.sites.findOne({ url: query.siteName }).then(function(site){
-        if(!site) return next(query.siteName + ' plysheet not found.');
+      models.sites.findOne({ url: query.sitename }).then(function(site){
+        if(!site) return next(query.sitename + ' plysheet not found.');
         models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
-          if(!sheet) return next(query.siteName + ' plysheet found but no ' + query.sheet + ' sheet found.');
+          if(!sheet) return next(query.sitename + ' plysheet found but no ' + query.sheet + ' sheet found.');
           next(null, sheet);
         });
       });
