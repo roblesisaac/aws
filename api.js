@@ -1,5 +1,17 @@
 const ply = require('ply');
 
+module.exports.sheets = (event, context, callback) => {
+  ply.findSheet(event, context, function(err, sheet){
+    ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
+      if(err) {
+        ply.error(err);
+      } else {
+        ply.res(JSON.stringify(sheet));
+      }
+    });
+  });
+};
+
 module.exports.sheetProp = (event, context, callback) => {
   // define the functions
   const res = (string, isCss) => {
@@ -63,16 +75,6 @@ module.exports.sheetProp = (event, context, callback) => {
           }), isCss);
         }); 
       });
-    }
-  });
-};
-
-module.exports.sheets = (event, context, callback) => {
-  ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
-    if(err) {
-      ply.error(err);
-    } else {
-      ply.res(JSON.stringify(sheet));
     }
   });
 };
