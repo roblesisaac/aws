@@ -19,13 +19,6 @@ module.exports.connect = (context) => {
     });
 };
 
-// var connect = (context, next) => {
-//   context.callbackWaitsForEmptyEventLoop = false;
-//   connectToDb().then(() => {
-//     next();
-//   });
-// };
-
 // module.exports.find = (modelName, query, next) => {
 //   module.exports.connect(context, function() {
 //     models[modelName].findOne(query).then(function(data){
@@ -40,14 +33,7 @@ module.exports.connect = (context) => {
 //   });
 // };
 
-// module.exports.findSheet = (event, context, next) => {
-//   context.callbackWaitsForEmptyEventLoop = false;
-//   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  
-// };
-
 module.exports.findSheet = (event, context, next) => {
-  context.callbackWaitsForEmptyEventLoop = false;
   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
   module.exports.connect().then(() => {
     // get site
