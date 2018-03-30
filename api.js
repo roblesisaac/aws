@@ -1,14 +1,19 @@
 const ply = require('ply');
 
 module.exports.sheets = (event, context, callback) => {
-  ply.findSheet(event, context, function(err, sheet){
-    ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
+  ply.findSheet(event, context, function(err, sheet) {
       if(err) {
         ply.error(err);
       } else {
         ply.res(JSON.stringify(sheet));
       }
-    });
+    // ply.checkIfSheetIsPublic(event, context, sheet, function(err, sheet){
+    //   if(err) {
+    //     ply.error(err);
+    //   } else {
+    //     ply.res(JSON.stringify(sheet));
+    //   }
+    // });
   });
 };
 
