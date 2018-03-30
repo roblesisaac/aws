@@ -3,40 +3,6 @@ const users = require('./models/users');
 const connectToDb = require('./db');
 const ply = require('ply');
 
-const loginUser = (user, next) => {
-  connectToDb()
-    .then(() => {
-    	users.findOne({username: user.username}, function(err, fUser) {
-    		if (err) throw err;
-    		if (!fUser) {
-    			next({ success: false, message: 'User not found.' });
-    		} else if (fUser) {
-    			fUser.comparePassword(user.password, function(err, isMatch){
-    				if(isMatch && isMatch === true) {
-    					// if user is found and password is right create a token
-    					next({
-    					  'ply-token': jwt.sign({ _id: fUser._id, username: fUser.username, name: fUser.name,	password: fUser.password	}, fUser.password, {	expiresIn: '15h' }),
-    					  userid: fUser._id
-    					});
-    				} else {
-    					next({ success: false, message: 'Authentication failed. Wrong password.' });
-    				}
-    			});
-    		}
-    	});
-    });
-};
-
-module.exports.login1 = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  loginUser(JSON.parse(event.body), (res) => {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(res)
-    });
-  });
-};
-
 module.exports.login = (event, context, callback) => {
   const user = JSON.parse(event.body);
   ply.login(context, user, function(err, tokenObj){
@@ -48,7 +14,7 @@ module.exports.login = (event, context, callback) => {
   });
 };
 
-module.exports.checkToken = (event, context, next) => {
+module.exports.checkToken1 = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const token = event.headers['ply-token'];
   const userId = event.headers.userid;
