@@ -21,11 +21,11 @@ const ply = {
         isConnected = db.connections[0].readyState;
       });    
   },
-  checkToken: function(context, token, userId, next) {
-    if(!token || !userId) return next('No token or userid provided');
+  checkToken: function(context, token, userid, next) {
+    if(!token || !userid) return next('No token or userid provided');
     this.connect(context).then(function(){
-    	models.users.findById(userId, (err, user) => {
-    		if(!user) return next('no user found with this id: '+userId);
+    	models.users.findById(userid, (err, user) => {
+    		if(!user) return next('no user found with this id: '+userid);
         jwt.verify(token, user.password, (err2, decoded) => {
     			if (err2) {
     				next('You are logged out with this error: '+ err2);
@@ -73,8 +73,8 @@ const ply = {
     			foundUser.comparePassword(user.password, function(err2, isMatch){
     				if(isMatch && isMatch === true) {
     					next(null, {
-    					  'plyToken': jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
-    					  userId: foundUser._id
+    					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
+    					  userid: foundUser._id
     					});
     				} else {
     					next('Authentication failed. Wrong password.');
