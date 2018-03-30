@@ -50,24 +50,23 @@ module.exports.landingPage = (event, context, callback) => {
     `
   };
   ply.connect(context).then(function(){
-    ply.res(callback, 'hi');
-    // models.site.findOne({url: siteName}).then(function(site){
-    //   if(site) {
-    //     models.sheet.find({siteId: site._id}).then(function(sheet){
-    //       var data = {
-    //         site: site,
-    //         user: {},
-    //         sheets: sheets,
-    //         link: sheets[0].name
-    //       };
-    //       response.body = response.body.replace('{{data}}', JSON.stringify(ply));
-    //       callback(null, response); 
-    //     });
-    //   } else {
-    //     response.body = `<h1>No ${siteName} exists</h1>`;
-    //     callback(null, response);             
-    //   }
-    // });
+    models.site.findOne({url: siteName}).then(function(site){
+      if(site) {
+        models.sheet.find({siteId: site._id}).then(function(sheets){
+          var data = {
+            site: site,
+            user: {},
+            sheets: sheets,
+            link: sheets[0].name
+          };
+          response.body = response.body.replace('{{data}}', JSON.stringify(ply));
+          callback(null, response); 
+        });
+      } else {
+        response.body = `<h1>No ${siteName} exists</h1>`;
+        callback(null, response);             
+      }
+    });
   });
 };
 
