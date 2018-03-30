@@ -60,26 +60,25 @@ const ply = {
     });
   },
   createModelFromSheet: function(sheet, next) {
-    next('hi');
-    // if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
-    // let options = {
-    //   strict: true,
-    //   collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
-    // };
-    // let schema = {};
-    // let arr = sheet._schema || [{}];
-    // for(var s in arr) {
-    //   let obj = arr[s] || {};
-    //   obj.propName = obj.propName || 'propName';
-    //   obj.propType = (obj.propType || 'string').toLowerCase();
-    //   if(options[obj.propName]) {
-    //     options[obj.propName] = obj.propType;
-    //   } else if(reserved.indexOf(obj.propName) === -1) {
-    //     schema[obj.propName] = types[obj.propType] || String;
-    //   }
-    // }
-    // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    // next(sessionModels[sheet._id]);    
+    if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
+    let options = {
+      strict: true,
+      collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
+    };
+    let schema = {};
+    let arr = sheet._schema || [{}];
+    for(var s in arr) {
+      let obj = arr[s] || {};
+      obj.propName = obj.propName || 'propName';
+      obj.propType = (obj.propType || 'string').toLowerCase();
+      if(options[obj.propName]) {
+        options[obj.propName] = obj.propType;
+      } else if(reserved.indexOf(obj.propName) === -1) {
+        schema[obj.propName] = types[obj.propType] || String;
+      }
+    }
+    sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
+    next(sessionModels[sheet._id]);    
   },
   error: function(callback, err) {
     callback(null, {
@@ -103,11 +102,12 @@ const ply = {
     });      
   },
   getModel: function(event, context, next) {
-    this.findSheet(event, context, function(err1, sheet){
+    var vm = this;
+    vm.findSheet(event, context, function(err1, sheet){
       if(err1) return next(err1);
-      this.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
+      vm.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
         if(err2) return next(err2);
-          this.createModelFromSheet(sheet, function(model){
+          vm.createModelFromSheet(sheet, function(model){
             next(null, model);
           });      
       });
