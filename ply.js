@@ -1,15 +1,56 @@
 const connectToDb = require('./db');
 const mongoose = require('mongoose');
 const checkToken = require('./auth').checkToken;
+const DB = process.env.DB;
+mongoose.Promise = global.Promise;
+let isConnected;
 const models = {
   sites: require('./models/sites'),
   sheets: require('./models/sheets')
 };
 
+module.exports.connect = (context) => {
+  if(context) context.callbackWaitsForEmptyEventLoop = false;
+  if (isConnected) {
+    return Promise.resolve();
+  }
+  return mongoose.connect(DB)
+    .then(db => { 
+      isConnected = db.connections[0].readyState;
+    });
+};
+
+// var connect = (context, next) => {
+//   context.callbackWaitsForEmptyEventLoop = false;
+//   connectToDb().then(() => {
+//     next();
+//   });
+// };
+
+// module.exports.find = (modelName, query, next) => {
+//   module.exports.connect(context, function() {
+//     models[modelName].findOne(query).then(function(data){
+//       next(data);
+//     });
+//   });
+// };
+
+// module.exports.findSheet = () => {
+//   ply.find('sites', { url: path.url }, function() {
+    
+//   });
+// };
+
+// module.exports.findSheet = (event, context, next) => {
+//   context.callbackWaitsForEmptyEventLoop = false;
+//   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
+  
+// };
+
 module.exports.findSheet = (event, context, next) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const path = { url: event.pathParameters.sitename, sheet: event.pathParameters.sheet };
-  connectToDb().then(() => {
+  module.exports.connect().then(() => {
     // get site
     models.sites.findOne({ url: path.url })
       .then(site => {
