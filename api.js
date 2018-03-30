@@ -1,10 +1,5 @@
-const connectToDb = require('./db');
 const mongoose = require('mongoose');
 const ply = require('ply');
-const models = {
-  sites: require('./models/sites'),
-  sheets: require('./models/sheets')
-};
 const sessionModels = {};
 const types = {
   'string': String,
@@ -64,13 +59,6 @@ const getModel = (event, context, next) => {
     });
   });
 };
-
-const printError = (callback, error) => {
-  return callback(null, {
-    statusCode: 200,
-    body: JSON.stringify({ error: error })    
-  });
-};
       
 module.exports.sheetProp = (event, context, callback) => {
   // define the functions
@@ -116,7 +104,7 @@ module.exports.sheetProp = (event, context, callback) => {
   };
   //execute the functions
   ply.findSheet(event, context, function(err, sheet){
-    if(err) return printError(callback, err);
+    if(err) return ply.error(callback, err);
     const propRaw = event.pathParameters.prop;
     const prop = propRaw.split('?')[0];
     const body = sheet[prop] || 'no ' + prop;
@@ -148,7 +136,7 @@ module.exports.sheets = (event, context, callback) => {
 
 module.exports.post = (event, context, callback) => {
   getModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
+    if(error) return ply.error(callback, error);
     model.create(JSON.parse(event.body))
       .then(data => callback(null, {
         statusCode: 200,
@@ -173,7 +161,7 @@ module.exports.get = (event, context, callback) => {
 
 module.exports.getOne = (event, context, callback) => {
   getModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
+    if(error) return ply.error(callback, error);
     model.findById(event.pathParameters.id)
       .then(data => callback(null, {
         statusCode: 200,
@@ -185,7 +173,7 @@ module.exports.getOne = (event, context, callback) => {
 
 module.exports.put = (event, context, callback) => {
   getModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
+    if(error) return ply.error(callback, error);
       model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
         .then(data => callback(null, {
           statusCode: 200,
@@ -197,7 +185,7 @@ module.exports.put = (event, context, callback) => {
 
 module.exports.delete = (event, context, callback) => {
   getModel(event, context, function(error, model) {
-    if(error) return printError(callback, error);
+    if(error) return ply.error(callback, error);
       model.findByIdAndRemove(event.pathParameters.id)
         .then(data => callback(null, {
           statusCode: 200,
