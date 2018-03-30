@@ -1,4 +1,3 @@
-const connectToDb = require('./db');
 const mongoose = require('mongoose');
 const checkToken = require('./auth').checkToken;
 const DB = process.env.DB;
@@ -66,5 +65,5 @@ module.exports.findSheet = (event, context, next) => {
 };
 
 module.exports.sheets = function() {
-  return 'test';
+  return 'test two';
 };
