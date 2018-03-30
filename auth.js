@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const users = require('./models/users');
 const connectToDb = require('./db');
-const ply = require('./ply');
+const ply = require('ply');
 
 const loginUser = (user, next) => {
   connectToDb()
@@ -39,7 +39,7 @@ module.exports.login1 = (event, context, callback) => {
 
 module.exports.login = (event, context, callback) => {
   const user = JSON.parse(event.body);
-  ply.login(user, function(err, tokenObj){
+  ply.login(context, user, function(err, tokenObj){
     if(err) {
       ply.error(callback, err);     
     } else {
