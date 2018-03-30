@@ -44,13 +44,13 @@ const ply = {
       })
     }); 
   },
-  findSheet: function(context, siteUrl, sheetName, next) {
+  findSheet: function(context, query, next) {
     this.connect(context).then(() => {
       // get site
-      models.sites.findOne({ url: siteUrl }).then(function(site){
-        if(!site) return next(siteUrl + ' plysheet not found.');
-        models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
-          if(!sheet) return next(siteUrl + ' plysheet found but no ' + sheetName + ' sheet found.');
+      models.sites.findOne({ url: query.siteName }).then(function(site){
+        if(!site) return next(query.siteName + ' plysheet not found.');
+        models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
+          if(!sheet) return next(query.siteName + ' plysheet found but no ' + query.sheet + ' sheet found.');
           next(null, sheet);
         });
       });
