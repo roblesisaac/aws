@@ -1,7 +1,7 @@
 const ply = require('ply');
 
 module.exports.sheets = (event, context, callback) => {
-  ply.getModer(event, context, function(message) {
+  ply.getModel(event, context, function(message) {
     ply.res(message);
   });
   // ply.findSheet(event, context, function(err, sheet) {
