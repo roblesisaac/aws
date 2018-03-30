@@ -1,7 +1,7 @@
 const connectToDb = require('./db');
 const mongoose = require('mongoose');
 const checkToken = require('./auth').checkToken;
-const handler = require('handler');
+const ply = require('ply');
 const models = {
   sites: require('./models/sites'),
   sheets: require('./models/sheets')
@@ -50,7 +50,7 @@ const checkIfSheetIsPublic = (event, context, sheet, next) => {
 };
 
 const getModel = (event, context, next) => {
-  handler.findSheet(event, context, function(err1, sheet){
+  ply.findSheet(event, context, function(err1, sheet){
     if(err1) return next(err1);
     checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
       if(err2) return next(err2);
@@ -111,7 +111,7 @@ module.exports.sheetProp = (event, context, callback) => {
     }
   };
   //execute the functions
-  handler.findSheet(event, context, function(err, sheet){
+  ply.findSheet(event, context, function(err, sheet){
     if(err) return printError(callback, err);
     const propRaw = event.pathParameters.prop;
     const prop = propRaw.split('?')[0];
@@ -138,8 +138,8 @@ module.exports.sheetProp = (event, context, callback) => {
 module.exports.sheets = (event, context, callback) => {
   callback(null, {
     statusCode: 200,
-    body: handler.sheets()
-  })
+    body: ply.sheets()
+  });
 };
 
 module.exports.post = (event, context, callback) => {
