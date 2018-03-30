@@ -73,8 +73,8 @@ const ply = {
     			foundUser.comparePassword(user.password, function(err2, isMatch){
     				if(isMatch && isMatch === true) {
     					next(null, {
-    					  'ply-token': jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
-    					  userid: foundUser._id
+    					  'plyToken': jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
+    					  userId: foundUser._id
     					});
     				} else {
     					next('Authentication failed. Wrong password.');
