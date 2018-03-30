@@ -104,13 +104,12 @@ const ply = {
   getModel: function(event, context, next) {
     this.findSheet(event, context, function(err1, sheet){
       if(err1) return next(err1);
-      next(null, sheet)
-      // this.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
-      //   if(err2) return next(err2);
-      //     this.createModelFromSheet(sheet, function(model){
-      //       next(null, model);
-      //     });      
-      // });
+      this.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
+        if(err2) return next(err2);
+          this.createModelFromSheet(sheet, function(model){
+            next(null, model);
+          });      
+      });
     });
   },
   login: function(context, user, next) {
