@@ -20,7 +20,11 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 
 const ply = {
   port: function(event, context, callback) {
-    ply.res(callback, 'skldjflksdjfl;d'); 
+    const method = event.queryStringParameters.method || 'none';
+    const fn = ply[method];
+    let res;
+    fn ? res = fn() : 'no function';
+    ply.res(callback, res);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
