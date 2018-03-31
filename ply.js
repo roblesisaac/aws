@@ -19,6 +19,12 @@ const types = {
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 
 const ply = {
+  res: function(callback, body) {
+    callback(null, {
+      statusCode: 200,
+      body: body
+    }); 
+  },
   port: function(event, context, callback) {
     this.res(callback, 'hi'); 
   },
@@ -139,12 +145,6 @@ const ply = {
     		}
     	});
     });
-  },
-  res: function(callback, body) {
-    callback(null, {
-      statusCode: 200,
-      body: body
-    }); 
   },
   sheets: function() {
     return 'test four';
