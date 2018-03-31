@@ -20,10 +20,10 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 
 const ply = {
   port: function(event, context, callback) {
-    var vm = this;
+    var vm = this.sheets();
     callback(null, {
       statusCode: 200,
-      body: 'vm.sheets()'
+      body: vm
     }); 
   },
   connect: function(context) {
