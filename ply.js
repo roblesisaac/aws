@@ -20,11 +20,7 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 
 const ply = {
   port: function(event, context, callback) {
-    // this.res(callback, 'hola');
-    callback(null, {
-      statusCode: 200,
-      body: 'body'
-    }); 
+    this.res(callback, 'hi'); 
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
