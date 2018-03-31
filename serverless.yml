@@ -24,25 +24,25 @@ functions:
     events:
       - http:
           method: get
-          path: /ply/{siteName}/port
+          path: /ply/{sheet}/port
   plyPost:
     handler: ply.port
     events:
       - http:
           method: post
-          path: /ply/{siteName}/port
+          path: /ply/{sheet}/port
   plyPut:
     handler: ply.port
     events:
       - http:
           method: put
-          path: /ply/{siteName}/port
+          path: /ply/{sheet}/port
   plyDelete:
     handler: ply.port
     events:
       - http:
           method: delete
-          path: /ply/{siteName}/port
+          path: /ply/{sheet}/port
   setup:
     handler: setup.init
     events:
