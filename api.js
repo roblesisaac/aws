@@ -74,12 +74,9 @@ module.exports.sheetProp = (event, context, callback) => {
 module.exports.post = (event, context, callback) => {
   ply.getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
-    model.create(JSON.parse(event.body))
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, err)); 
+    model.create(JSON.parse(event.body)).then(function(data){
+      ply.res(callback, JSON.stringify(data));
+    }); 
   });
 };
 
@@ -87,48 +84,36 @@ module.exports.get = (event, context, callback) => {
   ply.getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
     let params = event.queryStringParameters || {};
-    model.find(params)
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, err)); 
+    model.find(params).then(function(data){
+      ply.res(callback, JSON.stringify(data));
+    });
   });
 };
 
 module.exports.getOne = (event, context, callback) => {
   ply.getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
-    model.findById(event.pathParameters.id)
-      .then(data => callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(data)
-      }))
-      .catch(err => callback(null, err)); 
+    model.findById(event.pathParameters.id).then(function(data){
+      ply.res(callback, JSON.stringify(data));
+    });
   });
 };
 
 module.exports.put = (event, context, callback) => {
   ply.getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
-      model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true })
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        }))
-      .catch(err => callback(null, err)); 
+      model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true }).then(function(data){
+        ply.res(callback, JSON.stringify(data));
+      });
   });
 };
 
 module.exports.delete = (event, context, callback) => {
   ply.getModel(event, context, function(error, model) {
     if(error) return ply.error(callback, error);
-      model.findByIdAndRemove(event.pathParameters.id)
-        .then(data => callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        }))
-      .catch(err => callback(null, err)); 
+      model.findByIdAndRemove(event.pathParameters.id).then(function(data){
+        ply.res(callback, JSON.stringify(data));
+      }); 
   });
 };
 
