@@ -19,8 +19,8 @@ const types = {
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 
 const ply = {
-  port: function() {
-    return '<div><h1>hello world</h1></div>';
+  port: function(event, context, callback) {
+    this.res(callback, 'hola');
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
