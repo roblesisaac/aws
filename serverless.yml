@@ -19,6 +19,17 @@ custom:
     createRoute53Record: true
 
 functions:
+  ply:
+    handler: ply.port
+    events:
+      - http:
+          method: get
+          path: /ply/{sheet}/port
+          integration: lambda
+          response:
+            headers:
+              Content-Type: "'text/html'"
+            template: $input.path('$')
   setup:
     handler: setup.init
     events:
