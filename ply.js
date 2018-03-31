@@ -23,7 +23,7 @@ const ply = {
     var vm = this;
     callback(null, {
       statusCode: 200,
-      body: vm.sheets()
+      body: 'vm.sheets()'
     }); 
   },
   connect: function(context) {
