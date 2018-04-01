@@ -19,34 +19,103 @@ custom:
     createRoute53Record: true
 
 functions:
-  get:
+  plyGet:
     handler: ply.port
     events:
       - http:
           method: get
-          path: /{site}/{method}
-          cors: true
-  post:
+          path: /ply/{sheet}/port
+  plyPost:
     handler: ply.port
     events:
       - http:
           method: post
-          path: /{site}/{method}
-          cors: true
-  put:
+          path: /ply/{sheet}/port
+  plyPut:
     handler: ply.port
     events:
       - http:
           method: put
-          path: /{site}/{method}
-          cors: true
-  delete:
+          path: /ply/{sheet}/port
+  plyDelete:
     handler: ply.port
     events:
       - http:
           method: delete
-          path: /{site}/{method}
-          cors: true
+          path: /ply/{sheet}/port
+#  setup:
+#    handler: setup.init
+#    events:
+#      - http:
+#          method: get
+#          path: /plysheet/api/setup
+#  landing:
+#    handler: api.landingPage
+#    events:
+#      - http:
+#          method: get
+#          path: /
+#  siteLanding:
+#    handler: api.landingPage
+#    events:
+#      - http:
+#          method: get
+#          path: /{sitename}
+#  login:
+#    handler: auth.login
+#    events:
+#      - http:
+#          path: /login
+#          method: post
+#  sheetProp:
+#    handler: api.sheetProp
+#    events:
+#      - http:
+#          path: /{sitename}/{sheet}/{prop}
+#          method: get
+#          cors: true
+#  sheets:
+#    handler: api.sheets
+#    events:
+#      - http:
+#          path: /{sitename}/{sheet}/{prop}/sheets
+#          method: get
+#          cors: true
+#  post:
+#    handler: api.post
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}
+#          method: post
+#          cors: true
+#  get:
+#    handler: api.get
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}
+#          method: get
+#          cors: true
+#  getOne:
+#    handler: api.getOne
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}/{id}
+#          method: get
+#          cors: true
+#  put:
+#    handler: api.put
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}/{id}
+#          method: put
+#          cors: true
+#  delete:
+#    handler: api.delete
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}/{id}
+#          method: delete
+#          cors: true
 
 resources:
   Resources:
