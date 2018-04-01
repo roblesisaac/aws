@@ -20,7 +20,7 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 
 const ply = {
   port: function(event, context, callback) {
-    const method = event.pathParameters || 'none';
+    const method = event.pathParameters.site || 'none';
     const fn = ply[method];
     let res;
     fn ? res = fn() : 'no function';
