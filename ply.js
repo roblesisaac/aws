@@ -1,164 +1,142 @@
-const DB = process.env.DB;
-const jwt = require('jsonwebtoken');
-const models = {
-  sites: require('./models/sites'),
-  sheets: require('./models/sheets'),
-  users: require('./models/users')
-};
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-let isConnected;
-const sessionModels = {};
-const types = {
-  'string': String,
-  'number': Number,
-  'date': Date,
-  'boolean': Boolean,
-  'array': Array
-};
-const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
+service: plysheet
 
-const ply = {
-  port: function(event, context, callback) {
-    const method = (event.queryStringParameters || {}).method || 'none';
-    const fn = ply[method];
-    let res;
-    fn ? res = fn() : 'no function';
-    ply.res(callback, JSON.stringify({
-      body: res,
-      event: event,
-      context: context
-    }));
-  },
-  connect: function(context) {
-    if(context) context.callbackWaitsForEmptyEventLoop = false;
-    if (isConnected) {
-      return Promise.resolve();
-    }
-    return mongoose.connect(DB)
-      .then(db => { 
-        isConnected = db.connections[0].readyState;
-      });    
-  },
-  checkIfSheetIsPublic: function(event, context, sheet, next) {
-    if(sheet.public) {
-      next(null, sheet);
-    } else {
-      const token = event.headers.token;
-      const userId = event.headers.userid;
-      this.checkToken(context, token, userId, function(err, decoded) {
-        if(err) {
-          next(err);
-        } else {
-          next(null, sheet);
-        }
-      });
-    }      
-  },
-  checkToken: function(context, token, userid, next) {
-    if(!token || !userid) return next('No token or userid provided');
-    this.connect(context).then(function(){
-    	models.users.findById(userid, (err, user) => {
-    		if(!user) return next('no user found with this id: '+userid);
-        jwt.verify(token, user.password, (err2, decoded) => {
-    			if (err2) {
-    				next('You are logged out with this error: '+ err2);
-    			} else {
-    				next(null, decoded);
-    			}
-    		});
-    	}); 
-    });
-  },
-  createModelFromSheet: function(sheet, next) {
-    if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
-    let options = {
-      strict: true,
-      collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
-    };
-    let schema = {};
-    let arr = sheet._schema || [{}];
-    for(var s in arr) {
-      let obj = arr[s] || {};
-      obj.propName = obj.propName || 'propName';
-      obj.propType = (obj.propType || 'string').toLowerCase();
-      if(options[obj.propName]) {
-        options[obj.propName] = obj.propType;
-      } else if(reserved.indexOf(obj.propName) === -1) {
-        schema[obj.propName] = types[obj.propType] || String;
-      }
-    }
-    sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(sessionModels[sheet._id]);    
-  },
-  error: function(callback, err) {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        error: err
-      })
-    }); 
-  },
-  findSheet: function(event, context, next) {
-    var query = event.pathParameters;
-    this.connect(context).then(() => {
-      // get site
-      models.sites.findOne({ url: query.sitename }).then(function(site){
-        if(!site) return next(query.sitename + ' plysheet not found.');
-        models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
-          if(!sheet) return next(query.sitename + ' plysheet found but no ' + query.sheet + ' sheet found.');
-          next(null, sheet);
-        });
-      });
-    });      
-  },
-  getModel: function(event, context, next) {
-    var vm = this;
-    vm.findSheet(event, context, function(err1, sheet){
-      if(err1) return next(err1);
-      vm.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
-        if(err2) return next(err2);
-          vm.createModelFromSheet(sheet, function(model){
-            next(null, model);
-          });      
-      });
-    });
-  },
-  login: function(context, user, next) {
-    this.connect(context).then(function(){
-    	models.users.findOne({username: user.username}, function(err, foundUser) {
-    		if (err) {
-    		  next(err);
-    		  return;
-    		}
-    		if (!foundUser) {
-    			next(user.username + ' not found');
-    		} else if (foundUser) {
-    			foundUser.comparePassword(user.password, function(err2, isMatch){
-    				if(isMatch && isMatch === true) {
-    					next(null, {
-    					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
-    					  userid: foundUser._id
-    					});
-    				} else {
-    					next('Authentication failed. Wrong password.');
-    				}
-    			});
-    		}
-    	});
-    });
-  },
-  res: function(callback, body) {
-    callback(null, {
-      statusCode: 200,
-      body: body
-    }); 
-  },
-  sheets: function() {
-    return 'test four';
-  }
-};
+provider:
+  name: aws
+  runtime: nodejs6.10
+  memorySize: 128 # set the maximum memory of the Lambdas in Megabytes
+  timeout: 10 # the timeout is 10 seconds (default is 6 seconds)
+  environment:
+    DB: ${file(./variables.json):DB}
+  
+plugins:
+  - serverless-domain-manager
 
-for (var key in ply) {
-  if(key.indexOf('_') === -1) module.exports[key] = ply[key];
-}
+custom:
+  customDomain:
+    domainName: www.blockometry.com
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
+functions:
+  plyGet:
+    handler: ply.port
+    events:
+      - http:
+          method: get
+          path: /ply/{sheet}/port
+  plyPost:
+    handler: ply.port
+    events:
+      - http:
+          method: post
+          path: /ply/{sheet}/port
+  plyPut:
+    handler: ply.port
+    events:
+      - http:
+          method: put
+          path: /ply/{sheet}/port
+  plyDelete:
+    handler: ply.port
+    events:
+      - http:
+          method: delete
+          path: /ply/{sheet}/port
+#  setup:
+#    handler: setup.init
+#    events:
+#      - http:
+#          method: get
+#          path: /plysheet/api/setup
+#  landing:
+#    handler: api.landingPage
+#    events:
+#      - http:
+#          method: get
+#          path: /
+#  siteLanding:
+#    handler: api.landingPage
+#    events:
+#      - http:
+#          method: get
+#          path: /{sitename}
+#  login:
+#    handler: auth.login
+#    events:
+#      - http:
+#          path: /login
+#          method: post
+#  sheetProp:
+#    handler: api.sheetProp
+#    events:
+#      - http:
+#          path: /{sitename}/{sheet}/{prop}
+#          method: get
+#          cors: true
+#  sheets:
+#    handler: api.sheets
+#    events:
+#      - http:
+#          path: /{sitename}/{sheet}/{prop}/sheets
+#          method: get
+#          cors: true
+#  post:
+#    handler: api.post
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}
+#          method: post
+#          cors: true
+#  get:
+#    handler: api.get
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}
+#          method: get
+#          cors: true
+#  getOne:
+#    handler: api.getOne
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}/{id}
+#          method: get
+#          cors: true
+#  put:
+#    handler: api.put
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}/{id}
+#          method: put
+#          cors: true
+#  delete:
+#    handler: api.delete
+#    events:
+#      - http:
+#          path: /{sitename}/api/{sheet}/{id}
+#          method: delete
+#          cors: true
+
+resources:
+  Resources:
+    # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
