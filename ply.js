@@ -25,6 +25,7 @@ const ply = {
     let res;
     fn ? res = fn() : 'no function';
     ply.res(callback, JSON.stringify({
+      body: res,
       event: event,
       context: context
     }));
