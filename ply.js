@@ -24,7 +24,11 @@ const ply = {
     const fn = ply[method];
     let res;
     fn ? res = fn() : 'no function';
-    ply.res(callback, res);
+    ply.res(callback, JSON.stringify({
+      body: res + 'hi',
+      event: event,
+      context: context
+    }));
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
