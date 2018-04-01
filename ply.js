@@ -20,15 +20,11 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 
 const ply = {
   port: function(event, context, callback) {
-    const method = event.pathParameters.site || 'none';
+    const method = event.pathParameters.method || 'none';
     const fn = ply[method];
     let res;
     fn ? res = fn() : 'no function';
-    ply.res(callback, JSON.stringify({
-      body: res + 'hi',
-      event: event,
-      context: context
-    }));
+    ply.res(callback, res);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
