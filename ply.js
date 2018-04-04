@@ -28,7 +28,7 @@ const ply = {
   port: function(event, context, callback) {
     const method = (event.pathParameters || {}).method || 'landing';
     const fn = ply[method];
-    fn(event, context, callback);
+    return fn(event, context, callback);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
@@ -179,7 +179,7 @@ const ply = {
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
-    return ply.res(callback, 'test five');
+    ply.res(callback, 'test five');
   }
 };
 
