@@ -28,9 +28,10 @@ if(!tmplts.index) {
 
 const ply = {
   port: function(event, context, callback) {
-    const method = (event.pathParameters || {}).method || 'landing';
-    const fn = ply[method];
-    return fn(event, context, callback);
+    ply.res(callback, 'test five');
+    // const method = (event.pathParameters || {}).method || 'landing';
+    // const fn = ply[method];
+    // return fn(event, context, callback);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
