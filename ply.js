@@ -141,7 +141,7 @@ const ply = {
             };
             tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
             tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-            ply.res(calllback, tmplts.index, 'text/html');
+            ply.res(calllback, 'tmplts.index', 'text/html');
           });
         } else {
           ply.res(calllback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
