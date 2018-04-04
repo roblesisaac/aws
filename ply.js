@@ -18,7 +18,7 @@ const types = {
 };
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 const fs = require('fs');
-let tmplts = {};
+const tmplts = {};
 fs.readdir('./templates', function (err, data) {
   for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
 });
@@ -124,7 +124,7 @@ const ply = {
     });
   },
   landing: function(event, context, callback) {
-    ply.res(callback, JSON.stringify(tmplts));
+    ply.res(callback, tmplts.index, 'text/html');
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
