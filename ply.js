@@ -28,7 +28,7 @@ if(!tmplts.index) {
 
 const ply = {
   port: function(event, context, callback) {
-    ply[event.pathParameters.method](event, context, callback);
+    ply[(event.pathParameters.method || 'landing')](event, context, callback);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
