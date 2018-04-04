@@ -119,7 +119,7 @@ const ply = {
     });
   },
   landing: function(event, context, callback) {
-    ply.res(callback, JSON.stringify(event));
+    ply.res(callback, '<h1>Hello</h1>', 'text/html');
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
@@ -147,7 +147,7 @@ const ply = {
   },
   res: function(callback, body, contentType) {
     let res = { statusCode: 200, body: body };
-    if(contentType) res.headers = { 'Content-Type': type };
+    if(contentType) res.headers = { 'Content-Type': contentType };
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
