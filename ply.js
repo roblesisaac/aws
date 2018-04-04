@@ -19,6 +19,7 @@ const types = {
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 const fs = require('fs');
 const tmplts = {};
+
 fs.readdir('./templates', function (err, data) {
   for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
 });
@@ -102,10 +103,10 @@ const ply = {
     var query = event.pathParameters;
     this.connect(context).then(() => {
       // get site
-      models.sites.findOne({ url: query.sitename }).then(function(site){
-        if(!site) return next(query.sitename + ' plysheet not found.');
+      models.sites.findOne({ url: query.site }).then(function(site){
+        if(!site) return next(query.site + ' plysheet not found.');
         models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
-          if(!sheet) return next(query.sitename + ' plysheet found but no ' + query.sheet + ' sheet found.');
+          if(!sheet) return next(query.site + ' plysheet found but no ' + query.sheet + ' sheet found.');
           next(null, sheet);
         });
       });
@@ -124,6 +125,29 @@ const ply = {
     });
   },
   landing: function(event, context, callback) {
+    let siteUrl = 'plysheet';
+    if (event.pathParameters && event.pathParameters.site) {
+      siteUrl = event.pathParameters.site;
+    }
+    ply.connect(context).then(function(){
+      models.sites.findOne({url: siteUrl}).then(function(site){
+        if(site) {
+          models.sheets.find({siteId: site._id}).then(function(sheets){
+            var data = {
+              site: site,
+              user: {},
+              sheets: sheets,
+              link: sheets[0].name
+            };
+            tmplts.index = tmplts.index.replace('{{site}}', siteUrl);
+            tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
+            ply.res(calllback, tmplts.index, 'text/html');
+          });
+        } else {
+          ply.res(calllback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+        }
+      });
+    });
     ply.res(callback, tmplts.index, 'text/html');
   },
   login: function(context, user, next) {
