@@ -28,10 +28,7 @@ if(!tmplts.index) {
 
 const ply = {
   port: function(event, context, callback) {
-    // let method = event.pathParameters.method || 'landing';
-    // let fn = ply[method];
-    // fn(event, context, callback);
-    ply[event.pathParameters.method](event, context, callback);
+    ply[(event.pathParameters || {}).method || 'landing'](event, context, callback);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
