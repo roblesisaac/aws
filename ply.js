@@ -22,8 +22,8 @@ const ply = {
   port: function(event, context, callback) {
     const method = event.pathParameters.method || 'none';
     const fn = ply[method];
-    let res;
-    fn ? res = fn() : 'no function';
+    let res = 'Hello World.';
+    if(fn) res = fn(event, context);
     ply.res(callback, res);
   },
   connect: function(context) {
@@ -119,6 +119,9 @@ const ply = {
           });      
       });
     });
+  },
+  landing: function(event, context) {
+    return JSON.stringify(event);
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
