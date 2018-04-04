@@ -28,7 +28,7 @@ if(!tmplts.index) {
 
 const ply = {
   port: function(event, context, callback) {
-    let method = (event.pathParameters || {}).method || 'landing';
+    let method = event.pathParameters.method || 'landing';
     let fn = ply[method];
     fn(event, context, callback);
   },
