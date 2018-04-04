@@ -19,9 +19,9 @@ const types = {
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 const fs = require('fs');
 const tmplts = {};
-fs.readdir('templates', function (err, data) {
-  for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-4)] = fs.readFileSync('views/partials/' + data[i], 'utf8');
-});
+// fs.readdir('templates', function (err, data) {
+//   for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-4)] = fs.readFileSync('views/partials/' + data[i], 'utf8');
+// });
 
 const ply = {
   port: function(event, context, callback) {
