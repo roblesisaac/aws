@@ -139,7 +139,7 @@ const ply = {
               sheets: sheets,
               link: sheets[0].name
             };
-            tmplts.index = tmplts.index.replace('{{site}}', siteUrl);
+            tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
             tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
             ply.res(calllback, tmplts.index, 'text/html');
           });
