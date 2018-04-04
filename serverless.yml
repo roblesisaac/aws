@@ -23,28 +23,11 @@ functions:
     handler: ply.port
     events:
       - http:
-          method: get
-          path: /{site}/{method}
+          method: any
+          path: /{site}
           cors: true
-  post:
-    handler: ply.port
-    events:
       - http:
-          method: post
-          path: /{site}/{method}
-          cors: true
-  put:
-    handler: ply.port
-    events:
-      - http:
-          method: put
-          path: /{site}/{method}
-          cors: true
-  delete:
-    handler: ply.port
-    events:
-      - http:
-          method: delete
+          method: any
           path: /{site}/{method}
           cors: true
 
