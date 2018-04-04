@@ -20,11 +20,9 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 
 const ply = {
   port: function(event, context, callback) {
-    const method = event.pathParameters.method || 'none';
+    const method = (event.pathParameters || {}).method || 'landing';
     const fn = ply[method];
-    let res = 'Hello World.';
-    if(fn) res = fn(event, context);
-    ply.res(callback, res);
+    fn(event, context, callback);
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
@@ -120,8 +118,8 @@ const ply = {
       });
     });
   },
-  landing: function(event, context) {
-    return JSON.stringify(event);
+  landing: function(event, context, callback) {
+    ply.res(callback, JSON.stringify(event), 'text/html');
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
@@ -147,14 +145,13 @@ const ply = {
     	});
     });
   },
-  res: function(callback, body) {
-    callback(null, {
-      statusCode: 200,
-      body: body
-    }); 
+  res: function(callback, body, contentType) {
+    let res = { statusCode: 200, body: body };
+    if(contentType) res.headers = { 'Content-Type': type };
+    callback(null, res); 
   },
-  sheets: function() {
-    return 'test four';
+  sheets: function(event, context, callback) {
+    ply.res(callback, 'test five');
   }
 };
 
