@@ -179,7 +179,7 @@ const ply = {
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
-    this.res(callback, 'test five');
+    ply.res(callback, JSON.stringify(tmplts));
   }
 };
 
