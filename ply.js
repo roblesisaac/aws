@@ -28,7 +28,7 @@ if(!tmplts.index) {
 
 const ply = {
   port: function(event, context, callback) {
-    ply.res(callback, 'test five');
+    ply.sheets(event, context, callback);
     // const method = (event.pathParameters || {}).method || 'landing';
     // const fn = ply[method];
     // return fn(event, context, callback);
