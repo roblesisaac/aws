@@ -119,7 +119,7 @@ const ply = {
     });
   },
   landing: function(event, context, callback) {
-    ply.res(callback, JSON.stringify(event), 'text/html');
+    ply.res(callback, JSON.stringify(event));
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
