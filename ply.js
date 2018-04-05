@@ -181,9 +181,9 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
-  var m = (event.pathParameters || {}).method || landing;
+  var m = (event.pathParameters || {}).method || 'landing';
   if(ply[m]) {
-    ply[(event.pathParameters || {}).method](event, context, callback);
+    ply[m](event, context, callback);
   } else {
     ply.res(callback, 'No method named '+ (event.pathParameters || {}).method); 
   }
