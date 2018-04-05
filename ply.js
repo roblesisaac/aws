@@ -184,6 +184,6 @@ module.exports.port = function(event, context, callback) {
   if(ply[(event.pathParameters || {}).method]) {
     ply[(event.pathParameters || {}).method](event, context, callback);
   } else {
-    ply.res(callback, 'No method named '+ (event.pathParameters || {}).method); 
+    ply.landing(event, context, callback); 
   }
 }
