@@ -33,6 +33,15 @@ functions:
       - http:
           method: any
           path: /{site}/{method}
+          cors: true
+      - http:
+          method: any
+          path: /{site}/{method}/{arg1}
+          cors: true
+      - http:
+          method: any
+          path: /{site}/{method}/{arg1}/{arg2}
+          cors: true
 
 resources:
   Resources:
