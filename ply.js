@@ -182,6 +182,6 @@ const ply = {
 
 module.exports.port = function(event, context, callback) {
   let params = event.pathParameters;
-  params.method = params.method || 'landing';
+  params.method = params.method || 'sheets';
   ply[params.method](event, context, callback);
 }
