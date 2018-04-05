@@ -111,29 +111,26 @@ const ply = {
     });
   },
   landing: function(event, context, callback) {
-    // let siteUrl = 'plysheet';
-    // if (event.pathParameters && event.pathParameters.site) {
-    //   siteUrl = event.pathParameters.site;
-    // }
-    ply.connect(context).then(function(){
-      ply.res(callback, 'test');
-      // models.sites.findOne({url: siteUrl}).then(function(site){
-      //   if(site) {
-      //     models.sheets.find({siteId: site._id}).then(function(sheets){
-      //       var data = {
-      //         site: site,
-      //         user: {},
-      //         sheets: sheets,
-      //         link: sheets[0].name
-      //       };
-      //       tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
-      //       tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-      //       ply.res(callback, tmplts.index, 'text/html');
-      //     });
-      //   } else {
-      //     ply.res(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
-      //   }
-      // });
+    let siteUrl = 'plysheet';
+    if (event.pathParameters && event.pathParameters.site) {
+      siteUrl = event.pathParameters.site;
+    }
+    models.sites.findOne({url: siteUrl}).then(function(site){
+      if(site) {
+        models.sheets.find({siteId: site._id}).then(function(sheets){
+          var data = {
+            site: site,
+            user: {},
+            sheets: sheets,
+            link: sheets[0].name
+          };
+          tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
+          tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
+          ply.res(callback, tmplts.index, 'text/html');
+        });
+      } else {
+        ply.res(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+      }
     });
   },
   login: function(context, user, next) {
@@ -166,14 +163,14 @@ const ply = {
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
-    ply.connect(context).then(function(){
-      ply.res(callback, 'test seven');
-    });
+    ply.res(callback, 'test eight');
   }
 };
 
 module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
-  fn(event, context, callback);
+  ply.connect(context).then(function(){
+    fn(event, context, callback);
+  })
 }
