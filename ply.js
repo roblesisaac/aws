@@ -16,6 +16,16 @@ if(!tmplts.index) {
 }
 
 const ply = {
+  api: function(event, context, callback) {
+    const site = event.pathParameters.site;
+    const sheet = event.pathParameters.arg1;
+    ply.res(callback, JSON.stringify({
+      site: site,
+      sheet: sheet,
+      event: event,
+      context: context
+    }));
+  },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
     if (isConnected) {
