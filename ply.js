@@ -122,30 +122,29 @@ const ply = {
     });
   },
   landing: function(event, context, callback) {
-    ply.res(callback, 'landing');
-    // let siteUrl = 'plysheet';
-    // if (event.pathParameters && event.pathParameters.site) {
-    //   siteUrl = event.pathParameters.site;
-    // }
-    // ply.connect(context).then(function(){
-    //   models.sites.findOne({url: siteUrl}).then(function(site){
-    //     if(site) {
-    //       models.sheets.find({siteId: site._id}).then(function(sheets){
-    //         var data = {
-    //           site: site,
-    //           user: {},
-    //           sheets: sheets,
-    //           link: sheets[0].name
-    //         };
-    //         tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
-    //         tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-    //         ply.res(callback, tmplts.index, 'text/html');
-    //       });
-    //     } else {
-    //       ply.res(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
-    //     }
-    //   });
-    // });
+    let siteUrl = 'plysheet';
+    if (event.pathParameters && event.pathParameters.site) {
+      siteUrl = event.pathParameters.site;
+    }
+    ply.connect(context).then(function(){
+      models.sites.findOne({url: siteUrl}).then(function(site){
+        if(site) {
+          models.sheets.find({siteId: site._id}).then(function(sheets){
+            var data = {
+              site: site,
+              user: {},
+              sheets: sheets,
+              link: sheets[0].name
+            };
+            tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
+            tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
+            ply.res(callback, tmplts.index, 'text/html');
+          });
+        } else {
+          ply.res(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+        }
+      });
+    });
   },
   login: function(context, user, next) {
     this.connect(context).then(function(){
