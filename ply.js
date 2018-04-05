@@ -176,13 +176,13 @@ const ply = {
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
-    ply.res(callback, event);
+    ply.res(callback, 'test 4084');
   }
 };
 
 module.exports.port = function(event, context, callback) {
   if(ply[(event.pathParameters || {}).method]) {
-    ply.sheets(event, context, callback);
+    ply[(event.pathParameters || {}).method](event, context, callback);
   } else {
     ply.res(callback, 'No method named '+ (event.pathParameters || {}).method); 
   }
