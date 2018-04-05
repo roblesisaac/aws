@@ -1,21 +1,10 @@
-const DB = process.env.DB;
 const jwt = require('jsonwebtoken');
-const models = {
-  sites: require('./models/sites'),
-  sheets: require('./models/sheets'),
-  users: require('./models/users')
-};
+const models = { sites: require('./models/sites'), sheets: require('./models/sheets'), users: require('./models/users') };
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 let isConnected;
 const sessionModels = {};
-const types = {
-  'string': String,
-  'number': Number,
-  'date': Date,
-  'boolean': Boolean,
-  'array': Array
-};
+const types = { 'string': String, 'number': Number, 'date': Date, 'boolean': Boolean, 'array': Array };
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 const fs = require('fs');
 const tmplts = {};
@@ -31,11 +20,11 @@ const ply = {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
     if (isConnected) {
       return Promise.resolve();
-    }
-    return mongoose.connect(DB)
-      .then(db => { 
+    } else {
+      return mongoose.connect(process.env.DB).then(function(db){
         isConnected = db.connections[0].readyState;
-      });    
+      }); 
+    }
   },
   checkIfSheetIsPublic: function(event, context, sheet, next) {
     if(sheet.public) {
