@@ -182,7 +182,7 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
-  let params = event.pathParameters;
-  params.method = params.method || 'landing';
-  ply[params.method](event, context, callback);
+  const params = event.pathParameters || {};
+  const fn = ply[params.method] || ply.landing;
+  fn(event, context, callback);
 }
