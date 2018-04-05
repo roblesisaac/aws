@@ -176,7 +176,7 @@ const ply = {
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
-    ply.res(callback, 'test five');
+    ply.res(callback, event);
   }
 };
 
