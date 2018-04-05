@@ -43,18 +43,16 @@ const ply = {
   },
   checkToken: function(context, token, userid, next) {
     if(!token || !userid) return next('No token or userid provided');
-    this.connect(context).then(function(){
-    	models.users.findById(userid, (err, user) => {
-    		if(!user) return next('no user found with this id: '+userid);
-        jwt.verify(token, user.password, (err2, decoded) => {
-    			if (err2) {
-    				next('You are logged out with this error: '+ err2);
-    			} else {
-    				next(null, decoded);
-    			}
-    		});
-    	}); 
-    });
+  	models.users.findById(userid, (err, user) => {
+  		if(!user) return next('no user found with this id: '+userid);
+      jwt.verify(token, user.password, (err2, decoded) => {
+  			if (err2) {
+  				next('You are logged out with this error: '+ err2);
+  			} else {
+  				next(null, decoded);
+  			}
+  		});
+  	}); 
   },
   createModelFromSheet: function(sheet, next) {
     if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
@@ -87,16 +85,14 @@ const ply = {
   },
   findSheet: function(event, context, next) {
     var query = event.pathParameters;
-    this.connect(context).then(() => {
-      // get site
-      models.sites.findOne({ url: query.site }).then(function(site){
-        if(!site) return next(query.site + ' plysheet not found.');
-        models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
-          if(!sheet) return next(query.site + ' plysheet found but no ' + query.sheet + ' sheet found.');
-          next(null, sheet);
-        });
+    // get site
+    models.sites.findOne({ url: query.site }).then(function(site){
+      if(!site) return next(query.site + ' plysheet not found.');
+      models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
+        if(!sheet) return next(query.site + ' plysheet found but no ' + query.sheet + ' sheet found.');
+        next(null, sheet);
       });
-    });      
+    });     
   },
   getModel: function(event, context, next) {
     var vm = this;
@@ -134,28 +130,26 @@ const ply = {
     });
   },
   login: function(context, user, next) {
-    this.connect(context).then(function(){
-    	models.users.findOne({username: user.username}, function(err, foundUser) {
-    		if (err) {
-    		  next(err);
-    		  return;
-    		}
-    		if (!foundUser) {
-    			next(user.username + ' not found');
-    		} else if (foundUser) {
-    			foundUser.comparePassword(user.password, function(err2, isMatch){
-    				if(isMatch && isMatch === true) {
-    					next(null, {
-    					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
-    					  userid: foundUser._id
-    					});
-    				} else {
-    					next('Authentication failed. Wrong password.');
-    				}
-    			});
-    		}
-    	});
-    });
+  	models.users.findOne({username: user.username}, function(err, foundUser) {
+  		if (err) {
+  		  next(err);
+  		  return;
+  		}
+  		if (!foundUser) {
+  			next(user.username + ' not found');
+  		} else if (foundUser) {
+  			foundUser.comparePassword(user.password, function(err2, isMatch){
+  				if(isMatch && isMatch === true) {
+  					next(null, {
+  					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
+  					  userid: foundUser._id
+  					});
+  				} else {
+  					next('Authentication failed. Wrong password.');
+  				}
+  			});
+  		}
+  	});
   },
   res: function(callback, body, contentType) {
     let res = { statusCode: 200, body: body };
