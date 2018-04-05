@@ -27,9 +27,6 @@ if(!tmplts.index) {
 }
 
 const ply = {
-  port: function(event, context, callback) {
-    ply[(event.pathParameters.method || 'landing')](event, context, callback);
-  },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
     if (isConnected) {
@@ -183,6 +180,6 @@ const ply = {
   }
 };
 
-for (var key in ply) {
-  if(key.indexOf('_') === -1) module.exports[key] = ply[key];
+module.exports.port = function(event, context, callback) {
+  ply[event.pathParameters.method || 'landing'](event, context, callback);  
 }
