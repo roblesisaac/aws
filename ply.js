@@ -176,7 +176,7 @@ const ply = {
     callback(null, res); 
   },
   sheets: function(event, context, callback) {
-    ply.res(callback, event);
+    ply.res(callback, JSON.stringify(event));
   }
 };
 
