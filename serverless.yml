@@ -24,11 +24,23 @@ functions:
     events:
       - http:
           method: any
+          path: /
+          cors: true
+      - http:
+          method: any
           path: /{site}
           cors: true
       - http:
           method: any
           path: /{site}/{method}
+          cors: true
+      - http:
+          method: any
+          path: /{site}/{method}/{sheet}
+          cors: true
+      - http:
+          method: any
+          path: /{site}/{method}/{sheet}/{id}
           cors: true
 
 resources:
