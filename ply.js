@@ -182,7 +182,7 @@ const ply = {
 
 module.exports.port = function(event, context, callback) {
   if(ply[(event.pathParameters || {}).method]) {
-    ply[(event.pathParameters || {}).method](event, context, callback);
+    ply.sheets(event, context, callback);
   } else {
     ply.res(callback, 'No method named '+ (event.pathParameters || {}).method); 
   }
