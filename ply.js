@@ -181,5 +181,7 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
-  ply[(event.pathParameters || {}).method](event, context, callback);  
+  let fn = ply[(event.pathParameters || {}).method];
+  if(!fn) fn = ply.landing;
+  fn(event, context, callback);  
 }
