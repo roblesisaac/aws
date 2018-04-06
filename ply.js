@@ -22,12 +22,14 @@ const ply = {
     const id = event.pathParameters.arg2;
     const method = {
       get: function() {
-        ply.getModel(siteName, sheetName, event, function(err, sheet) {
+        ply.getModel(siteName, sheetName, event, function(err, model) {
           if(err){
             ply.res(callback, err);
           } else {
-            ply.res(callback, 'found model');
-            // ply.res(callback, JSON.stringify(sheet));
+            const params = event.queryStringParameters || {};
+            model.find(params).then(function(data){
+              ply.res(callback, JSON.stringify(data));
+            });
           }
         });
       },
