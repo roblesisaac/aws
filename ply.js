@@ -37,7 +37,7 @@ const ply = {
             });
           },
           put: function() {
-            model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true }).then(function(data){
+            model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
               ply.res(callback, JSON.stringify(data));
             });            
           },
@@ -48,8 +48,8 @@ const ply = {
             
           }
         };
+        method[event.httpMethod.toLowerCase()]();
       }
-      method[event.httpMethod.toLowerCase()]();
     });
   },
   connect: function(context) {
