@@ -127,7 +127,6 @@ const ply = {
       if(err1) return next(err1);
       vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
         if(err2) return next(err2);
-        next(null, sheet);
         vm.createModelFromSheet(sheet, function(model){
           next(null, model);
         });      
