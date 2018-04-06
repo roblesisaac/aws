@@ -23,7 +23,7 @@ const ply = {
     let params = event.queryStringParameters || {};
     ply.getModel(siteName, sheetName, event, function(err, model) {
       if(err) {
-        ply.res(callback, err);
+        ply.error(callback, err);
       } else {
         const method = {
           get: function() {
@@ -42,10 +42,14 @@ const ply = {
             });            
           },
           post: function() {
-            
+            model.create(JSON.parse(event.body)).then(function(data){
+              ply.res(callback, JSON.stringify(data));
+            });             
           },
           delete: function() {
-            
+            model.findByIdAndRemove(id).then(function(data){
+              ply.res(callback, JSON.stringify(data));
+            });            
           }
         };
         method[event.httpMethod.toLowerCase()]();
@@ -66,18 +70,15 @@ const ply = {
     if(sheet.public) {
       next(null, sheet);
     } else {
-      const token = event.headers.token;
-      const userId = event.headers.userid;
-      this.checkToken(token, userId, function(err, decoded) {
-        if(err) {
-          next(err);
-        } else {
-          next(null, sheet);
-        }
+      this.checkToken(event, function(err, decoded) {
+        if(err) return next(err);
+        next(null, sheet);
       });
     }      
   },
-  checkToken: function(context, token, userid, next) {
+  checkToken: function(event, next) {
+    const token = event.headers.token;
+    const userid = event.headers.userid;
     if(!token || !userid) return next('No token or userid provided');
   	models.users.findById(userid, (err, user) => {
   		if(!user) return next('no user found with this id: '+userid);
@@ -163,16 +164,13 @@ const ply = {
       }
     });
   },
-  login: function(context, user, next) {
+  login: function(user, next) {
   	models.users.findOne({username: user.username}, function(err, foundUser) {
-  		if (err) {
-  		  next(err);
-  		  return;
-  		}
+  		if (err) return next(err);
   		if (!foundUser) {
   			next(user.username + ' not found');
   		} else if (foundUser) {
-  			foundUser.comparePassword(user.password, function(err2, isMatch){
+  			foundUser.comparePassword(user.password, function(err2, isMatch) {
   				if(isMatch && isMatch === true) {
   					next(null, {
   					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
