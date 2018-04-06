@@ -16,14 +16,14 @@ if(!tmplts.index) {
 }
 
 const ply = {
-  api: function(event, context, callback) {
+  api: function(event, context, res) {
     const siteName = event.pathParameters.site;
     const sheetName = event.pathParameters.arg1;
     const id = event.pathParameters.arg2;
     let params = event.queryStringParameters || {};
     ply.getModel(siteName, sheetName, event, function(err, model) {
       if(err) {
-        ply.error(callback, err);
+        res(err);
       } else {
         const method = {
           get: function() {
@@ -33,22 +33,22 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });            
           }
         };
@@ -111,14 +111,6 @@ const ply = {
     }
     sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
     next(sessionModels[sheet._id]);    
-  },
-  error: function(callback, err) {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        error: err
-      })
-    }); 
   },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
@@ -183,12 +175,7 @@ const ply = {
   		}
   	});
   },
-  res: function(callback, body, contentType) {
-    let res = { statusCode: 200, body: body };
-    if(contentType) res.headers = { 'Content-Type': contentType };
-    callback(null, res); 
-  },
-  setup: function(event, context, callback) {
+  setup: function(event, context, res) {
     const first = require('./default');
     function areThereAnyYet(name, data, next) {
       models[name].find().then(function(res) {
@@ -209,7 +196,7 @@ const ply = {
     areThereAnyYet('users', first.user(), function(user){
       areThereAnyYet('sites', first.site(user), function(site) {
         areThereAnyYet('sheets', first.sheet(site), function(sheet){
-          ply.res(callback, JSON.stringify({
+          res(null, JSON.stringify({
             user: user,
             site: site,
             sheet: sheet
@@ -224,6 +211,11 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, callback);
+    fn(event, context, function(err, res, contentType) {
+      const o = { statusCode: 200 };
+      err ? o.body = JSON.stringify({ error: err }) : o.body = res;
+      if(contentType) o.headers = { 'Content-Type': contentType };
+      callback(null, o);
+    });
   });
 }
