@@ -17,9 +17,9 @@ if(!tmplts.index) {
 
 const res = {
   body: function(callback, body, contentType) {
-    let res = { statusCode: 200, body: body };
-    if(contentType) res.headers = { 'Content-Type': contentType };
-    callback(null, res);     
+    let r = { statusCode: 200, body: body };
+    if(contentType) r.headers = { 'Content-Type': contentType };
+    callback(null, r);     
   },
   error: function(callback, err) {
     callback(null, {
