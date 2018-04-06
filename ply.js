@@ -198,7 +198,7 @@ const ply = {
         next(res);
       });
     }
-    areThereAnyYet('users', first.user, function(user){
+    areThereAnyYet('users', first.user(), function(user){
       areThereAnyYet('sites', first.site(user), function(site) {
         areThereAnyYet('sheets', first.sheet(site), function(sheet){
           ply.res(callback, JSON.stringify({
