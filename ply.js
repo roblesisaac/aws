@@ -38,17 +38,17 @@ const ply = {
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(null, JSON.stringify(data));
             });            
           }
         };
@@ -214,8 +214,8 @@ module.exports.port = function(event, context, callback) {
     fn(event, context, function(err, res, contentType) {
       const o = { statusCode: 200 };
       err ? o.body = JSON.stringify({ error: err }) : o.body = res;
-      if(contentType) body.headers = { 'Content-Type': contentType };
-      callback(null, body);
+      if(contentType) o.headers = { 'Content-Type': contentType };
+      callback(null, o);
     });
   });
 }
