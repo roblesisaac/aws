@@ -17,19 +17,18 @@ if(!tmplts.index) {
 
 const ply = {
   api: function(event, context, callback) {
-    // const site = event.pathParameters.site;
-    // const sheet = event.pathParameters.arg1;
-    // const id = event.pathParameter.arg2;
+    const site = event.pathParameters.site;
+    const sheet = event.pathParameters.arg1;
+    const id = event.pathParameters.arg2;
     const method = {
       get: function() {
-        ply.res(callback, 'skjdflas');
-        // ply.findSheet(site, sheet, function(err, sheet) {
-        //   if(err){
-        //     ply.res(callback, err);
-        //   } else {
-        //     ply.res(callback, JSON.stringify(sheet));
-        //   }
-        // });
+        ply.findSheet(site, sheet, function(err, sheet) {
+          if(err){
+            ply.res(callback, err);
+          } else {
+            ply.res(callback, JSON.stringify(sheet));
+          }
+        });
       },
       put: function() {
         
