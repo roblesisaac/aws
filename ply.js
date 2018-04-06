@@ -180,8 +180,35 @@ const ply = {
     if(contentType) res.headers = { 'Content-Type': contentType };
     callback(null, res); 
   },
-  sheets: function(event, context, callback) {
-    ply.res(callback, 'test eight');
+  setup: function(event, context, callback) {
+    const default = require('default');
+    function areThereAnyYet(name, data, next) {
+      models[name].find().then(function(res) {
+        if(res.length === 0) {
+          createFirst(name, data, function(firstItem) {
+            next(firstItem);
+          });
+        } else {
+          next(res[0]);
+        }
+      });      
+    }
+    function createFirst(name, data, next) {
+      models[name].create(data).then(function(res){
+        next(res);
+      });
+    }
+    areThereAnyYet('users', default.user, function(user){
+      areThereAnyYet('sites', default.site, function(site) {
+        areThereAnyYet('sheets', default.sheet, function(sheet){
+          ply.res(callback, JSON.stringify({
+            user: user,
+            site: site,
+            sheet: sheet
+          }));
+        });
+      });
+    });
   }
 };
 
@@ -190,5 +217,5 @@ module.exports.port = function(event, context, callback) {
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
     fn(event, context, callback);
-  })
+  });
 }
