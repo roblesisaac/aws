@@ -181,35 +181,34 @@ const ply = {
     callback(null, res); 
   },
   setup: function(event, context, callback) {
-    ply.res(callback, 'test setup');
-    // const default = require('default');
-    // function areThereAnyYet(name, data, next) {
-    //   models[name].find().then(function(res) {
-    //     if(res.length === 0) {
-    //       createFirst(name, data, function(firstItem) {
-    //         next(firstItem);
-    //       });
-    //     } else {
-    //       next(res[0]);
-    //     }
-    //   });      
-    // }
-    // function createFirst(name, data, next) {
-    //   models[name].create(data).then(function(res){
-    //     next(res);
-    //   });
-    // }
-    // areThereAnyYet('users', default.user, function(user){
-    //   areThereAnyYet('sites', default.site, function(site) {
-    //     areThereAnyYet('sheets', default.sheet, function(sheet){
-    //       ply.res(callback, JSON.stringify({
-    //         user: user,
-    //         site: site,
-    //         sheet: sheet
-    //       }));
-    //     });
-    //   });
-    // });
+    const first = require('default');
+    function areThereAnyYet(name, data, next) {
+      models[name].find().then(function(res) {
+        if(res.length === 0) {
+          createFirst(name, data, function(firstItem) {
+            next(firstItem);
+          });
+        } else {
+          next(res[0]);
+        }
+      });      
+    }
+    function createFirst(name, data, next) {
+      models[name].create(data).then(function(res){
+        next(res);
+      });
+    }
+    areThereAnyYet('users', first.user, function(user){
+      areThereAnyYet('sites', first.site, function(site) {
+        areThereAnyYet('sheets', first.sheet, function(sheet){
+          ply.res(callback, JSON.stringify({
+            user: user,
+            site: site,
+            sheet: sheet
+          }));
+        });
+      });
+    });
   }
 };
 
