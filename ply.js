@@ -19,23 +19,17 @@ const ply = {
   api: function(event, context, callback) {
     const site = event.pathParameters.site;
     const sheet = event.pathParameters.arg1;
-    // const method = {
-    //   get: function() {
-    //     ply.res(callback, JSON.stringify({
-    //       site: site,
-    //       sheet: sheet,
-    //       event: event,
-    //       context: context
-    //     }));
-    //   }
-    // };
-    ply.res(callback, JSON.stringify({
-      site: site,
-      sheet: sheet,
-      event: event,
-      context: context
-    }));
-    // method[event.httpMethod]();
+    const method = {
+      get: function() {
+        ply.res(callback, JSON.stringify({
+          site: site,
+          sheet: sheet,
+          event: event,
+          context: context
+        }));
+      }
+    };
+    method[event.httpMethod.toLowerCase()]();
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
