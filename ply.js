@@ -16,7 +16,7 @@ if(!tmplts.index) {
 }
 
 const ply = {
-  api: function(event, context, callback) {
+  api: function(event, context, res) {
     const siteName = event.pathParameters.site;
     const sheetName = event.pathParameters.arg1;
     const id = event.pathParameters.arg2;
@@ -33,7 +33,7 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              ply.res(callback, JSON.stringify(data));
+              res(JSON.stringify(data));
             });
           },
           put: function() {
@@ -164,15 +164,15 @@ const ply = {
       }
     });
   },
-  login: function(user, next) {
+  login: function(event, context, callback) {
   	models.users.findOne({username: user.username}, function(err, foundUser) {
-  		if (err) return next(err);
+  		if (err) return ply.error(callback, err);
   		if (!foundUser) {
-  			next(user.username + ' not found');
+  			ply.error(callback, user.username + ' not found');
   		} else if (foundUser) {
   			foundUser.comparePassword(user.password, function(err2, isMatch) {
   				if(isMatch && isMatch === true) {
-  					next(null, {
+  					ply.res(callback, {
   					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
   					  userid: foundUser._id
   					});
@@ -188,7 +188,7 @@ const ply = {
     if(contentType) res.headers = { 'Content-Type': contentType };
     callback(null, res); 
   },
-  setup: function(event, context, callback) {
+  setup: function(event, context, res) {
     const first = require('./default');
     function areThereAnyYet(name, data, next) {
       models[name].find().then(function(res) {
@@ -209,7 +209,7 @@ const ply = {
     areThereAnyYet('users', first.user(), function(user){
       areThereAnyYet('sites', first.site(user), function(site) {
         areThereAnyYet('sheets', first.sheet(site), function(sheet){
-          ply.res(callback, JSON.stringify({
+          res(JSON.stringify({
             user: user,
             site: site,
             sheet: sheet
@@ -224,6 +224,8 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, callback);
+    fn(event, context, function(res, contentType){
+      ply.res(callback, res, contentType);
+    });
   });
 }
