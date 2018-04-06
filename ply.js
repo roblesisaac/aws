@@ -19,14 +19,21 @@ const ply = {
   api: function(event, context, callback) {
     const site = event.pathParameters.site;
     const sheet = event.pathParameters.arg1;
+    const id = event.pathParameter.arg2;
     const method = {
       get: function() {
-        ply.res(callback, JSON.stringify({
-          site: site,
-          sheet: sheet,
-          event: event,
-          context: context
-        }));
+        ply.findSheet(site, sheet, function(sheet) {
+          ply.res(callback, JSON.stringify(sheet));
+        });
+      },
+      put: function() {
+        
+      },
+      post: function() {
+        
+      },
+      delete: function() {
+        
       }
     };
     method[event.httpMethod.toLowerCase()]();
@@ -98,13 +105,12 @@ const ply = {
       })
     }); 
   },
-  findSheet: function(event, context, next) {
-    var query = event.pathParameters;
+  findSheet: function(siteName, sheetName, next) {
     // get site
-    models.sites.findOne({ url: query.site }).then(function(site){
-      if(!site) return next(query.site + ' plysheet not found.');
-      models.sheets.findOne({ siteId: site._id, name: query.sheet }).then(function(sheet){
-        if(!sheet) return next(query.site + ' plysheet found but no ' + query.sheet + ' sheet found.');
+    models.sites.findOne({ url: siteName }).then(function(site){
+      if(!site) return next(siteName + ' plysheet not found.');
+      models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
+        if(!sheet) return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
         next(null, sheet);
       });
     });     
