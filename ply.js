@@ -110,7 +110,7 @@ const ply = {
       })
     }); 
   },
-  findSheet: function(siteName, sheetName, event, next) {
+  findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
       models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
@@ -125,9 +125,10 @@ const ply = {
       if(err1) return next(err1);
       vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
         if(err2) return next(err2);
-          vm.createModelFromSheet(sheet, function(model){
-            next(null, model);
-          });      
+        next(null, sheet);
+        vm.createModelFromSheet(sheet, function(model){
+          next(null, model);
+        });      
       });
     });
   },
