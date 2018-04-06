@@ -22,13 +22,14 @@ const ply = {
     const id = event.pathParameter.arg2;
     const method = {
       get: function() {
-        ply.findSheet(site, sheet, function(err, sheet) {
-          if(err){
-            ply.res(callback, err);
-          } else {
-            ply.res(callback, JSON.stringify(sheet));
-          }
-        });
+        ply.res(callback, 'skjdflas');
+        // ply.findSheet(site, sheet, function(err, sheet) {
+        //   if(err){
+        //     ply.res(callback, err);
+        //   } else {
+        //     ply.res(callback, JSON.stringify(sheet));
+        //   }
+        // });
       },
       put: function() {
         
@@ -110,7 +111,7 @@ const ply = {
     }); 
   },
   findSheet: function(siteName, sheetName, next) {
-    next('tea')
+    next('tea');
     // models.sites.findOne({ url: siteName }).then(function(site){
     //   if(!site) return next(siteName + ' plysheet not found.');
     //   models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
