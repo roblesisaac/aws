@@ -17,16 +17,17 @@ if(!tmplts.index) {
 
 const ply = {
   api: function(event, context, callback) {
-    const site = event.pathParameters.site;
-    const sheet = event.pathParameters.arg1;
+    const siteName = event.pathParameters.site;
+    const sheetName = event.pathParameters.arg1;
     const id = event.pathParameters.arg2;
     const method = {
       get: function() {
-        ply.findSheet(site, sheet, function(err, sheet) {
+        ply.getModel(siteName, sheetName, event, function(err, sheet) {
           if(err){
             ply.res(callback, err);
           } else {
-            ply.res(callback, JSON.stringify(sheet));
+            ply.res(callback, 'found model');
+            // ply.res(callback, JSON.stringify(sheet));
           }
         });
       },
@@ -52,13 +53,13 @@ const ply = {
       }); 
     }
   },
-  checkIfSheetIsPublic: function(event, context, sheet, next) {
+  checkIfSheetIsPublic: function(sheet, event, next) {
     if(sheet.public) {
       next(null, sheet);
     } else {
       const token = event.headers.token;
       const userId = event.headers.userid;
-      this.checkToken(context, token, userId, function(err, decoded) {
+      this.checkToken(token, userId, function(err, decoded) {
         if(err) {
           next(err);
         } else {
@@ -109,7 +110,7 @@ const ply = {
       })
     }); 
   },
-  findSheet: function(siteName, sheetName, next) {
+  findSheet: function(siteName, sheetName, event, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
       models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
@@ -118,11 +119,11 @@ const ply = {
       });
     });     
   },
-  getModel: function(event, context, next) {
+  getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    vm.findSheet(event, context, function(err1, sheet){
+    vm.findSheet(siteName, sheetName, function(err1, sheet){
       if(err1) return next(err1);
-      vm.checkIfSheetIsPublic(event, context, sheet, function(err2, sheet) {
+      vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
         if(err2) return next(err2);
           vm.createModelFromSheet(sheet, function(model){
             next(null, model);
