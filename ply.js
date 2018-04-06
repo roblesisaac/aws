@@ -20,14 +20,19 @@ const ply = {
     const siteName = event.pathParameters.site;
     const sheetName = event.pathParameters.arg1;
     const id = event.pathParameters.arg2;
+    let params = event.queryStringParameters || {};
     const method = {
       get: function() {
         ply.getModel(siteName, sheetName, event, function(err, model) {
           if(err){
             ply.res(callback, err);
           } else {
-            const params = event.queryStringParameters || {};
-            model.find(params).then(function(data){
+            let modelMethod = 'find';
+            if(id) {
+              modelMethod = 'findById';
+              params = id;
+            }
+            model[modelMethod](params).then(function(data){
               ply.res(callback, JSON.stringify(data));
             });
           }
