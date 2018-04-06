@@ -21,12 +21,12 @@ const ply = {
     const sheetName = event.pathParameters.arg1;
     const id = event.pathParameters.arg2;
     let params = event.queryStringParameters || {};
-    const method = {
-      get: function() {
-        ply.getModel(siteName, sheetName, event, function(err, model) {
-          if(err){
-            ply.res(callback, err);
-          } else {
+    ply.getModel(siteName, sheetName, event, function(err, model) {
+      if(err) {
+        ply.res(callback, err);
+      } else {
+        const method = {
+          get: function() {
             let modelMethod = 'find';
             if(id) {
               modelMethod = 'findById';
@@ -35,20 +35,22 @@ const ply = {
             model[modelMethod](params).then(function(data){
               ply.res(callback, JSON.stringify(data));
             });
+          },
+          put: function() {
+            model.findByIdAndUpdate(event.pathParameters.id, JSON.parse(event.body), { new: true }).then(function(data){
+              ply.res(callback, JSON.stringify(data));
+            });            
+          },
+          post: function() {
+            
+          },
+          delete: function() {
+            
           }
-        });
-      },
-      put: function() {
-        
-      },
-      post: function() {
-        
-      },
-      delete: function() {
-        
+        };
       }
-    };
-    method[event.httpMethod.toLowerCase()]();
+      method[event.httpMethod.toLowerCase()]();
+    });
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
