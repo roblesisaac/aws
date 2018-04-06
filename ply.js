@@ -8,7 +8,6 @@ const types = { 'string': String, 'number': Number, 'date': Date, 'boolean': Boo
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 const fs = require('fs');
 const tmplts = {};
-const first = require('./default');
 
 if(!tmplts.index) {
   fs.readdir('./templates', function (err, data) {
@@ -182,6 +181,7 @@ const ply = {
     callback(null, res); 
   },
   setup: function(event, context, callback) {
+    const first = require('./default');
     function areThereAnyYet(name, data, next) {
       models[name].find().then(function(res) {
         if(res.length === 0) {
