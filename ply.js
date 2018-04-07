@@ -34,7 +34,8 @@ const res = {
 // plysheet/static/templates/css?type=application/javascript
 
 const ply = {
-  api: function(o, send) {
+  api: function(event, context, send) {
+    const o = ply.prep(event, context);
     const siteName = o.site;
     const sheetName = o.arg1;
     const id = o.arg2;
@@ -70,7 +71,7 @@ const ply = {
             });            
           }
         };
-        method[o.event.httpMethod.toLowerCase()]();
+        method[event.httpMethod.toLowerCase()]();
       }
     });
   },
@@ -246,8 +247,7 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    const o = ply.prep(event, context);
-    fn(o, function(err, body, contentType) {
+    fn(event, context, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
     });
