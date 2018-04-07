@@ -34,8 +34,7 @@ const res = {
 // plysheet/static/templates/css?type=application/javascript
 
 const ply = {
-  api: function(event, context, send) {
-    const o = ply.prep(event, context);
+  api: function(o, send) {
     const siteName = o.site;
     const sheetName = o.arg1;
     const id = o.arg2;
@@ -247,7 +246,7 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, function(err, body, contentType) {
+    fn(ply.prep(event, context), function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
     });
