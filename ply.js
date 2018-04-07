@@ -71,7 +71,7 @@ const ply = {
             });            
           }
         };
-        method[event.httpMethod.toLowerCase()]();
+        method[o.event.httpMethod.toLowerCase()]();
       }
     });
   },
@@ -237,9 +237,13 @@ const ply = {
     });
   },
   static: function(event, context, send) {
-    const o = ply.process(event, context);
-    send(null, JSON.stringify(o));
-    // models.findOne({site: event.})
+    const o = ply.prep(event, context);
+    const prop = o.arg1;
+    const find = o.arg2;
+    findSheet(o.site, 'sheets', function(err, sheet) {
+      if(err) return send(err);
+      send(null, JSON.stringify(sheet[prop]))
+    });
   }
 };
 
