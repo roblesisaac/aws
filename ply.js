@@ -227,7 +227,7 @@ const ply = {
     const prop = o.path.arg1;
     const index = o.path.arg2;
     const type = o.query.type;
-    models.
+    send(o);
   }
 };
 
