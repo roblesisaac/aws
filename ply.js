@@ -15,20 +15,22 @@ if(!tmplts.index) {
   });
 }
 
-const rest = {
-  body: function(callback, body, contentType) {
-    const o = { statusCode: 200, body: body };
-    if(contentType) o.headers = { 'Content-Type': contentType };
-    callback(null, o); 
-  },
-  error: function(callback, err) {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        error: err
-      })
-    }); 
-  }  
+const serve = function(callback) {
+  return {
+    body: function(body, contentType) {
+      const o = { statusCode: 200, body: body };
+      if(contentType) o.headers = { 'Content-Type': contentType };
+      callback(null, o); 
+    },
+    error: function(err) {
+      callback(null, {
+        statusCode: 200,
+        body: JSON.stringify({
+          error: err
+        })
+      }); 
+    }
+  };  
 };
 
 const ply = {
@@ -227,20 +229,8 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, {
-      body: function(body, contentType) {
-        const o = { statusCode: 200, body: body };
-        if(contentType) o.headers = { 'Content-Type': contentType };
-        callback(null, o); 
-      },
-      error: function(err) {
-        callback(null, {
-          statusCode: 200,
-          body: JSON.stringify({
-            error: err
-          })
-        }); 
-      }      
+    fn(event, context, function(){
+      serve(callback);
     });
   });
 }
