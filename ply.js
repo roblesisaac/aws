@@ -245,8 +245,8 @@ const ply = {
 module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
-  const o = ply.prep(event, context);
   ply.connect(context).then(function(){
+    const o = ply.prep(event, context);
     fn(o, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
