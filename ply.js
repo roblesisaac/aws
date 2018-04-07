@@ -31,8 +31,6 @@ const res = {
   }  
 };
 
-// plysheet/static/templates/css?type=application/javascript
-
 const ply = {
   api: function(event, context, send) {
     const o = ply.prep(event, context);
@@ -152,7 +150,7 @@ const ply = {
       });
     });
   },
-  landing: function(event, context, callback) {
+  landing: function(event, context, send) {
     let siteUrl = 'plysheet';
     if (event.pathParameters && event.pathParameters.site) {
       siteUrl = event.pathParameters.site;
@@ -168,10 +166,10 @@ const ply = {
           };
           tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
           tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-          res.body(callback, tmplts.index, 'text/html');
+          send(null, tmplts.index, 'text/html');
         });
       } else {
-        res.body(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+        send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
       }
     });
   },
