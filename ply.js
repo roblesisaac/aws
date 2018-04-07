@@ -15,33 +15,31 @@ if(!tmplts.index) {
   });
 }
 
-const serve = function(callback) {
-  return {
-    body: function(body, contentType) {
-      const o = { statusCode: 200, body: body };
-      if(contentType) o.headers = { 'Content-Type': contentType };
-      callback(null, o); 
-    },
-    error: function(err) {
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify({
-          error: err
-        })
-      }); 
-    }
-  };  
+const res = {
+  body: function(callback, body, contentType) {
+    const o = { statusCode: 200, body: body };
+    if(contentType) o.headers = { 'Content-Type': contentType };
+    callback(null, o); 
+  },
+  error: function(callback, err) {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({
+        error: err
+      })
+    }); 
+  }  
 };
 
 const ply = {
-  api: function(event, context, res) {
+  api: function(event, context, callback) {
     const siteName = event.pathParameters.site;
     const sheetName = event.pathParameters.arg1;
     const id = event.pathParameters.arg2;
     let params = event.queryStringParameters || {};
     ply.getModel(siteName, sheetName, event, function(err, model) {
       if(err) {
-        res.error(err);
+        callback(err);
       } else {
         const method = {
           get: function() {
@@ -51,22 +49,22 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              res.body(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              res.body(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              res.body(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              res.body(JSON.stringify(data));
+              callback(null,JSON.stringify(data));
             });            
           }
         };
@@ -229,6 +227,9 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, serve(callback));
+    fn(event, context, function(err, body, contentType) {
+      if(err) return res.error(callback, err);
+      res.body(callback, body, contentType);
+    });
   });
 }
