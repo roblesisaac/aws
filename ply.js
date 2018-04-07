@@ -31,15 +31,17 @@ const res = {
   }  
 };
 
+// plysheet/static/templates/css?type=application/javascript
+
 const ply = {
-  api: function(event, context, callback) {
-    const siteName = event.pathParameters.site;
-    const sheetName = event.pathParameters.arg1;
-    const id = event.pathParameters.arg2;
-    let params = event.queryStringParameters || {};
-    ply.getModel(siteName, sheetName, event, function(err, model) {
+  api: function(o, send) {
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    const id = o.arg2;
+    let params = o.query;
+    ply.getModel(siteName, sheetName, o.event, function(err, model) {
       if(err) {
-        callback(err);
+        send(err);
       } else {
         const method = {
           get: function() {
@@ -49,26 +51,26 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              callback(null, JSON.stringify(data));
+              send(null, JSON.stringify(data));
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              callback(null, JSON.stringify(data));
+              send(null, JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              callback(null, JSON.stringify(data));
+              send(null, JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              callback(null,JSON.stringify(data));
+              send(null,JSON.stringify(data));
             });            
           }
         };
-        method[event.httpMethod.toLowerCase()]();
+        method[o.event.httpMethod.toLowerCase()]();
       }
     });
   },
@@ -172,20 +174,20 @@ const ply = {
       }
     });
   },
-  login: function(event, context, callback) {
+  login: function(event, context, send) {
   	models.users.findOne({username: user.username}, function(err, foundUser) {
-  		if (err) return res.error(callback, err);
+  		if (err) return send(err);
   		if (!foundUser) {
-  			res.error(callback, user.username + ' not found');
+  			send(user.username + ' not found');
   		} else if (foundUser) {
   			foundUser.comparePassword(user.password, function(err2, isMatch) {
   				if(isMatch && isMatch === true) {
-  					res.body(callback, {
+  					send(null, {
   					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
   					  userid: foundUser._id
   					});
   				} else {
-  					res.error('Authentication failed. Wrong password.');
+  					send('Authentication failed. Wrong password.');
   				}
   			});
   		}
@@ -220,6 +222,12 @@ const ply = {
         });
       });
     });
+  },
+  static: function(o, send) {
+    const prop = o.path.arg1;
+    const index = o.path.arg2;
+    const type = o.query.type;
+    models.
   }
 };
 
@@ -227,7 +235,16 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, function(err, body, contentType) {
+    fn({
+      path: event.pathParameters || {},
+      site: event.pathParameters.site,
+      method: event.pathParameters.method,
+      arg1: event.pathParameters.arg1,
+      arg2: event.pathParameters.arg2,
+      query: event.queryStringParameters || {},
+      event: event,
+      context: context,
+    }, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
     });
