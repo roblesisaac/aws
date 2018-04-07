@@ -240,7 +240,7 @@ const ply = {
     const o = ply.prep(event, context);
     const prop = o.arg1;
     const find = o.arg2;
-    findSheet(o.site, 'sheets', function(err, sheet) {
+    ply.findSheet(o.site, 'sheets', function(err, sheet) {
       if(err) return send(err);
       send(null, JSON.stringify(sheet[prop]))
     });
