@@ -15,22 +15,6 @@ if(!tmplts.index) {
   });
 }
 
-const res = {
-  body: function(callback, body, contentType) {
-    let r = { statusCode: 200, body: body };
-    if(contentType) r.headers = { 'Content-Type': contentType };
-    callback(null, r);     
-  },
-  error: function(callback, err) {
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        error: err
-      })
-    });     
-  }
-};
-
 const ply = {
   api: function(event, context, callback) {
     const siteName = event.pathParameters.site;
@@ -39,7 +23,7 @@ const ply = {
     let params = event.queryStringParameters || {};
     ply.getModel(siteName, sheetName, event, function(err, model) {
       if(err) {
-        res.error(callback, err);
+        ply.error(callback, err);
       } else {
         const method = {
           get: function() {
@@ -49,22 +33,22 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              ply.res(callback, JSON.stringify(data));
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              ply.res(callback, JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              ply.res(callback, JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              ply.res(callback, JSON.stringify(data));
             });            
           }
         };
@@ -128,6 +112,14 @@ const ply = {
     sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
     next(sessionModels[sheet._id]);    
   },
+  error: function(callback, err) {
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({
+        error: err
+      })
+    }); 
+  },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
@@ -165,32 +157,37 @@ const ply = {
           };
           tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
           tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-          res.body(callback, tmplts.index, 'text/html');
+          ply.res(callback, tmplts.index, 'text/html');
         });
       } else {
-        res.body(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+        ply.res(callback, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
       }
     });
   },
   login: function(event, context, callback) {
   	models.users.findOne({username: user.username}, function(err, foundUser) {
-  		if (err) return res.error(callback, err);
+  		if (err) return ply.error(callback, err);
   		if (!foundUser) {
-  			res.error(callback, user.username + ' not found');
+  			ply.error(callback, user.username + ' not found');
   		} else if (foundUser) {
   			foundUser.comparePassword(user.password, function(err2, isMatch) {
   				if(isMatch && isMatch === true) {
-  					res.body(callback, {
+  					ply.res(callback, {
   					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
   					  userid: foundUser._id
   					});
   				} else {
-  					res.error(callback, 'Authentication failed. Wrong password.');
+  					ply.error('Authentication failed. Wrong password.');
   				}
   			});
   		}
   	});
-  },,
+  },
+  res: function(callback, body, contentType) {
+    let res = { statusCode: 200, body: body };
+    if(contentType) res.headers = { 'Content-Type': contentType };
+    callback(null, res); 
+  },
   setup: function(event, context, callback) {
     const first = require('./default');
     function areThereAnyYet(name, data, next) {
@@ -212,7 +209,7 @@ const ply = {
     areThereAnyYet('users', first.user(), function(user){
       areThereAnyYet('sites', first.site(user), function(site) {
         areThereAnyYet('sheets', first.sheet(site), function(sheet){
-          res.body(callback, JSON.stringify({
+          ply.res(callback, JSON.stringify({
             user: user,
             site: site,
             sheet: sheet
