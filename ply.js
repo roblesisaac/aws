@@ -229,8 +229,6 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, function(){
-      serve(callback);
-    });
+    fn(event, context, serve(callback));
   });
 }
