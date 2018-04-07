@@ -49,22 +49,22 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              callback(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              callback(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              callback(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              callback(JSON.stringify(data));
+              callback(null, JSON.stringify(data));
             });            
           }
         };
