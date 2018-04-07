@@ -286,7 +286,7 @@ const ply = {
               query: query,
               select: select,
               body: obj
-            }));
+            }), type);
           }); 
         });
       }
