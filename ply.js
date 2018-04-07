@@ -39,7 +39,7 @@ const ply = {
     let params = event.queryStringParameters || {};
     ply.getModel(siteName, sheetName, event, function(err, model) {
       if(err) {
-        res.error(callback, err);
+        callback(err);
       } else {
         const method = {
           get: function() {
@@ -49,22 +49,22 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              callback(JSON.stringify(data));
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              callback(JSON.stringify(data));
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              callback(JSON.stringify(data));
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              res.body(callback, JSON.stringify(data));
+              callback(JSON.stringify(data));
             });            
           }
         };
@@ -227,6 +227,9 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    fn(event, context, callback);
+    fn(event, context, function(err, body, contentType) {
+      if(err) return res.error(callback, err);
+      res.body(callback, body, contentType);
+    });
   });
 }
