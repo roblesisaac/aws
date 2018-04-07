@@ -70,7 +70,7 @@ const ply = {
             });            
           }
         };
-        method[event.httpMethod.toLowerCase()]();
+        method[o.event.httpMethod.toLowerCase()]();
       }
     });
   },
