@@ -35,11 +35,12 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    const siteName = event.pathParameters.site;
-    const sheetName = event.pathParameters.arg1;
-    const id = event.pathParameters.arg2;
-    let params = event.queryStringParameters || {};
-    ply.getModel(siteName, sheetName, event, function(err, model) {
+    const o = ply.prep(event, context);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    const id = o.arg2;
+    let params = o.query;
+    ply.getModel(siteName, sheetName, o.event, function(err, model) {
       if(err) {
         send(err);
       } else {
@@ -193,6 +194,18 @@ const ply = {
   		}
   	});
   },
+  prep: function(event, context) {
+    const params = event.pathParameters;
+    return {
+      site: params.site,
+      method: params.method,
+      arg1: params.arg1,
+      arg2: params.arg2,
+      query: event.queryStringParameters || {},
+      event: event,
+      context: context
+    }
+  },
   setup: function(event, context, callback) {
     const first = require('./default');
     function areThereAnyYet(name, data, next) {
@@ -224,10 +237,9 @@ const ply = {
     });
   },
   static: function(event, context, send) {
-    const prop = event.pathParameters.arg1;
-    const index = event.pathParameters.arg2;
-    const type = event.queryStringParameters.type;
-    
+    const o = ply.process(event, context);
+    send(null, JSON.stringify(o));
+    // models.findOne({site: event.})
   }
 };
 
