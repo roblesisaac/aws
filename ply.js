@@ -239,10 +239,57 @@ const ply = {
   static: function(event, context, send) {
     const o = ply.prep(event, context);
     const prop = o.arg1;
-    const find = o.arg2;
+    const isReady = (body) => {
+      return ['object', 'array'].indexOf(typeof body) === -1;
+    };
+    const createQueryFilterObjFrom = (queryStringParameters, next) => {
+      let q = queryStringParameters || {};
+      let s = q.select || 'selector is not defined';
+      let t = q.type || 'application/javascript';
+      q.name = o.arg2;
+      delete q.select;
+      delete q.type;
+      next(q, s, t);
+    };
+    const findAMatch = (arr, query, next) => {
+      let match = {};
+      for(var i=0; i<arr.length; i++) {
+        let item = arr[i];
+        let matches = [];
+        for(var key in query) matches.push(item[key] === query[key]);
+        if(matches.indexOf(false) === -1) { 
+          i=arr.length;
+          match = item;
+        }
+      }
+      next(match);
+    };
+    const getObjFrom = (body, query, next) => {
+      if(Array.isArray(body)) {
+        findAMatch(body, query, function(obj){
+          next(obj);
+        });
+      } else {
+        next(body);
+      }
+    };
     ply.findSheet(o.site, 'sheets', function(err, sheet) {
       if(err) return send(err);
-      send(null, JSON.stringify(sheet[prop]))
+      const body = sheet[prop];
+      if(isReady(body)) {
+        send(null, body, 'application/javascript');
+      } else {
+        createQueryFilterObjFrom(o.query, function(query, select, type) {
+          getObjFrom(body, query, function(obj) {
+            if(query.name.includes('css')) type = 'text/css';
+            send(null, obj[select] || JSON.stringify({
+              query: query,
+              select: select,
+              body: obj
+            }));
+          }); 
+        });
+      }
     });
   }
 };
