@@ -75,23 +75,17 @@ const ply = {
   },
   connect: function(context) {
     if(context) context.callbackWaitsForEmptyEventLoop = false;
-    if (isConnected) {
-      return Promise.resolve();
-    } else {
-      return mongoose.connect(process.env.DB).then(function(db){
-        isConnected = db.connections[0].readyState;
-      }); 
-    }
+    if (isConnected) return Promise.resolve();
+    return mongoose.connect(process.env.DB).then(function(db){
+      isConnected = db.connections[0].readyState;
+    }); 
   },
   checkIfSheetIsPublic: function(sheet, event, next) {
-    if(sheet.public) {
+    if(sheet.public) return next(null, sheet);
+    this.checkToken(event, function(err, decoded) {
+      if(err) return next(err);
       next(null, sheet);
-    } else {
-      this.checkToken(event, function(err, decoded) {
-        if(err) return next(err);
-        next(null, sheet);
-      });
-    }      
+    });    
   },
   checkToken: function(event, next) {
     const token = event.headers.token;
@@ -204,7 +198,7 @@ const ply = {
       context: context
     }
   },
-  setup: function(event, context, callback) {
+  setup: function(event, context, send) {
     const first = require('./default');
     function areThereAnyYet(name, data, next) {
       models[name].find().then(function(res) {
@@ -225,7 +219,7 @@ const ply = {
     areThereAnyYet('users', first.user(), function(user){
       areThereAnyYet('sites', first.site(user), function(site) {
         areThereAnyYet('sheets', first.sheet(site), function(sheet){
-          res.body(callback, JSON.stringify({
+          send(null, JSON.stringify({
             user: user,
             site: site,
             sheet: sheet
