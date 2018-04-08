@@ -173,7 +173,7 @@ const ply = {
   },
   login: function(event, context, send) {
     const user = JSON.parse(event.body);
-    send(null, JSON.stringify(event));
+    send(null, JSON.stringify(user))
   // 	models.users.findOne({username: user.username}, function(err, foundUser) {
   // 		if (err) return send(err);
   // 		if (!foundUser) {
