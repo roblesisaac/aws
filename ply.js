@@ -134,15 +134,19 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    vm.findSheet(siteName, sheetName, function(err1, sheet){
-      if(err1) return next(err1);
-      vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
-        if(err2) return next(err2);
-        vm.createModelFromSheet(sheet, function(model){
-          next(null, model);
-        });      
-      });
-    });
+    if(models[sheetName]) {
+      next(null, models[sheetName]);
+    } else {
+      vm.findSheet(siteName, sheetName, function(err1, sheet){
+        if(err1) return next(err1);
+        vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
+          if(err2) return next(err2);
+          vm.createModelFromSheet(sheet, function(model){
+            next(null, model);
+          });      
+        });
+      });      
+    }
   },
   landing: function(event, context, send) {
     let siteUrl = 'plysheet';
