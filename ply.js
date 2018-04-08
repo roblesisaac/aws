@@ -173,23 +173,24 @@ const ply = {
   },
   login: function(event, context, send) {
     const user = JSON.parse(event.body);
-  	models.users.findOne({username: user.username}, function(err, foundUser) {
-  		if (err) return send(err);
-  		if (!foundUser) {
-  			send(user.username + ' not found');
-  		} else if (foundUser) {
-  			foundUser.comparePassword(user.password, function(err2, isMatch) {
-  				if(isMatch && isMatch === true) {
-  					send(null, {
-  					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
-  					  userid: foundUser._id
-  					});
-  				} else {
-  					send('Authentication failed. Wrong password.');
-  				}
-  			});
-  		}
-  	});
+    send(null, event);
+  // 	models.users.findOne({username: user.username}, function(err, foundUser) {
+  // 		if (err) return send(err);
+  // 		if (!foundUser) {
+  // 			send(user.username + ' not found');
+  // 		} else if (foundUser) {
+  // 			foundUser.comparePassword(user.password, function(err2, isMatch) {
+  // 				if(isMatch && isMatch === true) {
+  // 					send(null, {
+  // 					  token: jwt.sign({ _id: foundUser._id, username: foundUser.username, name: foundUser.name,	password: foundUser.password	}, foundUser.password, {	expiresIn: '15h' }),
+  // 					  userid: foundUser._id
+  // 					});
+  // 				} else {
+  // 					send('Authentication failed. Wrong password.');
+  // 				}
+  // 			});
+  // 		}
+  // 	});
   },
   prep: function(event, context) {
     const params = event.pathParameters;
