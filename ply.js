@@ -149,27 +149,28 @@ const ply = {
     }
   },
   landing: function(event, context, send) {
-    let siteUrl = 'plysheet';
-    if (event.pathParameters && event.pathParameters.site) {
-      siteUrl = event.pathParameters.site;
-    }
-    models.sites.findOne({url: siteUrl}).then(function(site){
-      if(site) {
-        models.sheets.find({siteId: site._id}).then(function(sheets){
-          var data = {
-            site: site,
-            user: {},
-            sheets: sheets,
-            link: sheets[0].name
-          };
-          tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
-          tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-          send(null, tmplts.index, 'text/html');
-        });
-      } else {
-        send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
-      }
-    });
+    send(null, 'wellcoomee');
+    // let siteUrl = 'plysheet';
+    // if (event.pathParameters && event.pathParameters.site) {
+    //   siteUrl = event.pathParameters.site;
+    // }
+    // models.sites.findOne({url: siteUrl}).then(function(site){
+    //   if(site) {
+    //     models.sheets.find({siteId: site._id}).then(function(sheets){
+    //       var data = {
+    //         site: site,
+    //         user: {},
+    //         sheets: sheets,
+    //         link: sheets[0].name
+    //       };
+    //       tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
+    //       tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
+    //       send(null, tmplts.index, 'text/html');
+    //     });
+    //   } else {
+    //     send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+    //   }
+    // });
   },
   login: function(event, context, send) {
     const user = JSON.parse(event.body);
