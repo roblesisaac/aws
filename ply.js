@@ -302,6 +302,9 @@ module.exports.port = function(event, context, callback) {
       });
     });
   } else {
-    res.body(callback, 'no site to see');
+    callback(null, {
+      statusCode: 200,
+      body: 'no site to see'
+    });
   }
 }
