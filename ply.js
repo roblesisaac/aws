@@ -294,10 +294,14 @@ const ply = {
 module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
-  ply.connect(context).then(function(){
-    fn(event, context, function(err, body, contentType) {
-      if(err) return res.error(callback, err);
-      res.body(callback, body, contentType);
+  if(params.site) {
+    ply.connect(context).then(function(){
+      fn(event, context, function(err, body, contentType) {
+        if(err) return res.error(callback, err);
+        res.body(callback, body, contentType);
+      });
     });
-  });
+  } else {
+    res.body(callback, 'no site to see');
+  }
 }
