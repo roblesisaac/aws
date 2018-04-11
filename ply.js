@@ -293,13 +293,10 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
-  const params = event.pathParameters || {};
+  event.pathParameters = event.pathParameters || {};
+  const params = event.pathParameters;
   const fn = ply[params.method] || ply.landing;
   ply.connect(context).then(function(){
-    if(!params.site) {
-      params.site = 'plysheet';
-      fn = ply.landing;
-    }
     fn(event, context, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
