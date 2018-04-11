@@ -292,17 +292,17 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
-  res.body(callback, 'no site to see');
   // const params = event.pathParameters || {};
   // const fn = ply[params.method] || ply.landing;
-  // if(params.site) {
-  //   ply.connect(context).then(function(){
-  //     fn(event, context, function(err, body, contentType) {
-  //       if(err) return res.error(callback, err);
-  //       res.body(callback, body, contentType);
-  //     });
-  //   });
-  // } else {
-  //   res.body(callback, 'no site to see');
-  // }
+  if(params.site) {
+    res.body(callback, 'welcome');
+    // ply.connect(context).then(function(){
+    //   fn(event, context, function(err, body, contentType) {
+    //     if(err) return res.error(callback, err);
+    //     res.body(callback, body, contentType);
+    //   });
+    // });
+  } else {
+    res.body(callback, 'no site to see');
+  }
 }
