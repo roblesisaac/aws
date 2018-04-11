@@ -292,7 +292,7 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
-  // const params = event.pathParameters || {};
+  const params = event.pathParameters || {};
   // const fn = ply[params.method] || ply.landing;
   if(params.site) {
     res.body(callback, 'welcome');
