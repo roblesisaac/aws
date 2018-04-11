@@ -295,13 +295,13 @@ module.exports.port = function(event, context, callback) {
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
   if(params.site) {
-    res.body(callback, 'welcome');
-    // ply.connect(context).then(function(){
-    //   fn(event, context, function(err, body, contentType) {
-    //     if(err) return res.error(callback, err);
-    //     res.body(callback, body, contentType);
-    //   });
-    // });
+    ply.connect(context).then(function(){
+      res.body(callback, 'welc');
+      // fn(event, context, function(err, body, contentType) {
+      //   if(err) return res.error(callback, err);
+      //   res.body(callback, body, contentType);
+      // });
+    });
   } else {
     res.body(callback, 'no site to see');
   }
