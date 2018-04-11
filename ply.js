@@ -296,11 +296,10 @@ module.exports.port = function(event, context, callback) {
   const fn = ply[params.method] || ply.landing;
   if(params.site) {
     ply.connect(context).then(function(){
-      res.body(callback, 'welcome');
-      // fn(event, context, function(err, body, contentType) {
-      //   if(err) return res.error(callback, err);
-      //   res.body(callback, body, contentType);
-      // });
+      fn(event, context, function(err, body, contentType) {
+        if(err) return res.error(callback, err);
+        res.body(callback, body, contentType);
+      });
     });
   } else {
     res.body(callback, 'no site to see');
