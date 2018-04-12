@@ -7,7 +7,8 @@ const user = {
 
 const schm = {
   propName: String,
-  propType: String
+  propType: String,
+  subSchema: String
 };
 
 const sheetSchema = new mongoose.Schema({
