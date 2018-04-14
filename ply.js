@@ -299,16 +299,17 @@ const ply = {
       if(isReady(body)) {
         send(null, body, 'application/javascript');
       } else if(o.query) {
-        createQueryFilterObjFrom(o.query, function(query, select, type) {
-          getObjFrom(body, query, function(obj) {
-            if(query.name.includes('css')) type = 'text/css';
-            send(null, obj[select] || JSON.stringify({
-              query: query,
-              select: select,
-              body: obj
-            }), type);
-          }); 
-        });
+        send(null, JSON.stringify(o.query))
+        // createQueryFilterObjFrom(o.query, function(query, select, type) {
+        //   getObjFrom(body, query, function(obj) {
+        //     if(query.name.includes('css')) type = 'text/css';
+        //     send(null, obj[select] || JSON.stringify({
+        //       query: query,
+        //       select: select,
+        //       body: obj
+        //     }), type);
+        //   }); 
+        // });
       } else {
         send(null, 'JSON.stringify(obj[select])');
       }
