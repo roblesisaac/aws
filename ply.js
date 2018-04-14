@@ -298,7 +298,7 @@ const ply = {
       const body = sheet[prop];
       if(isReady(body)) {
         send(null, body, 'application/javascript');
-      } else {
+      } else if(o.query) {
         createQueryFilterObjFrom(o.query, function(query, select, type) {
           getObjFrom(body, query, function(obj) {
             if(query.name.includes('css')) type = 'text/css';
@@ -309,6 +309,8 @@ const ply = {
             }), type);
           }); 
         });
+      } else {
+        send(null, JSON.stringify(obj[select]));
       }
     });
   }
