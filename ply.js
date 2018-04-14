@@ -310,7 +310,7 @@ const ply = {
           }); 
         });
       } else {
-        send(null, JSON.stringify(obj[select]));
+        send(null, 'JSON.stringify(obj[select])');
       }
     });
   }
