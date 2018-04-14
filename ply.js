@@ -185,7 +185,7 @@ const ply = {
             sheets: sheets,
             link: sheets[0].name
           };
-          let index = tmplts.index;
+          let index = '{{data}}';
           index = index.replace('{{siteUrl}}', siteUrl);
           index = index.replace('{{data}}', JSON.stringify(data));
           send(null, index);
