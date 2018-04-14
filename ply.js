@@ -187,7 +187,7 @@ const ply = {
           };
           tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
           tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-          send(null, tmplts.index);
+          send(null, JSON.stringify(data));
         });
       } else {
         send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
