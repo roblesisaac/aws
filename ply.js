@@ -9,15 +9,11 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 const fs = require('fs');
 const tmplts = {};
 
-// if(!tmplts.index) {
-//   fs.readdir('./templates', function (err, data) {
-//     for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
-//   });
-// }
-
-fs.readdir('./templates', function (err, data) {
-  for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
-});
+if(!tmplts.index) {
+  fs.readdir('./templates', function (err, data) {
+    for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
+  });
+}
 
 const res = {
   body: function(callback, body, contentType) {
@@ -166,38 +162,15 @@ const ply = {
             sheets: sheets,
             link: sheets[0].name
           };
-          tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
-          tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-          send(null, tmplts.index, 'text/html');
+          let index = fs.readFileSync('./templates/index.html', 'utf8');
+          index = index.replace('{{siteUrl}}', siteUrl);
+          index = index.replace('{{data}}', JSON.stringify(data));
+          send(null, index, 'text/html');
         });
       } else {
         send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
       }
     });
-  },
-  landata: function(event, context, send) {
-    let siteUrl = 'plysheet';
-    if (event.pathParameters && event.pathParameters.site) {
-      siteUrl = event.pathParameters.site;
-    }
-    models.sites.findOne({url: siteUrl}).then(function(site){
-      if(site) {
-        models.sheets.find({siteId: site._id}).then(function(sheets){
-          var data = {
-            site: site,
-            user: {},
-            sheets: sheets,
-            link: sheets[0].name
-          };
-          let index = fs.readFileSync('./templates/index.html', 'utf8');
-          index = index.replace('{{siteUrl}}', siteUrl);
-          index = index.replace('{{data}}', JSON.stringify(data));
-          send(null, index);
-        });
-      } else {
-        send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
-      }
-    });    
   },
   login: function(event, context, send) {
     const user = JSON.parse(event.body);
