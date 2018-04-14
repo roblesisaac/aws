@@ -9,11 +9,15 @@ const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 
 const fs = require('fs');
 const tmplts = {};
 
-if(!tmplts.index) {
-  fs.readdir('./templates', function (err, data) {
-    for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i]);
-  });
-}
+// if(!tmplts.index) {
+//   fs.readdir('./templates', function (err, data) {
+//     for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
+//   });
+// }
+
+fs.readdir('./templates', function (err, data) {
+  for (i=0; i<data.length; i++) tmplts[data[i].slice(0,-5)] = fs.readFileSync('./templates/' + data[i], 'utf8');
+});
 
 const res = {
   body: function(callback, body, contentType) {
