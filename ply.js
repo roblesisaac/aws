@@ -185,9 +185,10 @@ const ply = {
             sheets: sheets,
             link: sheets[0].name
           };
-          tmplts.index = tmplts.index.replace('{{siteUrl}}', siteUrl);
-          tmplts.index = tmplts.index.replace('{{data}}', JSON.stringify(data));
-          send(null, JSON.stringify(data));
+          let index = tmplts.index;
+          index = index.replace('{{siteUrl}}', siteUrl);
+          index = index.replace('{{data}}', JSON.stringify(data));
+          send(null, index);
         });
       } else {
         send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
