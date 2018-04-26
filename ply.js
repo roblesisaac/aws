@@ -156,16 +156,20 @@ const ply = {
     models.sites.findOne({url: siteUrl}).then(function(site){
       if(site) {
         models.sheets.find({siteId: site._id}).then(function(sheets){
-          var data = {
-            site: site,
-            user: {},
-            sheets: sheets,
-            link: sheets[0].name
-          };
-          let index = fs.readFileSync('./templates/index.html', 'utf8');
-          index = index.replace('{{siteUrl}}', siteUrl);
-          index = index.replace('{{data}}', JSON.stringify(data));
-          send(null, index, 'text/html');
+          if(sheets && sheets.length > 0) {
+            var data = {
+              site: site,
+              user: {},
+              sheets: sheets,
+              link: sheets[0].name
+            };
+            let index = fs.readFileSync('./templates/index.html', 'utf8');
+            index = index.replace('{{siteUrl}}', siteUrl);
+            index = index.replace('{{data}}', JSON.stringify(data));
+            send(null, index, 'text/html');
+          } else {
+            send(null, 'no sheets yet')
+          }
         });
       } else {
         send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
