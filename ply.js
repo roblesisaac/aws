@@ -157,10 +157,10 @@ const ply = {
     function checkForSheets(site, next) {
       models.sheets.find({siteId: site._id}).then(function(sheets){
         if(sheets && sheets.length > 0) {
-          next();
+          next(sheets);
         } else {
-          models.sheets.create(first.sheet(site)).then(function(){
-            next();
+          models.sheets.create(first.sheet(site)).then(function(data){
+            next(data);
           });
         }
       });          
