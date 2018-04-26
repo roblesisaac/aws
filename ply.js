@@ -8,6 +8,7 @@ const types = { 'string': String, 'number': Number, 'date': Date, 'boolean': Boo
 const reserved = ['on', 'emit', '_events', 'db', 'get', 'set', 'init', 'isNew', 'errors', 'schema', 'options', 'modelName','_pres', '_posts', 'toObject'];
 const fs = require('fs');
 const tmplts = {};
+const first = require('./default');
 
 if(!tmplts.index) {
   fs.readdir('./templates', function (err, data) {
@@ -153,23 +154,30 @@ const ply = {
     if (event.pathParameters && event.pathParameters.site) {
       siteUrl = event.pathParameters.site;
     }
+    function checkForSheets(site, next) {
+      models.sheets.find({siteId: site._id}).then(function(sheets){
+        if(sheets && sheets.length > 0) {
+          next();
+        } else {
+          models.sheets.create(first.sheet(site)).then(function(){
+            next();
+          });
+        }
+      });          
+    }
     models.sites.findOne({url: siteUrl}).then(function(site){
       if(site) {
-        models.sheets.find({siteId: site._id}).then(function(sheets){
-          if(sheets && sheets.length > 0) {
-            var data = {
-              site: site,
-              user: {},
-              sheets: sheets,
-              link: sheets[0].name
-            };
-            let index = fs.readFileSync('./templates/index.html', 'utf8');
-            index = index.replace('{{siteUrl}}', siteUrl);
-            index = index.replace('{{data}}', JSON.stringify(data));
-            send(null, index, 'text/html');
-          } else {
-            send(null, 'no sheets yet')
-          }
+        checkForSheets(site, function(sheets) {
+          var data = {
+            site: site,
+            user: {},
+            sheets: sheets,
+            link: sheets[0].name
+          };
+          let index = fs.readFileSync('./templates/index.html', 'utf8');
+          index = index.replace('{{siteUrl}}', siteUrl);
+          index = index.replace('{{data}}', JSON.stringify(data));
+          send(null, index, 'text/html');          
         });
       } else {
         send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
@@ -209,7 +217,6 @@ const ply = {
     }
   },
   setup: function(event, context, send) {
-    const first = require('./default');
     function areThereAnyYet(name, data, next) {
       models[name].find().then(function(res) {
         if(res.length === 0) {
