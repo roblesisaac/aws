@@ -40,10 +40,10 @@ const ply = {
     const id = o.arg2;
     let params = o.query;
     ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
-      if(sheetName === 'sheets') params.siteId = site._id;
       if(err) {
         send(err);
       } else {
+        if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
           get: function() {
             let modelMethod = 'find';
