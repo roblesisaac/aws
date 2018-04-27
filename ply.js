@@ -129,7 +129,15 @@ const ply = {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
       models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
-        if(!sheet) return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
+        if(!sheet) {
+          if(sheetName === 'sheets') {
+            models.sheets.create(first.sheet(site)).then(function(data){
+              next(null, data, site);
+            });            
+          } else {
+            return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
+          }
+        };
         next(null, sheet, site);
       });
     });     
