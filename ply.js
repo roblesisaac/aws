@@ -39,7 +39,8 @@ const ply = {
     const sheetName = o.arg1;
     const id = o.arg2;
     let params = o.query;
-    ply.getModel(siteName, sheetName, o.event, function(err, model) {
+    ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
+      if(sheetName === 'sheets') params.siteId = site._id;
       if(err) {
         send(err);
       } else {
@@ -129,25 +130,21 @@ const ply = {
       if(!site) return next(siteName + ' plysheet not found.');
       models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
         if(!sheet) return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
-        next(null, sheet);
+        next(null, sheet, site);
       });
     });     
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    if(models[sheetName]) {
-      next(null, models[sheetName]);
-    } else {
-      vm.findSheet(siteName, sheetName, function(err1, sheet){
-        if(err1) return next(err1);
-        vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
-          if(err2) return next(err2);
-          vm.createModelFromSheet(sheet, function(model){
-            next(null, model);
-          });      
-        });
-      });      
-    }
+    vm.findSheet(siteName, sheetName, function(err1, sheet, site){
+      if(err1) return next(err1);
+      vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
+        if(err2) return next(err2);
+        vm.createModelFromSheet(sheet, function(model){
+          next(null, model, sheet, site);
+        });      
+      });
+    }); 
   },
   landing: function(event, context, send) {
     let siteUrl = 'plysheet';
