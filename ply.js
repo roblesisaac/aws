@@ -125,13 +125,14 @@ const ply = {
     next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
-    models.sites.findOne({ url: siteName }).then(function(site){
-      if(!site) return next(siteName + ' plysheet not found.');
-      models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
-        if(!sheet) return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
-        next(null, sheet);
-      });
-    });     
+    next(siteName + '' +sheetName);
+    // models.sites.findOne({ url: siteName }).then(function(site){
+    //   if(!site) return next(siteName + ' plysheet not found.');
+    //   models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
+    //     if(!sheet) return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
+    //     next(null, sheet);
+    //   });
+    // });     
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
