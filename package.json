@@ -4,10 +4,13 @@
   "description": "Demonstration of protecting API gateway endpoints with auth0",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.231.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^5.0.0",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^5.0.4",
+    "multer": "^1.3.0",
+    "multer-s3": "^2.7.0",
     "vue": "^2.5.13",
     "vue-server-renderer": "^2.5.13"
   },
