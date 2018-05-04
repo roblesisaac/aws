@@ -327,13 +327,7 @@ const ply = {
     };
     s3.listObjectsV2(params, function (err, data) {
       if (!err) {
-        var files = []
-        data.Contents.forEach(function (element) {
-          files.push({
-            filename: element.Key
-          });
-        });
-        send(null, JSON.stringify(files));
+        send(null, JSON.stringify(data));
       } else {
         console.log(err);  // an error ocurred
       }
