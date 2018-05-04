@@ -322,6 +322,17 @@ const ply = {
     });
   },
   upload: function(event, context, send) {
+    const upload = multer({
+      storage: multerS3({
+        s3: s3,
+        bucket: 'plysheet',
+        acl: 'public-read',
+        key: function (request, file, cb) {
+          console.log(file);
+          cb(null, file.originalname);
+        }
+      })
+    }).array('upload', 1);
     var params = {
         Bucket: 'plysheet'
     };
