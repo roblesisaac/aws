@@ -337,7 +337,7 @@ const ply = {
       if (error) {
         return send("/error");
       }
-      send(null, "/success");
+      send(null, JSON.stringify(event));
     });
     // var params = {
     //     Bucket: 'plysheet'
