@@ -333,13 +333,9 @@ const ply = {
       })
     }).array('upload', 1);
     
-    upload(event.body, send, function (error) {
-      if (error) {
-        send(error);
-        return;
-      }
-      send(null, 'Wait on the LORD!')
-    });
+    send(null, JSON.stringify({
+      test: event
+    }));
   }
 };
 
