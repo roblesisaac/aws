@@ -333,16 +333,22 @@ const ply = {
         }
       })
     }).array('upload', 1);
-    var params = {
-        Bucket: 'plysheet'
-    };
-    s3.listObjectsV2(params, function (err, data) {
-      if (!err) {
-        send(null, JSON.stringify(data));
-      } else {
-        console.log(err);  // an error ocurred
+    upload(event, context, function (error) {
+      if (error) {
+        return send("/error");
       }
+      send(null, "/success");
     });
+    // var params = {
+    //     Bucket: 'plysheet'
+    // };
+    // s3.listObjectsV2(params, function (err, data) {
+    //   if (!err) {
+    //     send(null, JSON.stringify(data));
+    //   } else {
+    //     console.log(err);  // an error ocurred
+    //   }
+    // });
   }
 };
 
