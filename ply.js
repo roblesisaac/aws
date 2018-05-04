@@ -8,8 +8,8 @@ const s3 = new aws.S3({
   accessKeyId: 'TD5OCO2KT5KMS2R6WVEJ',
   secretAccessKey: '7LhKRchX6rVVGL0V1fRlnkmrVUABZx4C8Q/QsUrGkNA'
 });
-// const multer = require('multer');
-// const multerS3 = require('multer-s3');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 mongoose.Promise = global.Promise;
 let isConnected;
 const sessionModels = {};
