@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 const models = { sites: require('./models/sites'), sheets: require('./models/sheets'), users: require('./models/users') };
 const mongoose = require('mongoose');
+const aws = require('aws-sdk');
 const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
 const s3 = new aws.S3({
   endpoint: spacesEndpoint,
   accessKeyId: 'TD5OCO2KT5KMS2R6WVEJ',
   secretAccessKey: '7LhKRchX6rVVGL0V1fRlnkmrVUABZx4C8Q/QsUrGkNA'
 });
-const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 mongoose.Promise = global.Promise;
