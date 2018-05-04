@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const models = { sites: require('./models/sites'), sheets: require('./models/sheets'), users: require('./models/users') };
 const mongoose = require('mongoose');
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 mongoose.Promise = global.Promise;
 let isConnected;
 const sessionModels = {};
@@ -311,6 +314,12 @@ const ply = {
         send(null, JSON.stringify(body));
       }
     });
+  },
+  upload: function(event, context, send) {
+    send(null, JSON.stringify({
+      event: event,
+      context: context
+    }));
   }
 };
 
