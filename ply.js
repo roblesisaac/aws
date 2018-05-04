@@ -8,8 +8,8 @@ const s3 = new aws.S3({
   accessKeyId: 'TD5OCO2KT5KMS2R6WVEJ',
   secretAccessKey: '7LhKRchX6rVVGL0V1fRlnkmrVUABZx4C8Q/QsUrGkNA'
 });
-const multer = require('multer');
-const multerS3 = require('multer-s3');
+// const multer = require('multer');
+// const multerS3 = require('multer-s3');
 mongoose.Promise = global.Promise;
 let isConnected;
 const sessionModels = {};
@@ -322,20 +322,22 @@ const ply = {
     });
   },
   upload: function(event, context, send) {
-    const upload = multer({
-      storage: multerS3({
-        s3: s3,
-        bucket: 'test',
-        acl: 'public-read',
-        key: function (request, file, cb) {
-          cb(null, file.originalname);
-        }
-      })
-    }).array('upload', 1);
-    
-    send(null, JSON.stringify({
-      test: event
-    }));
+    var params = {
+        Bucket: 'plysheet'
+    };
+    s3.listObjectsV2(params, function (err, data) {
+      if (!err) {
+        var files = []
+        data.Contents.forEach(function (element) {
+          files.push({
+            filename: element.Key
+          });
+        });
+        send(null, JSON.stringify(files));
+      } else {
+        console.log(err);  // an error ocurred
+      }
+    });
   }
 };
 
