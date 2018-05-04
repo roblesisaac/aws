@@ -1,6 +1,12 @@
 const jwt = require('jsonwebtoken');
 const models = { sites: require('./models/sites'), sheets: require('./models/sheets'), users: require('./models/users') };
 const mongoose = require('mongoose');
+const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
+const s3 = new aws.S3({
+  endpoint: spacesEndpoint,
+  accessKeyId: 'TD5OCO2KT5KMS2R6WVEJ',
+  secretAccessKey: '7LhKRchX6rVVGL0V1fRlnkmrVUABZx4C8Q/QsUrGkNA'
+});
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -316,10 +322,24 @@ const ply = {
     });
   },
   upload: function(event, context, send) {
-    send(null, JSON.stringify({
-      event: event,
-      context: context
-    }));
+    const upload = multer({
+      storage: multerS3({
+        s3: s3,
+        bucket: 'test',
+        acl: 'public-read',
+        key: function (request, file, cb) {
+          cb(null, file.originalname);
+        }
+      })
+    }).array('upload', 1);
+    
+    upload(event.body, send, function (error) {
+      if (error) {
+        send(error);
+        return;
+      }
+      send(null, 'Wait on the LORD!')
+    });
   }
 };
 
