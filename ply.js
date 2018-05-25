@@ -43,9 +43,16 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    send(null, JSON.stringify({
-      message: 'test tot the test test'
-    }));
+    ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
+      if(err) return send(err);
+      model.find({}).then(function(data){
+        // send(null, JSON.stringify(data));
+        callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(data)
+        });
+      });      
+    });
   },
   apsi: function(event, context, send, callback) {
     const o = ply.prep(event, context);
