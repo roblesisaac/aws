@@ -42,7 +42,7 @@ const res = {
 };
 
 const ply = {
-  api: function(event, context, send) {
+  api: function(event, context, send, callback) {
     const o = ply.prep(event, context);
     const siteName = o.site;
     const sheetName = o.arg1;
@@ -50,7 +50,13 @@ const ply = {
     let params = o.query;
     ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
       if(err) {
-        send(err);
+        // send(err);
+        callback(null, {
+          statusCode: 200,
+          body: JSON.stringify({
+            error: err
+          })
+        });
       } else {
         if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
@@ -61,22 +67,38 @@ const ply = {
               params = id;
             }
             model[modelMethod](params).then(function(data){
-              send(null, JSON.stringify(data));
+              // send(null, JSON.stringify(data));
+              callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(data)
+              });
             });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-              send(null, JSON.stringify(data));
+              // send(null, JSON.stringify(data));
+              callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(data)
+              });
             });            
           },
           post: function() {
             model.create(JSON.parse(event.body)).then(function(data){
-              send(null, JSON.stringify(data));
+              // send(null, JSON.stringify(data));
+              callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(data)
+              });
             });             
           },
           delete: function() {
             model.findByIdAndRemove(id).then(function(data){
-              send(null,JSON.stringify(data));
+              // send(null,JSON.stringify(data));
+              callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(data)
+              });
             });            
           }
         };
@@ -328,7 +350,6 @@ const ply = {
         bucket: 'plysheet',
         acl: 'public-read',
         key: function (request, file, cb) {
-          console.log(file);
           cb(null, file.originalname);
         }
       })
@@ -360,6 +381,6 @@ module.exports.port = function(event, context, callback) {
     fn(event, context, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
-    });
+    }, callback);
   });
 }
