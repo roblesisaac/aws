@@ -43,14 +43,13 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    const o = ply.prep(event, context);
-    const siteName = o.site;
-    const sheetName = o.arg1;
-    const id = o.arg2;
-    let params = o.query;
+    const params = event.pathParameters;
+    const siteName = params.site;
+    const sheetName = params.arg1;
+    let q = params.queryStringParameters || {};
     ply.getModel(siteName, sheetName, event, function(err, model, sheet, site) {
       if(err) return send(err);
-      model.find(params).then(function(data){
+      model.find(q).then(function(data){
         send(null, JSON.stringify(data));
       });      
     });
