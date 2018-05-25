@@ -45,7 +45,7 @@ const ply = {
   api: function(event, context, send) {
     const siteName = event.pathParameters.site;
     const sheetName = event.pathParameters.arg1;
-    ply.getModel(siteName, sheetName, event, function(err, model, sheet, site) {
+    ply.getModel('exhaustbarn', 'sheets', event, function(err, model, sheet, site) {
       if(err) return send(err);
       model.find({}).then(function(data){
         send(null, JSON.stringify(data));
