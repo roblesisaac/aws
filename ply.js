@@ -161,13 +161,13 @@ const ply = {
         schema[obj.propName] = types[obj.propType] || String;
       }
     }
-    var test = new mongoose.Schema({
+    var ban = new mongoose.Schema({
         name: String,
         userId: String
     });
-    sessionModels[sheet._id] = mongoose.model('sheeto', test);
+    const apple = mongoose.model('sheeto', ban);
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next({schema:true});
+    next(apple);
     // next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
