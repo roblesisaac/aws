@@ -375,9 +375,9 @@ const ply = {
 
 module.exports.port = function(event, context, callback) {
   event.pathParameters = event.pathParameters || {};
-  const params = event.pathParameters;
+  const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
-  ply.connect(context).then(function(){
+  return ply.connect(context).then(function(){
     fn(event, context, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
