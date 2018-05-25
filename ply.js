@@ -43,9 +43,14 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    ply.getModel('exhaustbarn', 'sheets', event, function(err, model, sheet, site) {
+    const o = ply.prep(event, context);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    const id = o.arg2;
+    let params = o.query;
+    ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
       if(err) return send(err);
-      model.find({}).then(function(data){
+      model.find(params).then(function(data){
         send(null, JSON.stringify(data));
       });      
     });
