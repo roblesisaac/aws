@@ -190,13 +190,13 @@ const ply = {
     } else {
       vm.findSheet(siteName, sheetName, function(err1, sheet, site){
         if(err1) return next(err1);
-        next(event);
-        // vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
-        //   if(err2) return next(err2);
-        //   vm.createModelFromSheet(sheet, function(model){
-        //     next(null, model, sheet, site);
-        //   });      
-        // });
+        vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
+          if(err2) return next(err2);
+          next(event);
+          // vm.createModelFromSheet(sheet, function(model){
+          //   next(null, model, sheet, site);
+          // });      
+        });
       });      
     }
   },
