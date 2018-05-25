@@ -44,7 +44,7 @@ const res = {
 const ply = {
   api: function(event, context, send) {
     ply.getModel(event, function(err, model, sheet, site) {
-      send(null, JSON.stringify(event))
+      send(null, JSON.stringify(model))
       // if(err) return send(err);
       // model.find({}).then(function(data){
       //   send(null, JSON.stringify(data));
@@ -162,7 +162,7 @@ const ply = {
       }
     }
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(sheet);
+    next(schema);
     // next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
@@ -194,7 +194,7 @@ const ply = {
         vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
           if(err2) return next(err2);
           vm.createModelFromSheet(sheet, function(model){
-            next(event);
+            next(null, model, sheet, site);
             // next(null, model, sheet, site);
           });      
         });
