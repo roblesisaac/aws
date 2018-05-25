@@ -42,15 +42,11 @@ const res = {
 };
 
 const ply = {
-  api: function(event, context, send, callback) {
+  api: function(event, context, send) {
     ply.getModel('exhaustbarn', 'sheets', event, function(err, model, sheet, site) {
       if(err) return send(err);
       model.find({}).then(function(data){
-        // send(null, JSON.stringify(data));
-        callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(data)
-        });
+        send(null, JSON.stringify(data));
       });      
     });
   },
