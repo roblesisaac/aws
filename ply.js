@@ -42,7 +42,12 @@ const res = {
 };
 
 const ply = {
-  api: function(event, context, send, callback) {
+  api: function(event, context, send) {
+    send(null, JSON.stringify({
+      message: 'test tot the test test'
+    }));
+  },
+  apsi: function(event, context, send, callback) {
     const o = ply.prep(event, context);
     const siteName = o.site;
     const sheetName = o.arg1;
