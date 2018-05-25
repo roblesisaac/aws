@@ -192,10 +192,10 @@ const ply = {
         if(err1) return next(err1);
         vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
           if(err2) return next(err2);
-          next(event);
-          // vm.createModelFromSheet(sheet, function(model){
-          //   next(null, model, sheet, site);
-          // });      
+          vm.createModelFromSheet(sheet, function(model){
+            next(event);
+            // next(null, model, sheet, site);
+          });      
         });
       });      
     }
