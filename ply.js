@@ -43,7 +43,7 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    ply.getModel(event.pathParameters.site, 'sheets', event, function(err, model, sheet, site) {
+    ply.getModel(event, function(err, model, sheet, site) {
       if(err) return send(err);
       model.find({}).then(function(data){
         send(null, JSON.stringify(data));
@@ -180,7 +180,9 @@ const ply = {
       });
     });     
   },
-  getModel: function(siteName, sheetName, event, next) {
+  getModel: function(event, next) {
+    const siteName = event.pathParameters.site;
+    const sheetName = event.pathParameters.arg1;
     var vm = this;
     if(['sites', 'users'].indexOf(sheetName) > -1) {
       next(null, models[sheetName]);
