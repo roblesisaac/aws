@@ -43,9 +43,8 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    const params = event.pathParameters;
-    const siteName = params.site;
-    const sheetName = params.arg1;
+    const siteName = event.pathParameters.site;
+    const sheetName = event.pathParameters.arg1;
     ply.getModel(siteName, sheetName, event, function(err, model, sheet, site) {
       if(err) return send(err);
       model.find({}).then(function(data){
