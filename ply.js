@@ -162,7 +162,7 @@ const ply = {
       }
     }
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(schema);
+    next({schema:true});
     // next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
