@@ -167,7 +167,7 @@ const ply = {
     });
     sessionModels[sheet._id] = mongoose.model('sheeto', ban);
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next({});
+    next({hello:'hi'});
     // next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
