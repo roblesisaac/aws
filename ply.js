@@ -106,8 +106,7 @@ const ply = {
       }
     });
   },
-  connect: function(context) {
-    if(context) context.callbackWaitsForEmptyEventLoop = false;
+  connect: function() {
     if (isConnected) return Promise.resolve();
     return mongoose.connect(process.env.DB).then(function(db){
       isConnected = db.connections[0].readyState;
@@ -374,10 +373,11 @@ const ply = {
 };
 
 module.exports.port = function(event, context, callback) {
+  context.callbackWaitsForEmptyEventLoop = false;
   event.pathParameters = event.pathParameters || {};
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
-  return ply.connect(context).then(function(){
+  return ply.connect().then(function(){
     fn(event, context, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
