@@ -165,9 +165,9 @@ const ply = {
         name: String,
         userId: String
     });
-    const apple = mongoose.model('sheeto', ban);
+    sessionModels[sheet._id] = mongoose.model('sheeto', ban);
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(apple);
+    next({});
     // next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
