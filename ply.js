@@ -42,7 +42,7 @@ const res = {
 };
 
 const ply = {
-  api: function(event, context, send) {
+  api: function(event, context, send, callback) {
     ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
       if(err) return send(err);
       model.find({}).then(function(data){
