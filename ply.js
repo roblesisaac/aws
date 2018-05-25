@@ -48,7 +48,7 @@ const ply = {
     const sheetName = o.arg1;
     const id = o.arg2;
     let params = o.query;
-    ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
+    ply.getModel(siteName, sheetName, event, function(err, model, sheet, site) {
       if(err) return send(err);
       model.find(params).then(function(data){
         send(null, JSON.stringify(data));
