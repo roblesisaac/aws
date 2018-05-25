@@ -144,14 +144,14 @@ const ply = {
   	}); 
   },
   createModelFromSheet: function(sheet, next) {
-    next({});
-    // if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
-    // let options = {
-    //   strict: true,
-    //   collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
-    // };
-    // let schema = {};
-    // let arr = sheet._schema || [{}];
+    if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
+    let options = {
+      strict: true,
+      collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
+    };
+    let schema = {};
+    let arr = sheet._schema || [{}];
+    next(sheet);
     // for(var s in arr) {
     //   let obj = arr[s] || {};
     //   obj.propName = obj.propName || 'propName';
