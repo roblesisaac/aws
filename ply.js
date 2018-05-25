@@ -42,8 +42,8 @@ const res = {
 };
 
 const ply = {
-  api: function(event, context, send, callback) {
-    const o = ply.prep(event, context);
+  api: function(event, send, callback) {
+    const o = ply.prep(event);
     const siteName = o.site;
     const sheetName = o.arg1;
     const id = o.arg2;
@@ -188,7 +188,7 @@ const ply = {
       });      
     }
   },
-  landing: function(event, context, send) {
+  landing: function(event, send) {
     let siteUrl = 'plysheet';
     if (event.pathParameters && event.pathParameters.site) {
       siteUrl = event.pathParameters.site;
@@ -223,7 +223,7 @@ const ply = {
       }
     });
   },
-  login: function(event, context, send) {
+  login: function(event, send) {
     const user = JSON.parse(event.body);
   	models.users.findOne({username: user.username}, function(err, foundUser) {
   		if (err) return send(err);
@@ -243,7 +243,7 @@ const ply = {
   		}
   	});
   },
-  prep: function(event, context) {
+  prep: function(event) {
     const params = event.pathParameters;
     return {
       site: params.site,
@@ -251,11 +251,10 @@ const ply = {
       arg1: params.arg1,
       arg2: params.arg2,
       query: event.queryStringParameters || {},
-      event: event,
-      context: context
+      event: event
     }
   },
-  setup: function(event, context, send) {
+  setup: function(event, send) {
     function areThereAnyYet(name, data, next) {
       models[name].find().then(function(res) {
         if(res.length === 0) {
@@ -284,8 +283,8 @@ const ply = {
       });
     });
   },
-  static: function(event, context, send) {
-    const o = ply.prep(event, context);
+  static: function(event, send) {
+    const o = ply.prep(event);
     const prop = o.arg1;
     const isReady = (body) => {
       return ['object', 'array'].indexOf(typeof body) === -1;
@@ -342,7 +341,7 @@ const ply = {
       }
     });
   },
-  upload: function(event, context, send) {
+  upload: function(event, send) {
     const upload = multer({
       storage: multerS3({
         s3: s3,
@@ -377,8 +376,8 @@ module.exports.port = function(event, context, callback) {
   event.pathParameters = event.pathParameters || {};
   const params = event.pathParameters || {};
   const fn = ply[params.method] || ply.landing;
-  return ply.connect().then(function(){
-    fn(event, context, function(err, body, contentType) {
+  ply.connect().then(function(){
+    fn(event, function(err, body, contentType) {
       if(err) return res.error(callback, err);
       res.body(callback, body, contentType);
     }, callback);
