@@ -161,7 +161,12 @@ const ply = {
         schema[obj.propName] = types[obj.propType] || String;
       }
     }
-    const test = mongoose.model(options.collection, new mongoose.Schema(schema, options));
+    var test = new mongoose.Schema({
+        name: String,
+        userId: String,
+        url: { type: String, unique: true }
+    });
+    sessionModels[sheet._id] = mongoose.model('sheet', test);
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
     next({schema:true});
     // next(sessionModels[sheet._id]);    
