@@ -160,12 +160,8 @@ const ply = {
         schema[obj.propName] = types[obj.propType] || String;
       }
     }
-    // var ban = new mongoose.Schema({
-    //     name: String,
-    //     userId: String
-    // });
-    sessionModels[sheet._id] = models.sheets;
-    // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
+    // sessionModels[sheet._id] = models.sheets;
+    sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
     next(sessionModels[sheet._id]);   
   },
   findSheet: function(siteName, sheetName, next) {
