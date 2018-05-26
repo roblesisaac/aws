@@ -114,27 +114,28 @@ const ply = {
   },
   createModelFromSheet: function(sheet, next) {
     if(sessionModels[sheet._id]) {
-      if(next) return next(sessionModels[sheet._id]);
-    }
-    let options = {
-      strict: true,
-      collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
-    };
-    let schema = {};
-    let arr = sheet._schema || [{}];
-    for(var s in arr) {
-      let obj = arr[s] || {};
-      obj.propName = obj.propName || 'propName';
-      obj.propType = (obj.propType || 'string').toLowerCase();
-      if(options[obj.propName]) {
-        options[obj.propName] = obj.propType;
-      } else if(reserved.indexOf(obj.propName) === -1) {
-        schema[obj.propName] = types[obj.propType] || String;
+      if(next) next(sessionModels[sheet._id]);
+    } else {
+      let options = {
+        strict: true,
+        collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
+      };
+      let schema = {};
+      let arr = sheet._schema || [{}];
+      for(var s in arr) {
+        let obj = arr[s] || {};
+        obj.propName = obj.propName || 'propName';
+        obj.propType = (obj.propType || 'string').toLowerCase();
+        if(options[obj.propName]) {
+          options[obj.propName] = obj.propType;
+        } else if(reserved.indexOf(obj.propName) === -1) {
+          schema[obj.propName] = types[obj.propType] || String;
+        }
       }
+      // sessionModels[sheet._id] = models.sheets;
+      sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
+      if(next) next(sessionModels[sheet._id]);
     }
-    // sessionModels[sheet._id] = models.sheets;
-    sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    if(next) next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
