@@ -44,11 +44,10 @@ const res = {
 const ply = {
   api: function(event, context, send) {
     ply.getModel(event, function(err, model, sheet, site) {
-      send(null, model);
-      // if(err) return send(err);
-      // model.find({}).then(function(data){
-      //   send(null, JSON.stringify(data));
-      // });      
+      if(err) return send(err);
+      model.find({}).then(function(data){
+        send(null, JSON.stringify(data));
+      });      
     });
   },
   apsi: function(event, context, send, callback) {
