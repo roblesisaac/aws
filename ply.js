@@ -196,7 +196,7 @@ const ply = {
           index = index.replace('{{siteUrl}}', siteUrl);
           index = index.replace('{{data}}', JSON.stringify(data));
           for(var i in sheets) {
-            createModelFromSheet(sheets[i]); 
+            ply.createModelFromSheet(sheets[i]); 
           }
           send(null, index, 'text/html');          
         });
