@@ -143,7 +143,7 @@ const ply = {
   	}); 
   },
   createModelFromSheet: function(sheet, next) {
-    // if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
+    if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
     let options = {
       strict: true,
       collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
@@ -164,9 +164,9 @@ const ply = {
         name: String,
         userId: String
     });
-    // sessionModels[sheet._id] = mongoose.model('sheeto', ban);
+    sessionModels[sheet._id] = mongoose.model('sheeto', ban);
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(mongoose.model('sheeto', ban));
+    next(sessionModels[sheet._id]);
     // next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
