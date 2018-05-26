@@ -44,11 +44,10 @@ const res = {
 const ply = {
   api: function(event, context, send) {
     ply.getModel(event, function(err, model, sheet, site) {
-      send(null, JSON.stringify(model))
-      // if(err) return send(err);
-      // model.find({}).then(function(data){
-      //   send(null, JSON.stringify(data));
-      // });      
+      if(err) return send(err);
+      model.find({}).then(function(data){
+        send(null, JSON.stringify(data));
+      });      
     });
   },
   apsi: function(event, context, send, callback) {
@@ -144,7 +143,7 @@ const ply = {
   	}); 
   },
   createModelFromSheet: function(sheet, next) {
-    if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
+    // if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
     let options = {
       strict: true,
       collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
