@@ -168,6 +168,7 @@ const ply = {
     }
   },
   landing: function(event, context, send) {
+    var vm = this;
     let siteUrl = 'plysheet';
     if (event.pathParameters && event.pathParameters.site) {
       siteUrl = event.pathParameters.site;
@@ -196,7 +197,7 @@ const ply = {
           index = index.replace('{{siteUrl}}', siteUrl);
           index = index.replace('{{data}}', JSON.stringify(data));
           for(var i in sheets) {
-            ply.createModelFromSheet(sheets[i]); 
+            vm.createModelFromSheet(sheets[i]); 
           }
           send(null, index, 'text/html');          
         });
