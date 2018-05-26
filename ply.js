@@ -195,6 +195,9 @@ const ply = {
           let index = fs.readFileSync('./templates/index.html', 'utf8');
           index = index.replace('{{siteUrl}}', siteUrl);
           index = index.replace('{{data}}', JSON.stringify(data));
+          for(var i in sheets) {
+            createModelFromSheet(sheets[i]); 
+          }
           send(null, index, 'text/html');          
         });
       } else {
