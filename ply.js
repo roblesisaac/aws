@@ -42,7 +42,7 @@ const res = {
 };
 
 const ply = {
-  api: function(event, context, send, callback) {
+  api: function(event, context, send) {
     const o = ply.prep(event, context);
     const siteName = o.site;
     const sheetName = o.arg1;
@@ -114,7 +114,10 @@ const ply = {
   },
   createModelFromSheet: function(sheet, next) {
     if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
-    let options = { strict: true, collection: sheet.name || sheet.url || JSON.stringify(sheet._id) };
+    let options = {
+      strict: true,
+      collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
+    };
     let schema = {};
     let arr = sheet._schema || [{}];
     for(var s in arr) {
@@ -127,9 +130,8 @@ const ply = {
         schema[obj.propName] = types[obj.propType] || String;
       }
     }
-    // sessionModels[sheet._id] = models.sheets;
     sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(sessionModels[sheet._id]);   
+    next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
@@ -148,9 +150,7 @@ const ply = {
       });
     });     
   },
-  getModel: function(event, next) {
-    const siteName = event.pathParameters.site;
-    const sheetName = event.pathParameters.arg1;
+  getModel: function(siteName, sheetName, event, next) {
     var vm = this;
     if(['sites', 'users'].indexOf(sheetName) > -1) {
       next(null, models[sheetName]);
