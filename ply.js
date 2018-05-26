@@ -113,7 +113,9 @@ const ply = {
   	}); 
   },
   createModelFromSheet: function(sheet, next) {
-    if(sessionModels[sheet._id]) return next(sessionModels[sheet._id]);
+    if(sessionModels[sheet._id]) {
+      if(next) return next(sessionModels[sheet._id]);
+    }
     let options = {
       strict: true,
       collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
@@ -132,7 +134,7 @@ const ply = {
     }
     // sessionModels[sheet._id] = models.sheets;
     sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-    next(sessionModels[sheet._id]);    
+    if(next) next(sessionModels[sheet._id]);    
   },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
