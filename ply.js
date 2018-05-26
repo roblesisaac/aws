@@ -165,7 +165,7 @@ const ply = {
     //     name: String,
     //     userId: String
     // });
-    sessionModels[sheet._id] = models.sites;
+    sessionModels[sheet._id] = models.sheets;
     // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
     next(sessionModels[sheet._id]);   
   },
