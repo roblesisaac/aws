@@ -156,7 +156,7 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    next(null, models.sheets);
+    next(null, models.sheets, {}, {});
     // if(['sites', 'users'].indexOf(sheetName) > -1) {
     //   next(null, models[sheetName]);
     // } else {
