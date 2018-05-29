@@ -43,7 +43,7 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    send(null, JSON.stringify(isConnected));
+    send(null, JSON.stringify(Promise));
     // const o = ply.prep(event, context);
     // const siteName = o.site;
     // const sheetName = o.arg1;
