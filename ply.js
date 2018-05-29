@@ -43,47 +43,50 @@ const res = {
 
 const ply = {
   api: function(event, context, send) {
-    send(null, JSON.stringify(Promise.resolve()));
-    // const o = ply.prep(event, context);
-    // const siteName = o.site;
-    // const sheetName = o.arg1;
-    // const id = o.arg2;
-    // let params = o.query;
-    // ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
-    //   if(err) {
-    //     send(err);
-    //   } else {
-    //     if(sheetName === 'sheets') params.siteId = site._id;
-    //     const method = {
-    //       get: function() {
-    //         let modelMethod = 'find';
-    //         if(id) {
-    //           modelMethod = 'findById';
-    //           params = id;
-    //         }
-    //         model[modelMethod](params).then(function(data){
-    //           send(null, JSON.stringify(data));
-    //         });
-    //       },
-    //       put: function() {
-    //         model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
-    //           send(null, JSON.stringify(data));
-    //         });            
-    //       },
-    //       post: function() {
-    //         model.create(JSON.parse(event.body)).then(function(data){
-    //           send(null, JSON.stringify(data));
-    //         });             
-    //       },
-    //       delete: function() {
-    //         model.findByIdAndRemove(id).then(function(data){
-    //           send(null,JSON.stringify(data));
-    //         });            
-    //       }
-    //     };
-    //     method[o.event.httpMethod.toLowerCase()]();
-    //   }
-    // });
+    const o = ply.prep(event, context);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    const id = o.arg2;
+    let params = o.query;
+    ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
+      if(err) {
+        send(err);
+      } else {
+        if(sheetName === 'sheets') params.siteId = site._id;
+        const method = {
+          get: function() {
+            let modelMethod = 'find';
+            if(id) {
+              modelMethod = 'findById';
+              params = id;
+            }
+            model[modelMethod](params).then(function(data){
+              // send(null, JSON.stringify(data));
+              send(null, JSON.stringify(Promise.resolve()));
+            });
+          },
+          put: function() {
+            model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
+              // send(null, JSON.stringify(data));
+              send(null, JSON.stringify(Promise.resolve()));
+            });            
+          },
+          post: function() {
+            model.create(JSON.parse(event.body)).then(function(data){
+              // send(null, JSON.stringify(data));
+              send(null, JSON.stringify(Promise.resolve()));
+            });             
+          },
+          delete: function() {
+            model.findByIdAndRemove(id).then(function(data){
+              // send(null, JSON.stringify(data));
+              send(null, JSON.stringify(Promise.resolve()));
+            });            
+          }
+        };
+        method[o.event.httpMethod.toLowerCase()]();
+      }
+    });
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
