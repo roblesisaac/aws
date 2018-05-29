@@ -132,8 +132,8 @@ const ply = {
           schema[obj.propName] = types[obj.propType] || String;
         }
       }
-      // sessionModels[sheet._id] = models.sheets;
-      sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
+      sessionModels[sheet._id] = models.sheets;
+      // sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
       if(next) next(sessionModels[sheet._id]);
     }
   },
@@ -156,7 +156,6 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    // next(null, models.sheets, {}, {});
     if(['sites', 'users'].indexOf(sheetName) > -1) {
       next(null, models[sheetName]);
     } else {
@@ -164,10 +163,9 @@ const ply = {
         if(err1) return next(err1);
         vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
           if(err2) return next(err2);
-          next(null, models.sheets, {}, {});
-          // vm.createModelFromSheet(sheet, function(model){
-          //   next(null, model, sheet, site);
-          // });      
+          vm.createModelFromSheet(sheet, function(model){
+            next(null, model, sheet, site);
+          });      
         });
       });      
     }
