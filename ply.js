@@ -85,7 +85,7 @@ const ply = {
     });
   },
   connect: function() {
-    if (isConnected) return Promise.resolve();
+    // if (isConnected) return Promise.resolve();
     return mongoose.connect(process.env.DB).then(function(db){
       isConnected = db.connections[0].readyState;
     }); 
