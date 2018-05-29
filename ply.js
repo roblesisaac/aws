@@ -115,7 +115,8 @@ const ply = {
   },
   createModelFromSheet: function(sheet, next) {
     if(sessionModels[sheet._id]) {
-      if(next) next(sessionModels[sheet._id]);
+      // if(next) next(sessionModels[sheet._id]);
+      send('already had model');
     } else {
       let options = {
         strict: true,
@@ -134,12 +135,8 @@ const ply = {
         }
       }
       // sessionModels[sheet._id] = models.sheets;
-      if(sessionModels[sheet._id]) {
-        next('already had a model')
-      } else {
-        sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-        next('created a new model');
-      }
+      sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
+      next('created a new model');
       // if(next) next(sessionModels[sheet._id]);
     }
   },
