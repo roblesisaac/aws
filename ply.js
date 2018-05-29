@@ -116,7 +116,7 @@ const ply = {
   createModelFromSheet: function(sheet, next) {
     if(sessionModels[sheet._id]) {
       // if(next) next(sessionModels[sheet._id]);
-      send('already had model');
+      next('already had model');
     } else {
       let options = {
         strict: true,
