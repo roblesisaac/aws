@@ -156,20 +156,20 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    next(null, models.sheets, {}, {});
-    // if(['sites', 'users'].indexOf(sheetName) > -1) {
-    //   next(null, models[sheetName]);
-    // } else {
-    //   vm.findSheet(siteName, sheetName, function(err1, sheet, site){
-    //     if(err1) return next(err1);
-    //     vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
-    //       if(err2) return next(err2);
-    //       vm.createModelFromSheet(sheet, function(model){
-    //         next(null, model, sheet, site);
-    //       });      
-    //     });
-    //   });      
-    // }
+    // next(null, models.sheets, {}, {});
+    if(['sites', 'users'].indexOf(sheetName) > -1) {
+      next(null, models[sheetName]);
+    } else {
+      vm.findSheet(siteName, sheetName, function(err1, sheet, site){
+        if(err1) return next(err1);
+        vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
+          if(err2) return next(err2);
+          vm.createModelFromSheet(sheet, function(model){
+            next(null, model, sheet, site);
+          });      
+        });
+      });      
+    }
   },
   landing: function(event, context, send) {
     var vm = this;
