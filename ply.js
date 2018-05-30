@@ -138,7 +138,8 @@ const ply = {
         }
       }
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      if(next) next(sessionModels[sheet._id]);
+      if(next) next(models.sheets);
+      // if(next) next(sessionModels[sheet._id]);
     }
   },
   findSheet: function(siteName, sheetName, next) {
