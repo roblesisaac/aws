@@ -116,7 +116,11 @@ const ply = {
   createModelFromSheet: function(sheet, next) {
     if(sessionModels[sheet._id]) {
       // if(next) next(sessionModels[sheet._id]);
-      next('already had model');
+      // next('already had model');
+      mongoose.connection.db.collectionNames(function (err, names) {
+        next(names);
+        // names contains an array of objects that contain the collection names 
+      });
     } else {
       let options = {
         strict: true,
