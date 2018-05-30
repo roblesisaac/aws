@@ -161,7 +161,7 @@ const ply = {
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
     if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
-      next(null, models[sheetName]);
+      next(null, models.sites);
     } else {
       vm.findSheet(siteName, sheetName, function(err1, sheet, site){
         if(err1) return next(err1);
