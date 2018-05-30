@@ -114,12 +114,12 @@ const ply = {
   	}); 
   },
   createModelFromSheet: function(sheet, next) {
+    // mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, names) {
+    //   next(names);
+    // });
     if(sessionModels[sheet._id]) {
       // if(next) next(sessionModels[sheet._id]);
       // next('already had model');
-      // mongoose.connection.db.listCollections(function (err, names) {
-      //   next(JSON.stringify(names));
-      // });
       mongoose.connection.db.listCollections({name: 'sheets'}).next(function(err, names) {
         next(names);
       });
@@ -142,7 +142,9 @@ const ply = {
       }
       // sessionModels[sheet._id] = models.sheets;
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      next('created a new model');
+      mongoose.connection.db.listCollections({name: 'sheets'}).next(function(err, names) {
+        next(names);
+      });
       // if(next) next(sessionModels[sheet._id]);
     }
   },
