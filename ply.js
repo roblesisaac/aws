@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const models = { sites: require('./models/sites'), sheets: require('./models/sheets'), users: require('./models/users') };
+const models = { sheets: require('./models/sheets'), sites: require('./models/sites'), users: require('./models/users') };
 const mongoose = require('mongoose');
 const aws = require('aws-sdk');
 const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
@@ -161,7 +161,7 @@ const ply = {
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
     if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
-      next(null, models.sheets);
+      next(null, models[sheetName]);
     } else {
       vm.findSheet(siteName, sheetName, function(err1, sheet, site){
         if(err1) return next(err1);
