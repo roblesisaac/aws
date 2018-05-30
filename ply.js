@@ -138,8 +138,7 @@ const ply = {
         }
       }
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      if(next) next(models.sheets);
-      // if(next) next(sessionModels[sheet._id]);
+      if(next) next(sessionModels[sheet._id]);
     }
   },
   findSheet: function(siteName, sheetName, next) {
@@ -161,8 +160,8 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    if(['sites', 'users'].indexOf(sheetName) > -1) {
-      next(null, models[sheetName]);
+    if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
+      next(null, models.sheets);
     } else {
       vm.findSheet(siteName, sheetName, function(err1, sheet, site){
         if(err1) return next(err1);
