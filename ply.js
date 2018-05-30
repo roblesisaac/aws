@@ -121,7 +121,7 @@ const ply = {
       //   next(JSON.stringify(names));
       // });
       mongoose.connection.db.listCollections().next(function(err, names) {
-        next(JSON.stringify(names));
+        next(names);
       });
     } else {
       let options = {
