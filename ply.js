@@ -90,6 +90,11 @@ const ply = {
       isConnected = db.connections[0].readyState;
     }); 
   },
+  collectionExists: function(sheet, next) {
+    mongoose.connection.db.listCollections({name: sheet.name}).next(function(err, collection) {
+      collection === null ? next(false) : next(true);
+    });
+  },
   checkIfSheetIsPublic: function(sheet, event, next) {
     if(sheet.public) return next(null, sheet);
     this.checkToken(event, function(err, decoded) {
@@ -118,7 +123,7 @@ const ply = {
     } else {
       let options = {
         strict: true,
-        collection: JSON.stringify(sheet._id)
+        collection: sheet.siteId+'_'+sheet.name+'_'+JSON.stringify(sheet._id)
       };
       let schema = {};
       let arr = sheet._schema || [{}];
@@ -132,15 +137,7 @@ const ply = {
           schema[obj.propName] = types[obj.propType] || String;
         }
       }
-      // sessionModels[sheet._id] = models.sheets;
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      // mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, collection) {
-      //   if(collection === null) {
-      //     next('yes null');
-      //   } else {
-      //     next('it exists');
-      //   }
-      // });
       if(next) next(sessionModels[sheet._id]);
     }
   },
