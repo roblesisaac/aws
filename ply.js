@@ -117,7 +117,7 @@ const ply = {
     // mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, names) {
     //   next(names);
     // });
-    if(sessionModels[sheet._id]) {
+    if(sessionModels[sheet._id] === 'hi') {
       // if(next) next(sessionModels[sheet._id]);
       // next('already had model');
       mongoose.connection.db.listCollections({name: 'sheets'}).next(function(err, names) {
@@ -142,8 +142,12 @@ const ply = {
       }
       // sessionModels[sheet._id] = models.sheets;
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, names) {
-        next(names);
+      mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, collection) {
+        if(collection === null) {
+          next('yes null')
+        } else {
+          next('it exists');
+        }
       });
       // if(next) next(sessionModels[sheet._id]);
     }
