@@ -120,7 +120,7 @@ const ply = {
       // mongoose.connection.db.listCollections(function (err, names) {
       //   next(JSON.stringify(names));
       // });
-      mongoose.connection.db.listCollections().next(function(err, names) {
+      mongoose.connection.db.listCollections({name: 'sheets'}).next(function(err, names) {
         next(names);
       });
     } else {
