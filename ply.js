@@ -114,19 +114,12 @@ const ply = {
   	}); 
   },
   createModelFromSheet: function(sheet, next) {
-    // mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, names) {
-    //   next(names);
-    // });
-    if(sessionModels[sheet._id] === 'hi') {
-      // if(next) next(sessionModels[sheet._id]);
-      // next('already had model');
-      mongoose.connection.db.listCollections({name: 'sheets'}).next(function(err, names) {
-        next(names);
-      });
+    if(sessionModels[sheet._id]) {
+      if(next) next(sessionModels[sheet._id]);
     } else {
       let options = {
         strict: true,
-        collection: sheet.name || sheet.url || JSON.stringify(sheet._id)
+        collection: JSON.stringify(sheet._id)
       };
       let schema = {};
       let arr = sheet._schema || [{}];
@@ -142,14 +135,14 @@ const ply = {
       }
       // sessionModels[sheet._id] = models.sheets;
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, collection) {
-        if(collection === null) {
-          next('yes null')
-        } else {
-          next('it exists');
-        }
-      });
-      // if(next) next(sessionModels[sheet._id]);
+      // mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, collection) {
+      //   if(collection === null) {
+      //     next('yes null');
+      //   } else {
+      //     next('it exists');
+      //   }
+      // });
+      if(next) next(sessionModels[sheet._id]);
     }
   },
   findSheet: function(siteName, sheetName, next) {
