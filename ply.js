@@ -142,7 +142,7 @@ const ply = {
       }
       // sessionModels[sheet._id] = models.sheets;
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
-      mongoose.connection.db.listCollections({name: 'sheets'}).next(function(err, names) {
+      mongoose.connection.db.listCollections({name: 'sheetso'}).next(function(err, names) {
         next(names);
       });
       // if(next) next(sessionModels[sheet._id]);
