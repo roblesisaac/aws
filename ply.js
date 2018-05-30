@@ -118,7 +118,7 @@ const ply = {
       // if(next) next(sessionModels[sheet._id]);
       // next('already had model');
       mongoose.connection.db.collectionNames(function (err, names) {
-        next(names);
+        next(JSON.stringify(names));
         // names contains an array of objects that contain the collection names 
       });
     } else {
