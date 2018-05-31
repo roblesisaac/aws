@@ -90,7 +90,7 @@ const ply = {
         obj = JSON.parse(o.event.body),
         col = obj.collection,
         data = obj.jsonParsed;
-    if (1===1) {
+    if (col && data) {
       // db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
       //   if(err) res.send(err);
       // });
