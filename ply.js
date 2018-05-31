@@ -85,20 +85,22 @@ const ply = {
     });
   },
   bulkUpload: function(event, context, send) {
-    var o = ply.prep(event, context);
-        // db = mongoose.connection,
-        // obj = req.body,
-        // col = obj.collection,
-        // data = obj.jsonParsed;
-    send(null, JSON.stringify(o));
-    // if (col && data) {
-    //   db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
-    //     if(err) res.send(err);
-    //   });
-    //   send('Finished uploading json!');
-    // } else {
-    //   send('Error uploading json.');
-    // }
+    var o = ply.prep(event, context),
+        db = mongoose.connection,
+        obj = o.event.body,
+        col = obj.collection,
+        data = obj.jsonParsed;
+    if (col && data) {
+      // db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
+      //   if(err) res.send(err);
+      // });
+      send(null, JSON.stringify({
+        collex: col,
+        data: data
+      }));
+    } else {
+      send('Error uploading json.');
+    }
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
