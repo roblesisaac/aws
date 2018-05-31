@@ -87,7 +87,7 @@ const ply = {
   bulkUpload: function(event, context, send) {
     var o = ply.prep(event, context),
         db = mongoose.connection,
-        obj = o.event.body,
+        obj = JSON.parse(o.event.body),
         col = obj.collection,
         data = obj.jsonParsed;
     if (1===1) {
@@ -95,9 +95,6 @@ const ply = {
       //   if(err) res.send(err);
       // });
       send(null, JSON.stringify({
-        test: 'hi',
-        ev: o.event,
-        ob: o.event.body,
         collex: col,
         data: data
       }));
