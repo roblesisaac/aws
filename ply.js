@@ -85,13 +85,12 @@ const ply = {
     });
   },
   bulkUpload: function(event, context, send) {
-    send(null, 'hola')
-    // var o = ply.prep(event, context),
-    //     db = mongoose.connection,
-    //     obj = req.body,
-    //     col = obj.collection,
-    //     data = obj.jsonParsed;
-    // send(null, JSON.stringify(o));
+    var o = ply.prep(event, context);
+        // db = mongoose.connection,
+        // obj = req.body,
+        // col = obj.collection,
+        // data = obj.jsonParsed;
+    send(null, JSON.stringify(o));
     // if (col && data) {
     //   db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
     //     if(err) res.send(err);
