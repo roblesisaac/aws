@@ -94,10 +94,11 @@ const ply = {
       // db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
       //   if(err) res.send(err);
       // });
-      send(null, {
+      send(null, JSON.stringify({
+        test: 'hi',
         collex: col,
         data: data
-      });
+      }));
     } else {
       send('Error uploading json.');
     }
