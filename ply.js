@@ -91,13 +91,10 @@ const ply = {
         col = obj.collection,
         data = obj.jsonParsed;
     if (col && data) {
-      // db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
-      //   if(err) res.send(err);
-      // });
-      send(null, JSON.stringify({
-        collex: col,
-        data: data
-      }));
+      db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
+        if(err) res.send(err);
+        send(null, JSON.stringify(doc));
+      });
     } else {
       send('Error uploading json.');
     }
