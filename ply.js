@@ -96,6 +96,8 @@ const ply = {
       // });
       send(null, JSON.stringify({
         test: 'hi',
+        ev: o.event,
+        ob: o.event.body,
         collex: col,
         data: data
       }));
