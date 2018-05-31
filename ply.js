@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const models = { sheets: require('./models/sheets'), sites: require('./models/sites'), users: require('./models/users') };
 const mongoose = require('mongoose');
+const db = mongoose.connection;
 const aws = require('aws-sdk');
 const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
 const s3 = new aws.S3({
@@ -84,25 +85,10 @@ const ply = {
       }
     });
   },
-  bulkUpload: function(event, context, send) {
-    var o = ply.prep(event, context),
-        db = mongoose.connection,
-        obj = JSON.parse(o.event.body),
-        col = obj.collection,
-        data = obj.jsonParsed;
-    if (col && data) {
-      db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
-        if(err) res.send(err);
-        send(null, JSON.stringify(doc));
-      });
-    } else {
-      send('Error uploading json.');
-    }
-  },
   connect: function() {
     if (isConnected) return Promise.resolve();
-    return mongoose.connect(process.env.DB).then(function(db){
-      isConnected = db.connections[0].readyState;
+    return mongoose.connect(process.env.DB).then(function(database){
+      isConnected = database.connections[0].readyState;
     }); 
   },
   checkIfSheetIsPublic: function(sheet, event, next) {
@@ -150,6 +136,23 @@ const ply = {
       sessionModels[sheet._id] = mongoose.model(options.collection, new mongoose.Schema(schema, options));
       if(next) next(sessionModels[sheet._id]);
     }
+  },
+  dbBulkUpload: function(event, context, send) {
+    var o = ply.prep(event, context),
+        obj = JSON.parse(o.event.body),
+        col = obj.collection,
+        data = obj.jsonParsed;
+    if (col && data) {
+      db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
+        if(err) res.send(err);
+        send(null, JSON.stringify(doc));
+      });
+    } else {
+      send('Error uploading json.');
+    }
+  },
+  dbDrop: function(event, context, send) {
+    send(null, 'ksdljf;l')  
   },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
