@@ -152,7 +152,14 @@ const ply = {
     }
   },
   dbDrop: function(event, context, send) {
-    send(null, 'ksdljf;l')  
+    const o = ply.prep(event, context);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    ply.getModel(siteName, sheetName, event, function(err, model, sheet, site){
+      model.remove({}, function(err) { 
+         send(null, 'collection removed') 
+      }); 
+    });
   },
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
