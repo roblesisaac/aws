@@ -84,16 +84,27 @@ const ply = {
       }
     });
   },
+  bulkUpload: function(event, context, send) {
+    var o = ply.prep(event, context),
+        db = mongoose.connection,
+        obj = req.body,
+        col = obj.collection,
+        data = obj.jsonParsed;
+    send(null, JSON.stringify(o));
+    // if (col && data) {
+    //   db.collection(col).insertMany(JSON.parse(data), function(err, doc) {
+    //     if(err) res.send(err);
+    //   });
+    //   send('Finished uploading json!');
+    // } else {
+    //   send('Error uploading json.');
+    // }
+  },
   connect: function() {
     if (isConnected) return Promise.resolve();
     return mongoose.connect(process.env.DB).then(function(db){
       isConnected = db.connections[0].readyState;
     }); 
-  },
-  collectionExists: function(sheet, next) {
-    mongoose.connection.db.listCollections({name: sheet.name}).next(function(err, collection) {
-      collection === null ? next(false) : next(true);
-    });
   },
   checkIfSheetIsPublic: function(sheet, event, next) {
     if(sheet.public) return next(null, sheet);
