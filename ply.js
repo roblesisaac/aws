@@ -57,7 +57,7 @@ const ply = {
         const method = {
           get: function() {
             let modelMethod = 'find';
-            if(!params.limit) params.limit = 50;
+            // if(!params.limit) params.limit = 50;
             if(id) {
               modelMethod = 'findById';
               params = id;
