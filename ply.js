@@ -70,7 +70,7 @@ const ply = {
               next(model[modelMethod](params));
             }
             function attachFiltersToFind(filters, find, next) {
-              for(var key in filters) find = find[key] = filters[key];
+              for(var key in filters) find = find[key](filters[key]);
               next(find);  
             }
             
