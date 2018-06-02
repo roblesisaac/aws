@@ -56,33 +56,30 @@ const ply = {
         if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
           get: function() {
-            let modelMethod = 'find';
-            if(id) {
-              modelMethod = 'findById';
-              params = id;
-            }            
-            // function createFinderFn(next) {
-            //   let modelMethod = 'find';
-            //   if(id) {
-            //     modelMethod = 'findById';
-            //     params = id;
-            //   }
-            //   pullOutKeysFromParams(['sort', 'limit'], function(params, mongoFilters) {
-            //     let finder = model[modelMethod](params).then(function(data){
-            //       send(null, JSON.stringify(data));
-            //     });
-            //   });
-            // }
+            // let modelMethod = 'find';
+            // if(id) {
+            //   modelMethod = 'findById';
+            //   params = id;
+            // }            
+            function createFindFn(next) {
+              let modelMethod = 'find';
+              if(id) modelMethod = 'findById';
+              let find = model[modelMethod];
+              pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+                find = find(params).limit(50);
+                next(find);
+              });
+            }
             
-            // createFinderFn(function(finder) {
-            //   finder(function(data){
-            //     send(null, JSON.stringify(data));  
-            //   });
-            // });
-            
-            model[modelMethod](params).limit(50).then(function(data){
-              send(null, JSON.stringify(data));
+            createFindFn(function(find) {
+              find.then(function(data){
+                send(null, JSON.stringify(data));
+              });  
             });
+            
+            // model[modelMethod](params).limit(50).then(function(data){
+            //   send(null, JSON.stringify(data));
+            // });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
