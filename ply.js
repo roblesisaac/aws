@@ -56,15 +56,28 @@ const ply = {
         if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
           get: function() {
-            let modelMethod = 'find';
-            // if(!params.limit) params.limit = 50;
-            if(id) {
-              modelMethod = 'findById';
-              params = id;
-            }
+            
+            // function createFinderFn(next) {
+            //   let modelMethod = 'find';
+            //   if(id) {
+            //     modelMethod = 'findById';
+            //     params = id;
+            //   }
+            //   pullOutKeysFromParams(['sort', 'limit'], function(params, mongoFilters) {
+            //     let finder = model[modelMethod](params).then(function(data){
+            //       send(null, JSON.stringify(data));
+            //     });
+            //   });
+            // }
+            
+            // createFinderFn(function(finder) {
+            //   finder(function(data){
+            //     send(null, JSON.stringify(data));  
+            //   });
+            // });
             model[modelMethod](params).then(function(data){
               send(null, JSON.stringify(data));
-            });
+            }).limit(50);
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
@@ -151,6 +164,18 @@ const ply = {
     } else {
       send('Error uploading json.');
     }
+  },
+  dbCount: function(event, context, send) {
+    const o = ply.prep(event, context);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site){
+      if(err) return send(err);
+      model.count({}, function(countErr, count){
+        if(countErr) return send(countErr);
+          send(null, count);
+      });
+    });
   },
   dbDrop: function(event, context, send) {
     const o = ply.prep(event, context);
