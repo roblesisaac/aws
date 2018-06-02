@@ -56,26 +56,20 @@ const ply = {
         if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
           get: function() {
-            // let modelMethod = 'find';
-            // if(id) {
-            //   modelMethod = 'findById';
-            //   params = id;
-            // }  
             function pullOutKeysFromParams(keys, next) {
               const mongoFilters = {};
-              for(var i in keys) {
-                mongoFilters[keys[i]] = params[keys[i]];
-                delete params[keys[i]];
-              }
+              // for(var i in keys) {
+              //   mongoFilters[keys[i]] = params[keys[i]];
+              //   delete params[keys[i]];
+              // }
               next(params, mongoFilters);
             }
             function createFindFn(next) {
               let modelMethod = 'find';
               if(id) modelMethod = 'findById';
-              let find = model[modelMethod];
+              // let find = model[modelMethod];
               pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
-                find = find(params).limit(50);
-                next(find);
+                next(find({}).limit(50));
               });
             }
             
@@ -85,6 +79,12 @@ const ply = {
               });  
             });
             
+            
+            // let modelMethod = 'find';
+            // if(id) {
+            //   modelMethod = 'findById';
+            //   params = id;
+            // }            
             // model[modelMethod](params).limit(50).then(function(data){
             //   send(null, JSON.stringify(data));
             // });
