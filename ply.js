@@ -56,7 +56,11 @@ const ply = {
         if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
           get: function() {
-            
+            let modelMethod = 'find';
+            if(id) {
+              modelMethod = 'findById';
+              params = id;
+            }            
             // function createFinderFn(next) {
             //   let modelMethod = 'find';
             //   if(id) {
