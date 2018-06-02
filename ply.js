@@ -74,7 +74,8 @@ const ply = {
             }
             
             createFindFn(function(find) {
-              find.limit(50).then(function(data){
+              find = find.limit(50);
+              find.then(function(data){
                 send(null, JSON.stringify(data));
               });  
             });
