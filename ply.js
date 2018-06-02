@@ -71,10 +71,12 @@ const ply = {
             }
             
             createFindFn(function(find) {
-              find = find.limit(50);
-              find.then(function(data){
-                send(null, JSON.stringify(data));
-              });  
+              pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+                find = find.limit(50);
+                find.then(function(data){
+                  send(null, JSON.stringify(data));
+                });
+              });
             });
             
             
