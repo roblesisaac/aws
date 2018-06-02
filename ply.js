@@ -65,10 +65,10 @@ const ply = {
               next(params, mongoFilters);
             }
             function createFindFn(next) {
-              let modelMethod = 'find';
-              if(id) modelMethod = 'findById';
-              const findy = model[modelMethod];
               pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+                let modelMethod = 'find';
+                if(id) modelMethod = 'findById';
+                const findy = model[modelMethod];
                 next(findy({}).limit(50));
               });
             }
