@@ -69,12 +69,12 @@ const ply = {
                 let modelMethod = 'find';
                 if(id) modelMethod = 'findById';
                 const findy = model[modelMethod];
-                next(model[modelMethod]({}).limit(50));
+                next(model[modelMethod]({}));
               });
             }
             
             createFindFn(function(find) {
-              find.then(function(data){
+              find.limit(50).then(function(data){
                 send(null, JSON.stringify(data));
               });  
             });
