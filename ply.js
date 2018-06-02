@@ -69,7 +69,7 @@ const ply = {
                 let modelMethod = 'find';
                 if(id) modelMethod = 'findById';
                 const findy = model[modelMethod];
-                next(findy({}).limit(50));
+                next(model[modelMethod]({}).limit(50));
               });
             }
             
