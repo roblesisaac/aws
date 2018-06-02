@@ -62,25 +62,25 @@ const ply = {
               //   mongoFilters[keys[i]] = params[keys[i]];
               //   delete params[keys[i]];
               // }
-              next(params, mongoFilters);
+              next({}, {limit: 40});
             }
-            function createFindFn(next) {
+            function createFindFn(params, next) {
               let modelMethod = 'find';
               if(id) modelMethod = 'findById';
-              next(model[modelMethod]({}));
+              next(model[modelMethod](params));
             }
             function attachFiltersToFind(filters, find, next) {
               find = find.limit(50);
               next(find);  
             }
             
-            createFindFn(function(find) {
-              pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+            pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+              createFindFn(params, function(find) {
                 attachFiltersToFind(mongoFilters, find, function(findFn) {
-                  find.then(function(data){
+                  findFn.then(function(data){
                     send(null, JSON.stringify(data));
                   });
-                });
+                });  
               });
             });
             
