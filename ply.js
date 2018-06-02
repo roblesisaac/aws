@@ -70,7 +70,7 @@ const ply = {
               next(model[modelMethod](params));
             }
             function attachFiltersToFind(filters, find, next) {
-              find = find.limit(50);
+              for(var key in filters) find = find[key] = filters[key];
               next(find);  
             }
             
@@ -80,7 +80,7 @@ const ply = {
                   findFn.then(function(data){
                     send(null, JSON.stringify(data));
                   });
-                });  
+                });
               });
             });
             
