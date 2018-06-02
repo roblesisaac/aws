@@ -69,16 +69,20 @@ const ply = {
               if(id) modelMethod = 'findById';
               next(model[modelMethod]({}));
             }
+            function attachFiltersToFind(filters, find, next) {
+              find = find.limit(50);
+              next(find);  
+            }
             
             createFindFn(function(find) {
               pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
-                find = find.limit(50);
-                find.then(function(data){
-                  send(null, JSON.stringify(data));
+                attachFiltersToFind(mongoFilters, find, function(findFn) {
+                  find.then(function(data){
+                    send(null, JSON.stringify(data));
+                  });
                 });
               });
             });
-            
             
             // let modelMethod = 'find';
             // if(id) {
