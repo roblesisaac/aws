@@ -79,9 +79,10 @@ const ply = {
             //     send(null, JSON.stringify(data));  
             //   });
             // });
-            model[modelMethod](params).then(function(data){
+            
+            model[modelMethod](params).limit(50).then(function(data){
               send(null, JSON.stringify(data));
-            }).limit(50);
+            });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
