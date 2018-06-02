@@ -67,9 +67,9 @@ const ply = {
             function createFindFn(next) {
               let modelMethod = 'find';
               if(id) modelMethod = 'findById';
-              // let find = model[modelMethod];
+              let find = model[modelMethod];
               pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
-                next(model[modelMethod]({}).limit(50));
+                next(find({}).limit(50));
               });
             }
             
