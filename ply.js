@@ -60,7 +60,15 @@ const ply = {
             // if(id) {
             //   modelMethod = 'findById';
             //   params = id;
-            // }            
+            // }  
+            function pullOutKeysFromParams(keys, next) {
+              const mongoFilters = {};
+              for(var i in keys) {
+                mongoFilters[keys[i]] = params[keys[i]];
+                delete params[keys[i]];
+              }
+              next(params, mongoFilters);
+            }
             function createFindFn(next) {
               let modelMethod = 'find';
               if(id) modelMethod = 'findById';
