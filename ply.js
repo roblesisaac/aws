@@ -69,7 +69,7 @@ const ply = {
               if(id) modelMethod = 'findById';
               // let find = model[modelMethod];
               pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
-                next(find({}).limit(50));
+                next(model[modelMethod]({}).limit(50));
               });
             }
             
