@@ -56,42 +56,42 @@ const ply = {
         if(sheetName === 'sheets') params.siteId = site._id;
         const method = {
           get: function() {
-            function pullOutKeysFromParams(keys, next) {
-              const mongoFilters = {};
-              // for(var i in keys) {
-              //   mongoFilters[keys[i]] = params[keys[i]];
-              //   delete params[keys[i]];
-              // }
-              next({}, {limit: 40});
-            }
-            function createFindFn(params, next) {
-              let modelMethod = 'find';
-              if(id) modelMethod = 'findById';
-              next(model[modelMethod](params));
-            }
-            function attachFiltersToFind(filters, find, next) {
-              for(var key in filters) find = find[key](filters[key]);
-              next(find);  
-            }
+            // function pullOutKeysFromParams(keys, next) {
+            //   const mongoFilters = {};
+            //   // for(var i in keys) {
+            //   //   mongoFilters[keys[i]] = params[keys[i]];
+            //   //   delete params[keys[i]];
+            //   // }
+            //   next({}, {limit: 40});
+            // }
+            // function createFindFn(params, next) {
+            //   let modelMethod = 'find';
+            //   if(id) modelMethod = 'findById';
+            //   next(model[modelMethod](params));
+            // }
+            // function attachFiltersToFind(filters, find, next) {
+            //   for(var key in filters) find = find[key](filters[key]);
+            //   next(find);  
+            // }
             
-            pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
-              createFindFn(params, function(find) {
-                attachFiltersToFind(mongoFilters, find, function(findFn) {
-                  findFn.then(function(data){
-                    send(null, JSON.stringify(data));
-                  });
-                });
-              });
-            });
-            
-            // let modelMethod = 'find';
-            // if(id) {
-            //   modelMethod = 'findById';
-            //   params = id;
-            // }            
-            // model[modelMethod](params).limit(50).then(function(data){
-            //   send(null, JSON.stringify(data));
+            // pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+            //   createFindFn(params, function(find) {
+            //     attachFiltersToFind(mongoFilters, find, function(findFn) {
+            //       findFn.then(function(data){
+            //         send(null, JSON.stringify(data));
+            //       });
+            //     });
+            //   });
             // });
+            
+            let modelMethod = 'find';
+            if(id) {
+              modelMethod = 'findById';
+              params = id;
+            }            
+            model[modelMethod](params).limit(50).then(function(data){
+              send(null, JSON.stringify(data));
+            });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
