@@ -53,7 +53,6 @@ const ply = {
       if(err) {
         send(err);
       } else {
-        if(sheetName === 'sheets') parameters.siteId = site._id;
         const method = {
           get: function() {
             function pullOutKeysFromParams(keys, next) {
@@ -66,6 +65,7 @@ const ply = {
                   params[key] = parameters[key];
                 }
               }
+              if(sheetName === 'sheets') params.siteId = site._id;
               next(params, mongoFilters);
             }
             function createFindFn(param, next) {
