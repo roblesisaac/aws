@@ -58,13 +58,15 @@ const ply = {
           get: function() {
             function pullOutKeysFromParams(keys, next) {
               let mongoFilters = {};
+              let params = {};
               for(var key in parameters) {
                 if(keys.indexOf(keys) > -1) {
                   mongoFilters[key] = parameters[key];
-                  delete parameters[key];
+                } else {
+                  params[key] = parameters[key];
                 }
               }
-              next(parameters, mongoFilters);
+              next(params, mongoFilters);
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
