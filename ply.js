@@ -66,7 +66,7 @@ const ply = {
                 }
               }
               if(sheetName === 'sheets') params.siteId = site._id;
-              next(params, mongoFilters);
+              next({}, mongoFilters);
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
