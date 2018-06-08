@@ -48,7 +48,7 @@ const ply = {
     const siteName = o.site;
     const sheetName = o.arg1;
     const id = o.arg2;
-    let parameters = o.query;
+    let parameters = o.query || {};
     ply.getModel(siteName, sheetName, o.event, function(err, model, sheet, site) {
       if(err) {
         send(err);
@@ -63,12 +63,12 @@ const ply = {
                   delete parameters[key];
                 }
               }
-              if(sheetName === 'sheets') parameters.siteId = site._id;
               next(parameters, mongoFilters);
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
               if(id) modelMethod = 'findById';
+              if(sheetName === 'sheets') param.siteId = site._id;
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
