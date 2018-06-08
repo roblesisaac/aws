@@ -56,17 +56,17 @@ const ply = {
         const method = {
           get: function() {
             function pullOutKeysFromParams(keys, next) {
-              // let mongoFilters = {};
-              // let params = {};
-              // for(var key in parameters) {
-              //   if(keys.indexOf(keys) > -1) {
-              //     mongoFilters[key] = parameters[key];
-              //   } else {
-              //     params[key] = parameters[key];
-              //   }
-              // }
-              // if(sheetName === 'sheets') params.siteId = site._id;
-              next({}, {limit:3});
+              let mongoFilters = {};
+              let params = {};
+              for(var key in parameters) {
+                if(keys.indexOf(keys) > -1) {
+                  mongoFilters[key] = parameters[key];
+                } else {
+                  params[key] = parameters[key];
+                }
+              }
+              if(sheetName === 'sheets') params.siteId = site._id;
+              next({}, mongoFilters);
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
