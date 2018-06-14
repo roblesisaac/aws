@@ -90,7 +90,8 @@ const ply = {
             if(id) {
               modelMethod = 'findById';
               parameters = id;
-            }            
+            }   
+            if(sheetName === 'sheets') parameters.siteId = site._id;
             model[modelMethod](parameters).limit(50).then(function(data){
               send(null, JSON.stringify(data));
             });
