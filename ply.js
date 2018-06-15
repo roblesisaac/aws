@@ -63,7 +63,7 @@ const ply = {
                   delete parameters[key];
                 }
               }
-              next(parameters, {limit:7});
+              next(parameters, mongoFilters);
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
