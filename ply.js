@@ -56,7 +56,7 @@ const ply = {
         const method = {
           get: function() {
             function pullOutKeysFromParams(keys, next) {
-              let mongoFilters = {};
+              const mongoFilters = {};
               for(var key in parameters) {
                 if(keys.indexOf(key) > -1) {
                   mongoFilters[key] = parameters[key];
