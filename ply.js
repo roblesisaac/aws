@@ -63,7 +63,7 @@ const ply = {
                   delete parameters[key];
                 }
               }
-              next({}, {limit:7});
+              next({sku:10010}, {limit:7});
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
