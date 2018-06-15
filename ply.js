@@ -59,11 +59,11 @@ const ply = {
               const mongoFilters = {};
               for(var key in parameters) {
                 if(keys.indexOf(key) > -1) {
-                  mongoFilters[key] = 4;
+                  // mongoFilters[key] = 4;
                   delete parameters[key];
                 }
               }
-              next(parameters, {limit:2});
+              next(parameters, mongoFilters);
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
