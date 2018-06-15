@@ -59,7 +59,7 @@ const ply = {
               const mongoFilters = {};
               for(var key in parameters) {
                 if(keys.indexOf(key) > -1) {
-                  mongoFilters[key] = parameters[key];
+                  mongoFilters[key] = 4;
                   delete parameters[key];
                 }
               }
