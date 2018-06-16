@@ -55,11 +55,19 @@ const ply = {
       } else {
         const method = {
           get: function() {
+            function doSomethingTo(key) {
+              const keys = {
+                limit: function() {
+                  return parameters[key]*1;
+                }
+              };
+              return keys(key);
+            }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
               for(var key in parameters) {
                 if(keys.indexOf(key) > -1) {
-                  filters[key] = parameters[key]*1;
+                  filters[key] = doSomethingTo(key);
                   delete parameters[key];
                 }
               }
