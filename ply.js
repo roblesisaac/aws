@@ -72,6 +72,7 @@ const ply = {
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
+              if(!filters.limit) filters.limit = 50;
               for(var key in filters) find = find[key](filters[key]);
               next(find);
             }
