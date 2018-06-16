@@ -61,7 +61,7 @@ const ply = {
                   return parameters[key]*1;
                 }
               };
-              return keys(key);
+              keys(key);
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
