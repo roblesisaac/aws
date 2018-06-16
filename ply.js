@@ -59,7 +59,7 @@ const ply = {
               const filters = {};
               for(var key in parameters) {
                 if(keys.indexOf(key) > -1) {
-                  filters[key] = 2;
+                  filters[key] = parameters[key];
                   delete parameters[key];
                 }
               }
