@@ -66,14 +66,15 @@ const ply = {
               } else {
                 return parameters[key];
               }
+              delete parameters[key];
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
+              function keyIsSpecial(key) {
+                return keys.indexOf(key) > -1;
+              }
               for(var key in parameters) {
-                if(keys.indexOf(key) > -1) {
-                  filters[key] = doSomethingTo(key);
-                  delete parameters[key];
-                }
+                if(keyIsSpecial(key)) filters[key] = doSomethingTo(key);
               }
               next(parameters, filters);
             }
