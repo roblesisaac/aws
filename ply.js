@@ -61,7 +61,7 @@ const ply = {
                   return parameters[key]*1;
                 }
               };
-              filterMethods(key);
+              return filterMethods[key]();
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
