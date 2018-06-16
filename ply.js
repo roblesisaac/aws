@@ -66,7 +66,6 @@ const ply = {
               } else {
                 return parameters[key];
               }
-              delete parameters[key];
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
@@ -74,7 +73,10 @@ const ply = {
                 return keys.indexOf(key) > -1;
               }
               for(var key in parameters) {
-                if(keyIsSpecial(key)) filters[key] = doSomethingTo(key);
+                if(keyIsSpecial(key)) {
+                  filters[key] = doSomethingTo(key);
+                  delete parameters[key];
+                }
               }
               next(parameters, filters);
             }
