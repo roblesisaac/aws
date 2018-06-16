@@ -61,7 +61,11 @@ const ply = {
                   return parameters[key]*1;
                 }
               };
-              return filterMethods[key]();
+              if(filterMethods[key]) {
+                return filterMethods[key]();
+              } else {
+                return parameters[key];
+              }
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
