@@ -280,7 +280,7 @@ const ply = {
             link: sheets[0].name
           };
           let index = fs.readFileSync('./templates/index.html', 'utf8');
-          index = index.replace('/{{siteUrl}}/', siteUrl);
+          index = index.replace('/{{siteUrl}}/g', siteUrl);
           index = index.replace('{{data}}', JSON.stringify(data));
           send(null, index, 'text/html');          
         });
