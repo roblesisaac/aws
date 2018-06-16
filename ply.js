@@ -58,10 +58,10 @@ const ply = {
             function doSomethingTo(key) {
               const filterMethods = {
                 limit: function() {
-                  parameters[key]*1;
+                  return parameters[key]*1;
                 }
               };
-              return filterMethods(key);
+              filterMethods(key);
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
