@@ -58,7 +58,7 @@ const ply = {
             function doSomethingTo(key) {
               const filterMethods = {
                 limit: function() {
-                  return parameters[key]*1;
+                  parameters[key]*1;
                 }
               };
               return filterMethods(key);
