@@ -56,12 +56,7 @@ const ply = {
         const method = {
           get: function() {
             function doSomethingTo(key) {
-              const keys = {
-                limit: function() {
-                  return parameters[key]*1;
-                }
-              };
-              keys(key);
+              return parameters[key]*1;
             }
             function pullOutKeysFromParams(keys, next) {
               const filters = {};
