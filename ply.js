@@ -59,6 +59,9 @@ const ply = {
               const filterMethods = {
                 limit: function() {
                   return parameters[key]*1;
+                },
+                skip: function() {
+                  return parameters[key]*1;
                 }
               };
               if(filterMethods[key]) {
@@ -92,7 +95,7 @@ const ply = {
               next(find);
             }
             
-            pullOutKeysFromParams(['limit', 'select', 'sort'], function(params, mongoFilters) {
+            pullOutKeysFromParams(['limit', 'select', 'skip', 'sort'], function(params, mongoFilters) {
               createFindFn(params, function(find) {
                 attachFiltersToFind(find, mongoFilters, function(findFn) {
                   findFn.then(function(data){
