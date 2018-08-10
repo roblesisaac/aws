@@ -85,8 +85,11 @@ const ply = {
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
-              if(id) modelMethod = 'findById';
               if(sheetName === 'sheets') param.siteId = site._id;
+              if(id) {
+                modelMethod = 'findById';
+                param = id;
+              }
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
