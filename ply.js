@@ -85,7 +85,7 @@ const ply = {
               next(parameters, filters);
             }
             function queryPropIsARegex(prop, queryObj) {
-              return queryObj[prop].indexOf(queryObj[prop]) !== -1;
+              return queryObj[prop].indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
               queryObj[prop] = { $regex: /queryObj[prop]/ };
@@ -97,9 +97,9 @@ const ply = {
                 modelMethod = 'findById';
                 param = id;
               }
-              // for(var queryProp in param) {
-              //   if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
-              // }
+              for(var queryProp in param) {
+                if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
+              }
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
