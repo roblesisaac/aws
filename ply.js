@@ -89,7 +89,7 @@ const ply = {
             }
             function createRegObj(prop, queryObj) {
               var slashlessValue = 'acc';
-              queryObj[prop] = { $regex: /slashlessValue/ };
+              queryObj[prop] = { $regex: /acc/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
