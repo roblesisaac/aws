@@ -88,7 +88,7 @@ const ply = {
               return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              queryObj[prop] = queryObj[prop].replace(/\//g,'');
+              queryObj[prop] = 'acc';
               queryObj[prop] = { $regex: /queryObj[prop]/ };
             }
             function createFindFn(param, next) {
