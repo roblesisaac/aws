@@ -88,7 +88,7 @@ const ply = {
               return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              queryObj[prop] = { $regex: /performance/ };
+              queryObj[prop] = { $regex: /acc/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
