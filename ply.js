@@ -89,7 +89,7 @@ const ply = {
             }
             function createRegObj(prop, queryObj) {
               queryObj[prop] = 'acc';
-              queryObj[prop] = { $regex: /queryObj[prop]/ };
+              queryObj[prop] = { $regex: /acc/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
