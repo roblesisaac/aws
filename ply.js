@@ -88,8 +88,8 @@ const ply = {
               return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              // queryObj[prop] = queryObj[prop].replace(/\//g,'');
-              queryObj[prop] = { $regex: queryObj[prop] };
+              queryObj[prop] = queryObj[prop].replace(/\//g,'');
+              queryObj[prop] = { $regex: new RegExp(queryObj[prop]) };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
