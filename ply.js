@@ -85,7 +85,9 @@ const ply = {
               next(parameters, filters);
             }
             function queryValueIsRegex(queryValue) {
-              return queryValue.indexOf('/') !== -1;
+              var firstIsSlash = queryValue.charAt(0) === '/';
+              var lastIsSlash = queryValue.charAt(queryValue.length-1) === '/';
+              return firstIsSlash && lastIsSlash;
             }
             function createRegObj(prop, queryObj) {
               queryObj[prop] = queryObj[prop].replace(/\//g,'');
