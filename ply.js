@@ -55,6 +55,7 @@ const ply = {
       } else {
         const method = {
           get: function() {
+            // db.inventory.find( { sku: { $regex: /789$/ } } );
             function doSomethingTo(key) {
               const filterMethods = {
                 limit: function() {
@@ -83,12 +84,21 @@ const ply = {
               }
               next(parameters, filters);
             }
+            function queryPropIsARegex(prop, queryObj) {
+              return queryObj[prop].indexOf(queryObj[prop]) !== -1;
+            }
+            function createRegObj(prop, queryObj) {
+              queryObj[prop] = { $regex: /queryObj[prop]/ };
+            }
             function createFindFn(param, next) {
               let modelMethod = 'find';
               if(sheetName === 'sheets') param.siteId = site._id;
               if(id) {
                 modelMethod = 'findById';
                 param = id;
+              }
+              for(var queryProp in param) {
+                if(queryPropIsARegex(param, queryProp)) createRegObj(param, queryProp);
               }
               next(model[modelMethod](param));
             }
@@ -108,15 +118,6 @@ const ply = {
               });
             });
             
-            // let modelMethod = 'find';
-            // if(id) {
-            //   modelMethod = 'findById';
-            //   parameters = id;
-            // }   
-            // if(sheetName === 'sheets') parameters.siteId = site._id;
-            // model[modelMethod](parameters).limit(50).then(function(data){
-            //   send(null, JSON.stringify(data));
-            // });
           },
           put: function() {
             model.findByIdAndUpdate(id, JSON.parse(event.body), { new: true }).then(function(data){
