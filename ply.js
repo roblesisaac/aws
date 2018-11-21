@@ -88,7 +88,8 @@ const ply = {
               return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              queryObj[prop] = { $regex: /queryObj[prop]/ };
+              var slashlessValue = queryObj[prop].replace(/\//g,'');
+              queryObj[prop] = { $regex: /slashlessValue/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
