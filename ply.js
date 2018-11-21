@@ -88,7 +88,7 @@ const ply = {
               return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              var slashlessValue = queryObj[prop].replace(/\//g,'');
+              var slashlessValue = 'acc';
               queryObj[prop] = { $regex: /slashlessValue/ };
             }
             function createFindFn(param, next) {
