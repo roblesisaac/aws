@@ -88,17 +88,17 @@ const ply = {
               return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              queryObj[prop] = { $regex: /acc/ };
+              queryObj[prop] = { $regex: /queryObj[prop]/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
+              for(var queryProp in param) {
+                if(queryValueIsRegex(param[queryProp])) createRegObj(queryProp, param);
+              }
               if(sheetName === 'sheets') param.siteId = site._id;
               if(id) {
                 modelMethod = 'findById';
                 param = id;
-              }
-              for(var queryProp in param) {
-                if(queryValueIsRegex(param[queryProp])) createRegObj(queryProp, param);
               }
               next(model[modelMethod](param));
             }
