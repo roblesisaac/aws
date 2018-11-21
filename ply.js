@@ -88,7 +88,7 @@ const ply = {
               return queryObj[prop].indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              queryObj[prop] = { $regex: /queryObj[prop]/ };
+              queryObj[prop] = { $regex: /2009/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
@@ -97,9 +97,9 @@ const ply = {
                 modelMethod = 'findById';
                 param = id;
               }
-              for(var queryProp in param) {
-                if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
-              }
+              // for(var queryProp in param) {
+              //   if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
+              // }
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
