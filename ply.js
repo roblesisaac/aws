@@ -97,9 +97,9 @@ const ply = {
                 modelMethod = 'findById';
                 param = id;
               }
-              for(var queryProp in param) {
-                if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
-              }
+              // for(var queryProp in param) {
+              //   if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
+              // }
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
