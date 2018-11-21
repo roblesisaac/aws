@@ -98,7 +98,7 @@ const ply = {
                 param = id;
               }
               for(var queryProp in param) {
-                if(queryPropIsARegex(param, queryProp)) createRegObj(param, queryProp);
+                if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
               }
               next(model[modelMethod](param));
             }
