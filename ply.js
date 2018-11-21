@@ -84,11 +84,11 @@ const ply = {
               }
               next(parameters, filters);
             }
-            function queryPropIsARegex(prop, queryObj) {
-              return queryObj[prop].indexOf('/') !== -1;
+            function queryValueIsRegex(queryValue) {
+              return queryValue.indexOf('/') !== -1;
             }
             function createRegObj(prop, queryObj) {
-              queryObj[prop] = { $regex: /2009/ };
+              queryObj[prop] = { $regex: /performance/ };
             }
             function createFindFn(param, next) {
               let modelMethod = 'find';
@@ -97,9 +97,9 @@ const ply = {
                 modelMethod = 'findById';
                 param = id;
               }
-              // for(var queryProp in param) {
-              //   if(queryPropIsARegex(queryProp, param)) createRegObj(queryProp, param);
-              // }
+              for(var queryProp in param) {
+                if(queryValueIsRegex(param[queryProp])) createRegObj(queryProp, param);
+              }
               next(model[modelMethod](param));
             }
             function attachFiltersToFind(find, filters, next) {
