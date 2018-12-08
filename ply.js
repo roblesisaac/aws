@@ -143,7 +143,8 @@ const ply = {
     });
   },
   brain: function(event, context, send) {
-    send(null, 'Welcome to the brain');  
+    
+    send(null, JSON.stringify(context));
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
