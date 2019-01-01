@@ -364,7 +364,7 @@ const ply = {
       });
     });
   },
-  static: function(event, context, send) {
+  script: function(event, context, send) {
     const o = ply.prep(event, context);
     const prop = o.arg1;
     const isReady = (body) => {
