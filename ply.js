@@ -299,9 +299,10 @@ const ply = {
       } else {
         ply.checkToken(event, function(err, decoded) {
           if(err) {
-            send(null, `<h1>No ${siteUrl} exists yet...</h1>`, 'text/html');
+            send(err);
           } else {
-            send(null, `<h1>No ${siteUrl} exists yet... but user is logged in :)</h1>`, 'text/html'); 
+            send(null, JSON.stringify(decoded));
+            // send(null, `<h1>No ${siteUrl} exists yet... but user is logged in :)</h1>`, 'text/html'); 
           }
         }); 
       }
