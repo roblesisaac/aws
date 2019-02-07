@@ -270,9 +270,7 @@ const ply = {
   landing: function(event, context, send) {
     var vm = this;
     let siteUrl = 'plysheet';
-    if (event.pathParameters && event.pathParameters.site) {
-      siteUrl = event.pathParameters.site;
-    }
+    if (event.pathParameters && event.pathParameters.site) siteUrl = event.pathParameters.site;
     function checkForSheets(site, next) {
       models.sheets.find({siteId: site._id}).then(function(sheets){
         if(sheets && sheets.length > 0) {
@@ -299,6 +297,10 @@ const ply = {
           send(null, index, 'text/html');          
         });
       } else {
+        this.checkToken(event, function(err, decoded) {
+          if(err) return next(err);
+          send(null, `<h1>No ${siteUrl} exists yet... but user is logged in :)</h1>`, 'text/html');
+        }); 
         send(null, `<h1>No ${siteUrl} exists yet...</h1>`, 'text/html');
       }
     });
