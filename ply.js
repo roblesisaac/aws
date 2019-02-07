@@ -299,7 +299,7 @@ const ply = {
           send(null, index, 'text/html');          
         });
       } else {
-        send(null, `<h1>No ${siteUrl} exists</h1>`, 'text/html');
+        send(null, `<h1>No ${siteUrl} exists yet...</h1>`, 'text/html');
       }
     });
   },
