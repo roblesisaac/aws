@@ -298,10 +298,12 @@ const ply = {
         });
       } else {
         this.checkToken(event, function(err, decoded) {
-          if(err) return next(err);
-          send(null, `<h1>No ${siteUrl} exists yet... but user is logged in :)</h1>`, 'text/html');
+          if(err) {
+            send(null, `<h1>No ${siteUrl} exists yet...</h1>`, 'text/html');
+          } else {
+            send(null, `<h1>No ${siteUrl} exists yet... but user is logged in :)</h1>`, 'text/html'); 
+          }
         }); 
-        send(null, `<h1>No ${siteUrl} exists yet...</h1>`, 'text/html');
       }
     });
   },
