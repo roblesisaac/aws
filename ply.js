@@ -297,7 +297,7 @@ const ply = {
           send(null, index, 'text/html');          
         });
       } else {
-        this.checkToken(event, function(err, decoded) {
+        ply.checkToken(event, function(err, decoded) {
           if(err) {
             send(null, `<h1>No ${siteUrl} exists yet...</h1>`, 'text/html');
           } else {
