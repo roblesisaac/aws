@@ -268,7 +268,7 @@ const ply = {
     });
   },
   sitefind: function(event, context, send) {
-    let site = event.pathParameters.site;x
+    let site = event.pathParameters.site;
     models.sites.find({}).then(function(sitesfound){
       send(null, JSON.stringify(sitesfound));
     });
