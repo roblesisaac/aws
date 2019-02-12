@@ -237,7 +237,7 @@ const ply = {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
       if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
-        next(null, models[sheetName], {}, site);  
+        next(null, {name: sheetName, isDefault: true, message: 'You do not have access to this sheet.'}, site);
       } else {
         models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
           if(!sheet) {
@@ -258,12 +258,16 @@ const ply = {
     var vm = this;
     vm.findSheet(siteName, sheetName, function(err1, sheet, site){
       if(err1) return next(err1);
-      vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
-        if(err2) return next(err2);
-        vm.createModelFromSheet(sheet, function(model){
-          next(null, model, sheet, site);
-        });      
-      }); 
+      if(sheet.isDefault) {
+        next(null, models[sheet.name], sheet, site);  
+      } else {
+        vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
+          if(err2) return next(err2);
+          vm.createModelFromSheet(sheet, function(model){
+            next(null, model, sheet, site);
+          });
+        });
+      }
     });
   },
   sitefind: function(event, context, send) {
