@@ -55,6 +55,7 @@ const ply = {
       } else {
         const method = {
           get: function() {
+            // db.inventory.find( { sku: { $regex: /789$/ } } );
             function doSomethingTo(key) {
               const filterMethods = {
                 limit: function() {
@@ -236,37 +237,33 @@ const ply = {
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
-      if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
-        next(null, {name: sheetName, isDefault: true, message: 'You do not have access to this sheet.'}, site);
-      } else {
-        models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
-          if(!sheet) {
-            if(sheetName === 'sheets') {
-              models.sheets.create(first.sheet(site)).then(function(data){
-                next(null, data, site);
-              });            
-            } else {
-              return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
-            }
-          };
-          next(null, sheet, site);
-        });
-      }
+      models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
+        if(!sheet) {
+          if(sheetName === 'sheets') {
+            models.sheets.create(first.sheet(site)).then(function(data){
+              next(null, data, site);
+            });            
+          } else {
+            return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
+          }
+        };
+        next(null, sheet, site);
+      });
     });     
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    vm.findSheet(siteName, sheetName, function(err1, sheet, site) {
+    vm.findSheet(siteName, sheetName, function(err1, sheet, site){
       if(err1) return next(err1);
-      if(sheet.isDefault === true) {
-        next(null, models[sheet.name], sheet, site);  
+      if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
+        next(null, models[sheetName], sheet, site);
       } else {
         vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
           if(err2) return next(err2);
           vm.createModelFromSheet(sheet, function(model){
             next(null, model, sheet, site);
-          });
-        });
+          });      
+        }); 
       }
     });
   },
