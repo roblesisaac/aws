@@ -268,9 +268,9 @@ const ply = {
     });
   },
   sitefind: function() {
-    let site = event.pathParameters.site;
-    models.sites.find({}).then(function(sites){
-      send(null, JSON.stringify(sites));
+    // let site = event.pathParameters.site;
+    models.sites.find({}).then(function(sitesfound){
+      send(null, JSON.stringify(sitesfound));
     });
   },
   landing: function(event, context, send) {
