@@ -267,12 +267,11 @@ const ply = {
       }
     });
   },
-  sitefind: function() {
-    // let site = event.pathParameters.site;
-    send(null, 'sites')
-    // models.sites.find({}).then(function(sitesfound){
-    //   send(null, JSON.stringify(sitesfound));
-    // });
+  sitefind: function(event, context, send) {
+    let site = event.pathParameters.site;x
+    models.sites.find({}).then(function(sitesfound){
+      send(null, JSON.stringify(sitesfound));
+    });
   },
   landing: function(event, context, send) {
     var vm = this;
