@@ -267,6 +267,12 @@ const ply = {
       }
     });
   },
+  sitefind: function() {
+    let site = event.pathParameters.site;
+    models.sites.find({}).then(function(sites){
+      send(null, JSON.stringify(sites));
+    });
+  },
   landing: function(event, context, send) {
     var vm = this;
     let siteUrl = 'plysheet';
@@ -297,13 +303,7 @@ const ply = {
           send(null, index, 'text/html');          
         });
       } else {
-        ply.checkToken(event, function(err, decoded) {
-          if(err) {
-            send('flfjasldjfd');
-          } else {
-            send(null, `<h1>No ${siteUrl} exists.)</h1>`, 'text/html');
-          }
-        }); 
+        send(null, `<h1>No ${siteUrl} exists.)</h1>`, 'text/html'); 
       }
     });
   },
