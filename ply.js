@@ -269,9 +269,10 @@ const ply = {
   },
   sitefind: function() {
     // let site = event.pathParameters.site;
-    models.sites.find({}).then(function(sitesfound){
-      send(null, JSON.stringify(sitesfound));
-    });
+    send(null, 'sites')
+    // models.sites.find({}).then(function(sitesfound){
+    //   send(null, JSON.stringify(sitesfound));
+    // });
   },
   landing: function(event, context, send) {
     var vm = this;
