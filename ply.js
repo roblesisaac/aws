@@ -236,7 +236,7 @@ const ply = {
   findSheet: function(siteName, sheetName, next) {
     models.sites.findOne({ url: siteName }).then(function(site){
       if(!site) return next(siteName + ' plysheet not found.');
-      if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
+      if(['sitess', 'userss', 'sheetss'].indexOf(sheetName) > -1) {
         next(null, {name: sheetName, isDefault: true, message: 'You do not have access to this sheet.'}, site);
       } else {
         models.sheets.findOne({ siteId: site._id, name: sheetName }).then(function(sheet){
@@ -256,7 +256,7 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    vm.findSheet(siteName, sheetName, function(err1, sheet, site){
+    vm.findSheet(siteName, sheetName, function(err1, sheet, site) {
       if(err1) return next(err1);
       if(sheet.isDefault) {
         next(null, models[sheet.name], sheet, site);  
