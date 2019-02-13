@@ -243,6 +243,8 @@ const ply = {
             models.sheets.create(first.sheet(site)).then(function(data){
               next(null, data, site);
             });            
+          } else if(['users', 'sites'].indexOf(sheetName) > -1) {
+            next(null, {name: sheetName, isABuildingBlock: true, message: 'This sheet is a building block.'}, site);
           } else {
             return next(siteName + ' plysheet found but no ' + sheetName + ' sheet found.');
           }
@@ -255,7 +257,7 @@ const ply = {
     var vm = this;
     vm.findSheet(siteName, sheetName, function(err1, sheet, site){
       if(err1) return next(err1);
-      if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
+      if(['sites', 'users'].indexOf(sheetName) > -1) {
         next(null, models[sheetName], sheet, site);
       } else {
         vm.checkIfSheetIsPublic(sheet, event, function(err2, sheet) {
