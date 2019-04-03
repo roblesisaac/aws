@@ -150,9 +150,7 @@ const ply = {
       publicKey: "zs9k3t4hs3hg73jh",
       privateKey: "0a213415ca5f7cd23591c12c8794346d"
     });
-    gateway.clientToken.generate({
-      customerId: aCustomerId
-    }, function (err, response) {
+    gateway.clientToken.generate({}, function (err, response) {
       var clientToken = response.clientToken;
       send(null, JSON.stringify({
         name: "Isaac loves Sharayah, his wife :)",
