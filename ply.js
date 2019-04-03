@@ -156,7 +156,6 @@ const ply = {
     gateway.clientToken.generate({}, function (err, response) {
       var clientToken = response.clientToken;
       send(null, JSON.stringify({
-        name: "Isaac loves Sharayah, his wife :)",
         token: clientToken
       }));
     });
