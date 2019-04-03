@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const models = { sheets: require('./models/sheets'), sites: require('./models/sites'), users: require('./models/users') };
 const mongoose = require('mongoose');
+const brain = require('braintree');
 const db = mongoose.connection;
 const aws = require('aws-sdk');
 const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
@@ -143,8 +144,21 @@ const ply = {
     });
   },
   brain: function(event, context, send) {
-    
-    send(null, JSON.stringify(context));
+    var gateway = braintree.connect({
+      environment: braintree.Environment.Sandbox,
+      merchantId: "zn8dfjtt2zsttw88",
+      publicKey: "zs9k3t4hs3hg73jh",
+      privateKey: "0a213415ca5f7cd23591c12c8794346d"
+    });
+    gateway.clientToken.generate({
+      customerId: aCustomerId
+    }, function (err, response) {
+      var clientToken = response.clientToken;
+      send(null, JSON.stringify({
+        name: "Isaac loves Sharayah, his wife :)",
+        token: clientToken
+      }));
+    });
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
@@ -255,7 +269,7 @@ const ply = {
   },
   getModel: function(siteName, sheetName, event, next) {
     var vm = this;
-    vm.findSheet(siteName, sheetName, function(err1, sheet, site){
+    vm.findSheet(siteName, sheetName, function(err1, sheet, site) {
       if(err1) return next(err1);
       if(['sites', 'users', 'sheets'].indexOf(sheetName) > -1) {
         next(null, models[sheetName], sheet, site);
