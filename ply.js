@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const models = { sheets: require('./models/sheets'), sites: require('./models/sites'), users: require('./models/users') };
 const mongoose = require('mongoose');
-const brain = require('braintree');
+const braintree = require('braintree');
 const db = mongoose.connection;
 const aws = require('aws-sdk');
 const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
