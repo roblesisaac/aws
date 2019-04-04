@@ -153,12 +153,23 @@ const ply = {
         privateKey: "0a213415ca5f7cd23591c12c8794346d"
       });
     }
-    gateway.clientToken.generate({}, function (err, response) {
-      var clientToken = response.clientToken;
-      send(null, JSON.stringify({
-        token: clientToken
-      }));
-    });
+    const o = ply.prep(event, context);
+    const method = {
+      get: function() {
+        gateway.clientToken.generate({}, function (err, response) {
+          var clientToken = response.clientToken;
+          send(null, JSON.stringify({
+            token: clientToken
+          }));
+        });  
+      },
+      post: function() {
+       send(null, JSON.stringify({
+         message: 'posted that!'
+       }));  
+      }
+    };
+    method[o.event.httpMethod.toLowerCase()]();
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
