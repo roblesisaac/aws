@@ -166,7 +166,7 @@ const ply = {
       post: function() {
        send(null, JSON.stringify({
          message: 'posted that!',
-         andthestuff: o
+         andthestuff: event.body
        }));  
       }
     };
