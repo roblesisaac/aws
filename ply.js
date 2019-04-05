@@ -164,10 +164,18 @@ const ply = {
         });  
       },
       post: function() {
-       send(null, JSON.stringify({
-         message: 'posted that!',
-         andthestuff: event.body
-       }));  
+      gateway.transaction.sale({
+        amount: "10.00",
+        paymentMethodNonce: event.body.nonce,
+        options: {
+          submitForSettlement: true
+        }
+      }, function (err, result) {
+         send(null, JSON.stringify({
+           message: 'posted that!',
+           andthestuff: result
+         }));
+      });
       }
     };
     method[o.event.httpMethod.toLowerCase()]();
