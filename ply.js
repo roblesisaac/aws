@@ -173,7 +173,8 @@ const ply = {
       }, function (err, result) {
          send(null, JSON.stringify({
            message: 'posted that!',
-           andthestuff: result
+           andthestuff: result,
+           andthenonce: event.body.nonce
          }));
       });
       }
