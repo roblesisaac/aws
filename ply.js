@@ -166,7 +166,7 @@ const ply = {
       post: function() {
       gateway.transaction.sale({
         amount: "10.00",
-        paymentMethodNonce: event.body.nonce,
+        paymentMethodNonce: JSON.parse(event.body).nonce,
         options: {
           submitForSettlement: true
         }
@@ -175,7 +175,7 @@ const ply = {
            message: 'posted that!',
            andthestuff: result,
            andthebody: event.body,
-           andthenonce: event.body.nonce
+           andthenonce: JSON.parse(event.body).nonce
          }));
       });
       }
