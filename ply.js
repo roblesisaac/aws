@@ -166,7 +166,7 @@ const ply = {
       post: function() {
       gateway.transaction.sale({
         amount: "10.00",
-        paymentMethodNonce: event.body.nonce,
+        paymentMethodNonce: event.body.payload.nonce,
         options: {
           submitForSettlement: true
         }
