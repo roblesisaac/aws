@@ -182,6 +182,9 @@ const ply = {
     };
     method[o.event.httpMethod.toLowerCase()]();
   },
+  braindrop: function(event, context, send) {
+    send(null, JSON.stringify('hi'))
+  },
   connect: function() {
     if (isConnected) return Promise.resolve();
     return mongoose.connect(process.env.DB).then(function(database){
