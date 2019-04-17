@@ -156,21 +156,19 @@ const ply = {
     const o = ply.prep(event, context);
     const method = {
       get: function() {
-        gateway.clientToken.generate({}, function (err, response) {
-          var clientToken = response.clientToken;
-          send(null, JSON.stringify({
-            token: clientToken
-          }));
+        gateway.clientToken.generate({}, function (err, res) {
+          send(null, JSON.stringify({ token: res.clientToken }));
         });  
       },
       post: function() {
-      gateway.transaction.sale({
+      let saleObj = {
         amount: "10.00",
         paymentMethodNonce: JSON.parse(event.body).nonce,
         options: {
           submitForSettlement: true
         }
-      }, function (err, result) {
+      };
+      gateway.transaction.sale(saleObj, function (err, result) {
          send(null, JSON.stringify({
            message: 'posted that!',
            andthestuff: result,
@@ -181,9 +179,6 @@ const ply = {
       }
     };
     method[o.event.httpMethod.toLowerCase()]();
-  },
-  braindrop: function(event, context, send) {
-    send(null, JSON.stringify('hi'))
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
