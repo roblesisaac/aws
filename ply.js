@@ -156,8 +156,11 @@ const ply = {
     const o = ply.prep(event, context);
     const method = {
       get: function() {
-        gateway.clientToken.generate({}, function (err, res) {
-          send(null, JSON.stringify({ token: res.clientToken }));
+        gateway.clientToken.generate({}, function (err, response) {
+          var clientToken = response.clientToken;
+          send(null, JSON.stringify({
+            token: clientToken
+          }));
         });  
       },
       post: function() {
@@ -165,6 +168,37 @@ const ply = {
         let saleObj = {
           amount: payload.amount,
           paymentMethodNonce: payload.nonce,
+          customer: {
+            firstName: "Drew",
+            lastName: "Smith",
+            company: "Braintree",
+            phone: "312-555-1234",
+            fax: "312-555-12346",
+            website: "http://www.example.com",
+            email: "drew@example.com"
+          },
+          billing: {
+            firstName: "Paul",
+            lastName: "Smith",
+            company: "Braintree",
+            streetAddress: "1 E Main St",
+            extendedAddress: "Suite 403",
+            locality: "Chicago",
+            region: "IL",
+            postalCode: "60622",
+            countryCodeAlpha2: "US"
+          },
+          shipping: {
+            firstName: "Jen",
+            lastName: "Smith",
+            company: "Braintree",
+            streetAddress: "1 E 1st St",
+            extendedAddress: "5th Floor",
+            locality: "Bartlett",
+            region: "IL",
+            postalCode: "60103",
+            countryCodeAlpha2: "US"
+          },
           options: {
             submitForSettlement: true
           }
@@ -180,6 +214,12 @@ const ply = {
       }
     };
     method[o.event.httpMethod.toLowerCase()]();
+  },
+  braindrop: function(event, context, send) {
+    var dropin = require('braintree-web-drop-in');
+    
+    dropin.create({ /* options */ }, callback);
+    send(null, JSON.stringify('hi'))
   },
   connect: function() {
     if (isConnected) return Promise.resolve();
