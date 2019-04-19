@@ -165,14 +165,21 @@ const ply = {
       },
       post: function() {
         let payload = JSON.parse(event.body);
-        payload.options = {
-          submitForSettlement: true
+        let saleObj = {
+          amount: payload.amount,
+          paymentMethodNonce: payload.nonce,
+          customer: payload.customer,
+          billing: payload.billing,
+          shipping: payload.shipping,
+          options: {
+            submitForSettlement: true
+          }
         };
-        gateway.transaction.sale(payload, function (err, result) {
+        gateway.transaction.sale(saleObj, function (err, result) {
            send(null, JSON.stringify({
              message: 'posted that!',
              andthestuff: result,
-             andthebody: payload,
+             andthebody: event.body,
              andthenonce: JSON.parse(event.body).nonce
            }));
         });
