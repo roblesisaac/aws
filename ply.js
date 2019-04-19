@@ -169,7 +169,12 @@ const ply = {
           submitForSettlement: true
         };
         gateway.transaction.sale(payload, function (err, result) {
-           send(null, JSON.stringify(result));
+           send(null, JSON.stringify({
+             message: 'posted that!',
+             andthestuff: result,
+             andthebody: payload,
+             andthenonce: JSON.parse(event.body).nonce
+           }));
         });
       }
     };
