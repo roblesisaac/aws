@@ -176,12 +176,7 @@ const ply = {
           }
         };
         gateway.transaction.sale(saleObj, function (err, result) {
-           send(null, JSON.stringify({
-             message: 'posted that!',
-             andthestuff: result,
-             andthebody: event.body,
-             andthenonce: JSON.parse(event.body).nonce
-           }));
+           send(null, JSON.stringify(result));
         });
       }
     };
