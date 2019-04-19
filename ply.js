@@ -165,51 +165,11 @@ const ply = {
       },
       post: function() {
         let payload = JSON.parse(event.body);
-        let saleObj = {
-          amount: payload.amount,
-          paymentMethodNonce: payload.nonce,
-          customer: {
-            firstName: "Drew",
-            lastName: "Smith",
-            company: "Braintree",
-            phone: "312-555-1234",
-            fax: "312-555-12346",
-            website: "http://www.example.com",
-            email: "drew@example.com"
-          },
-          billing: {
-            firstName: "Paul",
-            lastName: "Smith",
-            company: "Braintree",
-            streetAddress: "1 E Main St",
-            extendedAddress: "Suite 403",
-            locality: "Chicago",
-            region: "IL",
-            postalCode: "60622",
-            countryCodeAlpha2: "US"
-          },
-          shipping: {
-            firstName: "Jen",
-            lastName: "Smith",
-            company: "Braintree",
-            streetAddress: "1 E 1st St",
-            extendedAddress: "5th Floor",
-            locality: "Bartlett",
-            region: "IL",
-            postalCode: "60103",
-            countryCodeAlpha2: "US"
-          },
-          options: {
-            submitForSettlement: true
-          }
+        payload.options = {
+          submitForSettlement: true
         };
-        gateway.transaction.sale(saleObj, function (err, result) {
-           send(null, JSON.stringify({
-             message: 'posted that!',
-             andthestuff: result,
-             andthebody: event.body,
-             andthenonce: JSON.parse(event.body).nonce
-           }));
+        gateway.transaction.sale(payload, function (err, result) {
+           send(null, JSON.stringify(result));
         });
       }
     };
