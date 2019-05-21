@@ -356,7 +356,7 @@ const ply = {
     const siteName = o.site;
     const sheetName = o.arg1;
     const id = o.arg2;
-    models.site.find({url: siteName}).then(function(site){
+    models.site.findOne({url: siteName}).then(function(site){
       send(null, JSON.stringiyfy(site));
     });
   },
