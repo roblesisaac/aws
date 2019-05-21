@@ -353,9 +353,11 @@ const ply = {
   },
   sheetJs: function(event, context, send) {
     const o = ply.prep(event, context);
-    const siteUrl = o.site;
-    models.sites.findOne({url: siteUrl}).then(function(site){
-      send(null, JSON.stringiyfy(site);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    const id = o.arg2;
+    models.sites.findOne({siteUrl:siteName}).then(function(site){
+      send(null, JSON.stringify(site));
     });
   },
   login: function(event, context, send) {
