@@ -362,7 +362,7 @@ const ply = {
         test: function(){
           console.log("test");
         }
-      }));
+      }), 'application/javascript');
     });
   },
   login: function(event, context, send) {
