@@ -356,8 +356,13 @@ const ply = {
     const siteName = o.site;
     const sheetName = o.arg1;
     const id = o.arg2;
-    models.sites.findOne({siteUrl:siteName}).then(function(site){
-      send(null, JSON.stringify(site));
+    models.sites.findOne({url:siteName}).then(function(site){
+      send(null, JSON.stringify({
+        site:site
+        test: function(){
+          console.log("test");
+        }
+      }));
     });
   },
   login: function(event, context, send) {
