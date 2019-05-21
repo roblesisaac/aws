@@ -343,7 +343,7 @@ const ply = {
           };
           let index = fs.readFileSync('./templates/index.html', 'utf8');
           index = index.replace(new RegExp('{{siteUrl}}', 'g'), siteUrl);
-          index = index.replace('{{data}}', JSON.stringify({hello: "world"}}));
+          index = index.replace('{{data}}', JSON.stringify({hello: "world"}));
           send(null, index, 'text/html');          
         });
       } else {
