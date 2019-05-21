@@ -358,7 +358,7 @@ const ply = {
     const id = o.arg2;
     models.sites.findOne({url:siteName}).then(function(site){
       send(null, JSON.stringify({
-        site:site
+        site:site,
         test: function(){
           console.log("test");
         }
