@@ -354,10 +354,13 @@ const ply = {
   sheetJs: function(event, context, send) {
     const o = ply.prep(event, context);
     const siteName = o.site;
-    const sheetName = o.arg1;
-    const id = o.arg2;
-    models.site.findOne({url: siteName}).then(function(site){
-      send(null, JSON.stringiyfy(site));
+    models.sites.findOne({url: siteName}).then(function(site){
+      send(null, JSON.stringiyfy({
+        site: site,
+        test: function() {
+          console.log("test");
+        }
+      }));
     });
   },
   login: function(event, context, send) {
