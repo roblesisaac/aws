@@ -351,6 +351,15 @@ const ply = {
       }
     });
   },
+  sheetJs: function(event, context, send) {
+    const o = ply.prep(event, context);
+    const siteName = o.site;
+    const sheetName = o.arg1;
+    const id = o.arg2;
+    models.site.find({url: siteName}).then(function(site){
+      send(null, JSON.stringiyfy(site));
+    });
+  },
   login: function(event, context, send) {
     const user = JSON.parse(event.body);
   	models.users.findOne({username: user.username}, function(err, foundUser) {
