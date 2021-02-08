@@ -1,27 +1,32 @@
 const mongoose = require('mongoose');
 
-const user = {
-  username: String,
-  apps: [String]
+const blockCell = {
+  width: Number,
+  rows: Array
 };
 
-const schm = {
-  propName: String,
-  propType: String,
-  subSchema: String
+const scriptObj =  {
+  name: String,
+  text: String
 };
 
 const sheetSchema = new mongoose.Schema({
-    "name" : String,
-    "link" : String,
-    "sort" : Number,
-    "_init" : String,
-    "public" : Boolean,
+  "name": String,
+  "htmlButton": String,
+  "onStart": String,
+  "sort": Number,
+  "siteId": String,
+  "author": String,
+  "db": {
+    "schema": {}
+  },
+  "ui": {
     "js": String,
-    "_schema" : [schm],
-    "templates" : Array,
-    "users": [user],
-    "siteId": String
+    "html": String,
+    "css": String,
+    "scripts": [ scriptObj ],
+    "blocks": [ blockCell ]
+  }
 });
 
 module.exports = mongoose.model('sheet', sheetSchema);

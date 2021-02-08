@@ -1,5 +1,5 @@
 node_modules
 .serverless
-secrets.json
+variables.json
 /frontend/misc.md
 .env

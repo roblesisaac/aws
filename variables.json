@@ -1,3 +1,11 @@
 {
-  "DB": "mongodb://roblesisaac:Pavopavo7.@plysheet-shard-00-00-5k1jk.mongodb.net:27017,plysheet-shard-00-01-5k1jk.mongodb.net:27017,plysheet-shard-00-02-5k1jk.mongodb.net:27017/test?ssl=true&replicaSet=plysheet-shard-0&authSource=admin"
+  "DB": "mongodb+srv://roblesisaac:Pavopavo7.@cluster0-5k1jk.mongodb.net/uisheet?retryWrites=true&w=majority",
+  "SSKEY": "gk0zbew019urdsrpp2phofxlyd",
+  "BT": {
+      "MERCHANTID": "zn8dfjtt2zsttw88",
+      "PUBLIC": "zs9k3t4hs3hg73jh",
+      "PRIVATE": "0a213415ca5f7cd23591c12c8794346d",
+      "TOKEN": "sandbox_y62jvhm8_zn8dfjtt2zsttw88"
+   } 
 }
+
